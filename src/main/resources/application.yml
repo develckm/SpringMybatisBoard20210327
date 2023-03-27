@@ -1,0 +1,14 @@
+#.properties \uC5D0\uC11C \uD55C\uAE00 \uC0AC\uC6A9\uD558\uB824\uBA74 \uAF2D \uC778\uCF54\uB529\uC744 utf-8 \uB85C \uBC14\uAFB8\uC138\uC694
+#Spring boot \uC5D0 mybatis \uAC00 \uD3EC\uD568\uB418\uBA74 \uC2E4\uD589\uD560 \uB54C db \uC811\uC18D\uC778 DataSource \uB97C \uCEE8\uD14C\uC774\uB108\uC5D0\uC11C \uC0DD\uC131\uD558\uAE30 \uB54C\uBB38\uC5D0 \uC811\uC18D \uC815\uBCF4\uB97C \uAF2D \uC791\uC131\uD55C\uB2E4.
+spring:
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOME:localhost}:3306/WebAppBoard
+    username: boardServerDev
+    password: mysql123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8080
+mybatis:
+  type-aliases-package: com.acorn.springboardteacher.dto
+  mapper-locations: mapper/*Mapper.xml

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.BoardMapper">
+    <insert id="insertOne" parameterType="BoardDto">
+        INSERT INTO boards (u_id, title, content) VALUE (#{uId},#{title},#{content})
+    </insert>
+    <update id="updateOne" parameterType="BoardDto">
+        UPDATE boards SET title=#{title},content=#{content} WHERE b_id=#{bId}
+    </update>
+    <update id="updateStatusByBId">
+        UPDATE boards SET status=#{status} WHERE b_id=#{bId}
+    </update>
+    <delete id="deleteOne">
+        DELETE FROM boards WHERE b_id=#{bId}
+    </delete>
+    <select id="findAll" resultType="BoardDto">
+        SELECT * FROM boards
+    </select>
+    <select id="findByBId" resultType="BoardDto">
+        SELECT * FROM boards WHERE b_id=#{bId}
+    </select>
+</mapper>
