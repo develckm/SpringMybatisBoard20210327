@@ -16,5 +16,5 @@ public interface BoardMapper {
     int insertOne(BoardDto board);
     int updateOne(BoardDto board);
     int deleteOne(int bId);
-    int updateStatusByBId(String status,int bId);
+    int updateStatusByBId(BoardDto board);
 }

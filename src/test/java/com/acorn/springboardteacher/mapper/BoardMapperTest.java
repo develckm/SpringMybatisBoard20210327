@@ -1,8 +1,11 @@
 package com.acorn.springboardteacher.mapper;
 import com.acorn.springboardteacher.dto.BoardDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -16,13 +19,18 @@ class BoardMapperTest {
     @Test
     void findAll() {
         List<BoardDto> boardList=boardMapper.findAll();
-        System.out.println("boardList = " + boardList);
+        Assertions.assertNotNull(boardList);
     }
 
     @Test
     void findByBId() {
-        BoardDto board=boardMapper.findByBId(6);
-        System.out.println("board = " + board);
+        BoardDto board=boardMapper.findByBId(4);
+        //System.out.println("board = " + board);
+        //지연로딩(fetch=lazy) : 호출할 때(트리거(get,toString)) 조회
+        System.out.println("board.getReplies() = " + board.getReplies());
+        System.out.println("board.getUser() = " + board.getUser());
+        Assertions.assertNotNull(board);
+        //board_imgs 를 collection 조회하세요~
     }
 
     @Test
@@ -37,15 +45,31 @@ class BoardMapperTest {
         
         int delete=boardMapper.deleteOne(board.getBId());
         System.out.println("delete = " + delete);
+        Assertions.assertEquals(insert+delete,2);
     }
     //view 하기 전에 user 로 조인 boardLike join  test~~
 
     @Test
     void updateOne() {
+        BoardDto board=new BoardDto();
+        board.setTitle("보드 수정 테스트 안녕!");
+        board.setContent("수정 내용 입니다.");
+        board.setBId(6);
+        int update=boardMapper.updateOne(board);
+        Assertions.assertEquals(update,1); //수정 성공
+        BoardDto updateBoard=boardMapper.findByBId(6);
+        System.out.println("updateBoard = " + updateBoard);
     }
-
 
     @Test
     void updateStatusByBId() {
+        BoardDto board=new BoardDto();
+        board.setBId(6);
+        board.setStatus("REPORT");
+        int update=boardMapper.updateStatusByBId(board);
+        Assertions.assertEquals(update,1); //수정 성공
+        BoardDto updateBoard=boardMapper.findByBId(6);
+        System.out.println("updateBoard = " + updateBoard);
+
     }
 }

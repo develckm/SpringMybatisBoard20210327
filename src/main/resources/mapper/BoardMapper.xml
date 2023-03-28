@@ -10,8 +10,23 @@
         <result column="update_time" property="updateTime"/>
         <result column="status" property="status"/>
         <result column="view_count" property="viewCount"/>
+        <association property="user"
+                    select="com.acorn.springboardteacher.mapper.UserMapper.findByUId"
+                    column="u_id"
+                    fetchType="lazy"/>
+        <collection property="replies"
+                    select="com.acorn.springboardteacher.mapper.BoardReplyMapper.findByBIdAndParentBrIdIsNull"
+                    column="b_id"
+                    fetchType="lazy"/>
     </resultMap>
     <!--
+       resultMap.collection :  1:N or N:N 관계(리스트)일때 조회하는 방법
+       resultMap.association : N:1 or 1:1 관계일 때 조회하는 방법
+       fetchType="eager" : 즉시 조회 (호출이 없어도 조회 join)
+       fetchType="lazy" : 지연로딩 (호출이 있는지 검색 후 있으면 조회) 리스트에서 댓글 필요 없으면 조회하지 않음
+       select="namespace.id" : resultMap 으로 조회할 때 해당 필드를 다른 내역을 조회해서 파싱
+       column="b_id" : 조회할 때 사용할 파라미터의 값
+
      SELECT LAST_INSERT_ID : auto increment 로 방금 생성된 id
      useGeneratedKeys="true" : auto_increment 로 pk 를 생성하는냐??
       keyProperty="bId" : BoardDto 에 auto increment 생성된 키를 반환 하겠다.
@@ -22,7 +37,7 @@
     <update id="updateOne" parameterType="BoardDto">
         UPDATE boards SET title=#{title},content=#{content} WHERE b_id=#{bId}
     </update>
-    <update id="updateStatusByBId">
+    <update id="updateStatusByBId" parameterType="BoardDto">
         UPDATE boards SET status=#{status} WHERE b_id=#{bId}
     </update>
     <delete id="deleteOne">

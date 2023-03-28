@@ -3,6 +3,7 @@ package com.acorn.springboardteacher.dto;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class BoardDto {
@@ -14,4 +15,8 @@ public class BoardDto {
     private String title;
     private String content;
     private int viewCount;
+
+    private List<BoardReplyDto> replies;//1 : N = boards : board_replies
+    private UserDto user; //N : 1 = boards : users
+
 }

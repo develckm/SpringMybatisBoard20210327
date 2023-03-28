@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.BoardReplyMapper">
+    <resultMap id="BoardReplyMap" type="BoardReplyDto">
+        <id property="brId" column="br_id"/>
+        <result property="bId" column="b_id"/>
+        <result property="uId" column="u_id"/>
+        <result property="parentBrId" column="parent_br_id"/>
+        <result property="postTime" column="post_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="imgPath" column="img_path"/>
+        <result property="status" column="status"/>
+        <result property="content" column="content"/>
+    </resultMap>
+    <insert id="insertOne" parameterType="BoardReplyDto">
+        INSERT INTO board_replies
+            (b_id, u_id, parent_br_id, img_path, content) VALUE
+            (#{bId}, #{uId}, #{parentBrId}, #{imgPath}, #{content})
+    </insert>
+    <update id="updateOne" parameterType="BoardReplyDto">
+        UPDATE board_replies
+            SET img_path=#{imgPath},content=#{content}
+            WHERE br_id=#{brId}
+    </update>
+    <delete id="deleteOne">
+        DELETE FROM board_replies
+            WHERE br_id=#{brId}
+    </delete>
+    <select id="findByBIdAndParentBrIdIsNull" resultMap="BoardReplyMap">
+        SELECT * FROM board_replies WHERE parent_br_id IS NULL AND b_id=#{bId}
+    </select>
+    <select id="findByParentBrId"  resultMap="BoardReplyMap">
+        SELECT * FROM board_replies WHERE parent_br_id=#{brId}
+    </select>
+    <select id="findByBrId" resultMap="BoardReplyMap">
+        SELECT * FROM board_replies WHERE br_id=#{brId}
+
+    </select>
+</mapper>
