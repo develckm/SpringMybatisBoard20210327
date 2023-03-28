@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.acorn.springboardteacher.mapper.BoardMapper">
-    <insert id="insertOne" parameterType="BoardDto">
+    <resultMap id="BoardMap" type="BoardDto">
+        <id column="b_id" property="bId"/>
+        <result column="content" property="content"/>
+        <result column="title" property="title"/>
+        <result column="u_id" property="uId"/>
+        <result column="post_time" property="postTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="view_count" property="viewCount"/>
+    </resultMap>
+    <!--
+     SELECT LAST_INSERT_ID : auto increment 로 방금 생성된 id
+     useGeneratedKeys="true" : auto_increment 로 pk 를 생성하는냐??
+      keyProperty="bId" : BoardDto 에 auto increment 생성된 키를 반환 하겠다.
+     -->
+    <insert useGeneratedKeys="true" keyProperty="bId" id="insertOne" parameterType="BoardDto">
         INSERT INTO boards (u_id, title, content) VALUE (#{uId},#{title},#{content})
     </insert>
     <update id="updateOne" parameterType="BoardDto">
@@ -13,10 +28,10 @@
     <delete id="deleteOne">
         DELETE FROM boards WHERE b_id=#{bId}
     </delete>
-    <select id="findAll" resultType="BoardDto">
+    <select id="findAll" resultMap="BoardMap">
         SELECT * FROM boards
     </select>
-    <select id="findByBId" resultType="BoardDto">
+    <select id="findByBId" resultMap="BoardMap">
         SELECT * FROM boards WHERE b_id=#{bId}
     </select>
 </mapper>

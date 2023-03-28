@@ -6,7 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
+//Junit 은 단위 테스트는 spring 과 는 별개로 실행되기 때문에 객체 주입을 받을 수 없는데
+//Spring boot 3.0 부터  @SpringBootTest 테스트에 정의하면 spring 에서 생성하는 객체를 주입 받을 수 있다.
 class BoardMapperTest {
+    //Junit 은 클래스에 생성자를 정의 할 수 없다. 그래서 생성자 없이 객체를 주입 받는 @Autowired 를 작성해야 한다.
     @Autowired
     private BoardMapper boardMapper;
 
@@ -18,19 +21,29 @@ class BoardMapperTest {
 
     @Test
     void findByBId() {
+        BoardDto board=boardMapper.findByBId(6);
+        System.out.println("board = " + board);
     }
 
     @Test
-    void insertOne() {
+    void insertOneAndDeleteOne() {
+        BoardDto board=new BoardDto();
+        board.setTitle("보드 등록 테스트 안녕!");
+        board.setContent("내용입니다.");
+        board.setUId("admin");
+        int insert=boardMapper.insertOne(board);
+        System.out.println("insert = " + insert);
+        System.out.println("board = " + board);
+        
+        int delete=boardMapper.deleteOne(board.getBId());
+        System.out.println("delete = " + delete);
     }
+    //view 하기 전에 user 로 조인 boardLike join  test~~
 
     @Test
     void updateOne() {
     }
 
-    @Test
-    void deleteOne() {
-    }
 
     @Test
     void updateStatusByBId() {

@@ -37,7 +37,7 @@
             <li>spring-mybatis : spring 에서 mybatis를 사용할 수 있도록 최적화 되어있고
                 sql(session)을 객체로 생성 관리하는 컨테이너(session factory)를 제공
             </li>
-            <li>Mapper 인터페이스 작성 (@Mapper) : mybatis가 해당 인터페이스를 기반으로 sql을 java 객체를 맵핑하는 객체 생성</li>
+            <li>Mapper 인터페이스 작성 (@Mapper) : mybatis가 해당 인터페이스를 기반으로 sql(Mapper xml)을 java 객체(DTO)를 맵핑하는 컴포넌트로 생성</li>
             <li>Mapper xml 작성 및 인터페이스를 연결 (namespace) : xml에 작성된 sql 을 기반으로 객체 생성</li>
             <li>**사용할 곳에서 의존성 주입(DependencyInjection) 받기 : session factory 가 객체를 주입  </li>
         </ul>
