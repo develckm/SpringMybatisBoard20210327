@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.BoardImgMapper">
+    <resultMap id="BoardImgMap" type="BoardImgDto">
+        <id property="biId" column="bi_id"/>
+        <result property="bId" column="b_id"/>
+        <result property="imgPath" column="img_path"/>
+    </resultMap>
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="biId">
+        INSERT INTO board_imgs (b_id, img_path) VALUE (#{bId}, #{imgPath})
+    </insert>
+    <delete id="deleteOne">
+        DELETE FROM board_imgs WHERE bi_id=#{biId}
+    </delete>
+    <select id="findByBId" resultMap="BoardImgMap">
+        SELECT * FROM board_imgs WHERE b_id=#{bId}
+    </select>
+</mapper>

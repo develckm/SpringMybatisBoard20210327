@@ -16,7 +16,10 @@ public class BoardDto {
     private String content;
     private int viewCount;
 
+    private LikeStatusCntDto likes; //1 : N = boards : board_likes 이지만 집계한 결과만 조회
     private UserDto user; //N : 1 = boards : users
     private List<BoardReplyDto> replies;//1 : N = boards : board_replies
     private List<BoardImgDto> imgs;//1:N = boars : board_imgs
+
+
 }

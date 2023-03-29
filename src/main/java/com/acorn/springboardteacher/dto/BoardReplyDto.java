@@ -13,5 +13,4 @@ public class BoardReplyDto {
     private String status;//[PUBLIC,PRIVATE,REPORT,BLOCK]
     private String imgPath;
     private String content;
-    //15분까지 쉬었다가 와서 조인 복습~
 }

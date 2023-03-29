@@ -25,11 +25,13 @@ class BoardMapperTest {
 
     @Test
     void findByBId() {
-        BoardDto board=boardMapper.findByBId(4);
+        BoardDto board = boardMapper.findByBId(10);
         //System.out.println("board = " + board);
         //지연로딩(fetch=lazy) : 호출할 때(트리거(get,toString)) 조회
         System.out.println("board.getReplies() = " + board.getReplies());
         System.out.println("board.getUser() = " + board.getUser());
+        System.out.println("board.getImgs() = " + board.getImgs());
+        System.out.println("board.getLikes() = " + board.getLikes());
         Assertions.assertNotNull(board);
         //board_imgs 를 collection 조회하세요~
     }
