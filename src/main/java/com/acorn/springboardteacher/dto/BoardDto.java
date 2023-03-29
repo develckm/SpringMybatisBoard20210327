@@ -12,11 +12,11 @@ public class BoardDto {
     private Date postTime; //default CURRENT_TIMESTAMP
     private Date updateTime; //default on update CURRENT_TIMESTAMP
     private String status; //enum [PUBLIC,PRIVATE,REPORT,BLOCK]
-    private String title;
+    private String title="타이틀없음";
     private String content;
     private int viewCount;
 
-    private List<BoardReplyDto> replies;//1 : N = boards : board_replies
     private UserDto user; //N : 1 = boards : users
-
+    private List<BoardReplyDto> replies;//1 : N = boards : board_replies
+    private List<BoardImgDto> imgs;//1:N = boars : board_imgs
 }

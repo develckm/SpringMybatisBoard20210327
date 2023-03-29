@@ -19,6 +19,7 @@ class BoardMapperTest {
     @Test
     void findAll() {
         List<BoardDto> boardList=boardMapper.findAll();
+        System.out.println("boardList = " + boardList);
         Assertions.assertNotNull(boardList);
     }
 

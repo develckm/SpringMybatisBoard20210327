@@ -37,10 +37,56 @@
             <li>spring-mybatis : spring 에서 mybatis를 사용할 수 있도록 최적화 되어있고
                 sql(session)을 객체로 생성 관리하는 컨테이너(session factory)를 제공
             </li>
-            <li>Mapper 인터페이스 작성 (@Mapper) : mybatis가 해당 인터페이스를 기반으로 sql(Mapper xml)을 java 객체(DTO)를 맵핑하는 컴포넌트로 생성</li>
-            <li>Mapper xml 작성 및 인터페이스를 연결 (namespace) : xml에 작성된 sql 을 기반으로 객체 생성</li>
-            <li>**사용할 곳에서 의존성 주입(DependencyInjection) 받기 : session factory 가 객체를 주입  </li>
+            <li>Mapper 인터페이스 작성 (@Mapper) : mybatis는 @Mapper가 정의된 인터페이스를 Mapper.xml에 정의된 sql로 컴포넌트를 생성</li>
+            <li>Mapper xml : sql(Session) 을 관리하고 테이블의 관계의 관계를 정의해서 조인을 할 수 있다.</li>
+            <li>**사용할 곳에서 의존성 주입(DependencyInjection) 받기 : session factory 가 @Mapper로 정의된 인터페이스를 객체로 만들어서 주입  </li>
         </ul>
+        <h3>Spring Mybatis 설정</h3>
+        <ol>
+            <li>DataSource : resource>application.properties(yml) > spring:datasource:(url,username,password,driver-class-name) 작성
+                (spring 컨테이너에서 db 를 접속 관리하는 객체 생성 => mybatis 컨포넌트에 주입)
+            </li>
+            <li>resourece 하위에 mapper xml 폴더를 만들고 application.properties에 mybaits:mapper-locations 작성</li>
+            <li>인텔리제이의 MybatisX 플러그인 설치</li>
+            <li>@Mapper 인터페이스 생성 및 추상메서드 정의</li>
+            <li>인터페이스에서 마우스 오른쪽 클릭 > Show Context Action > [MabatisX] Generate Mabtis xml 클릭후 mapper-locations에 지정한 폴더에 xml 생성</li>
+        </ol>
+        <h3>Mapper.xml 정의 방법</h3>
+        <ul>
+            <li>mapper namespace="@Mapper 의 타입" : 컨포넌트(컨테이너에서 관리되는 객체)로 생성할 타입</li>
+            <li>id="추상메서드 이름" : 쿼리가 실행될 메서드 정의</li>
+            <li>select: DQL 작성 작성할 때 사용하는 태그 **resultType or resultMap 을 작성해야 한다.
+                <ul>
+                    <li>select 는 무조건 resultType 으로 정의된 객체나 java.util.List 를 반환 </li>
+                    <li>만약 추상메서드에서 객체만 반환한다고 정의했는데 복수가 반환되면 오류가 발생한다.</li>
+                    <li>resultType 으로 정의된 DTO 필드와 반환되는 테이블의 칼럼과 동일이한 이름이 있다면 맵핑해서 반환.</li>
+                    <li>만약 칼럼과 필드명이 다르면 as 로 필드와 같은 이름을 만들거나 resultMap 을 정의하면된다.
+                        (대부분의 db는 대소문자를 구분하지 않더라 이름규칙으로 _ 를 사용, 자바는 변수명의 규칙 낙타표기법을 사용(상수=="_" ) )
+                    </li>
+                    <li>만약 반환되는 타입을 resultMap 을 사용한다면 association, collection 으로 정의된 필드는 한번 더 조회한다.(조인처럼 동작)</li>
+                </ul>
+            </li>
+            <li>delete,update,insert : DML 을 작성할 때 사용하고 몇개 성공했음의 정수(int,long)를 반환</li>
+            <li>mybatis 와 매개변수(PreparedStatement) : Dto 의 필드명이나 변수명을 #{}을 작성하면 매개변수로 동작</li>
+            <li>만약 필드명이나 변수명을 사용하고 싶지 않다면 @Param(value="바꿀이름")을 작성하면 된다.</li>
+            <li>order by 에서 필드명을 매개변수로 받아야 한다면 ${}에 작성하면 된다. order by #{filed} => order by 'b_id' (동작 x)</li>
+        </ul>
+        <h3>resultMap</h3>
+        <p>질의(DQL)의 결과를 자바객체(POJO,DTO)에 맵핑하는 역할과 객체간의 연관성을 표현 </p>
+        <ul>
+            <li>객체의 필드와 칼럼 맵핑</li>
+            <li>복합 객체 맵핑 : Dto 에 존재하는 복수를 필드를 관계로 맵핑 </li>
+            <li>상속 관계 맵핑 : Dto 의 부모 타입으로 맵핑</li>
+            <li>컬렉션 맵핑 : 해당 테이블과 참조 관계에 있는 다른 테이블의 복수의 값을 조회해서 맵핑 가능</li>
+            <li>collection(List(default),Map,Set), association(dto) : 해당 테이블과 참조 관계에 있는 다른 테이블을 조회</li>
+            <li> property : 조회해서 맵핑할 필드</li>
+            <li> select : 조회할 session(sql) id </li>
+            <li> column : 조회할 sql 파라미터로 제공할 칼럼</li>
+            <li> fetchType : [ eager | lazy ] 조회할 방식으로 즉시로딩과 지연로딩 설정할 수 있다.</li>
+            <li> 지연로딩  : collection,association 에 정의한 필드를 (view에서) 호출(트리거)하면 조회 </li>
+            <li> 즉시로딩  : 호출이 있지 않아도 조회</li>
+        </ul>
+
     </main>
 </body>
 </html>
