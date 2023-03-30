@@ -1,15 +1,13 @@
 package com.acorn.springboardteacher.mapper;
 
 import com.acorn.springboardteacher.dto.BoardReplyDto;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest //junit 테스를할때 스프링부트가 같이 실행되면서 의존성 주입을 받을 수있다.
 class BoardReplyMapperTest {
     @Autowired
@@ -18,18 +16,21 @@ class BoardReplyMapperTest {
     void findByBIdAndParentBrIdIsNull() {
         List<BoardReplyDto> boardReplies=boardReplyMapper.findByBIdAndParentBrIdIsNull(6);
         System.out.println("boardReplies = " + boardReplies);
-        Assertions.assertNotNull(boardReplies);
+        assertNotNull(boardReplies);
     }
 
     @Test
     void findByParentBrId() {
+        List<BoardReplyDto> replies = boardReplyMapper.findByParentBrId(20);
+        System.out.println("replies = " + replies);
+        assertNotNull(replies);
     }
 
     @Test
     void findByBrId() {
-        BoardReplyDto boardReply = boardReplyMapper.findByBrId(1);
+        BoardReplyDto boardReply = boardReplyMapper.findByBrId(16);
         System.out.println("boardReply = " + boardReply);
-        Assertions.assertNotNull(boardReply);
+        assertNotNull(boardReply);
     }
 
     @Test
@@ -50,7 +51,7 @@ class BoardReplyMapperTest {
 
         int deleteOne = boardReplyMapper.deleteOne(boardReply.getBrId());
 
-        Assertions.assertEquals(insertOne+updateOne+deleteOne,3);
+        assertEquals(insertOne+updateOne+deleteOne,3);
     }
 
 }

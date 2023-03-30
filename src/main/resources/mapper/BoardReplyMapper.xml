@@ -11,6 +11,10 @@
         <result property="imgPath" column="img_path"/>
         <result property="status" column="status"/>
         <result property="content" column="content"/>
+        <collection property="replies"
+                    select="findByParentBrId"
+                    column="br_id"
+                    fetchType="lazy"/>
     </resultMap>
     <insert useGeneratedKeys="true" keyProperty="brId" id="insertOne" parameterType="BoardReplyDto">
         INSERT INTO board_replies

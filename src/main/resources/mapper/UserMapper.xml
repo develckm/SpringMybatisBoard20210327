@@ -15,8 +15,37 @@
         <result column="detail_address" property="detailAddress"/>
         <result column="permission" property="permission"/>
     </resultMap>
-
+    <insert id="insertOne" parameterType="UserDto">
+        INSERT INTO users (u_id, pw, name, phone, img_path, email, birth, gender, address, detail_address)
+        VALUE (#{uId},#{pw},#{name},#{phone},#{imgPath},#{email},#{birth},#{gender},#{address},#{detailAddress})
+    </insert>
+    <update id="updateOne" parameterType="UserDto">
+        UPDATE users SET
+            pw=#{pw},
+            name=#{name},
+            phone=#{phone},
+            img_path=#{imgPath},
+            email=#{email},
+            birth=#{birth},
+            gender=#{gender},
+            address=#{address},
+            detail_address=#{detailAddress}
+            WHERE u_id=#{uId}
+    </update>
+    <update id="updatePwByUId" parameterType="UserDto">
+        UPDATE users SET pw=#{pw} WHERE u_id=#{uId};
+    </update>
+    <delete id="deleteByUIdAndPw" parameterType="UserDto">
+        DELETE FROM users WHERE u_id=#{uId} AND pw=#{pw}
+    </delete>
     <select id="findByUId" resultMap="UserMap">
         SELECT * FROM users WHERE u_id=#{uId}
+    </select>
+    <select id="findByUIdAndPw" resultMap="UserMap">
+        SELECT * FROM users WHERE u_id=#{uId} AND pw=#{pw}
+
+    </select>
+    <select id="findUIdByEmailAndPhoneAndName" resultType="java.lang.String">
+        SELECT u_id FROM users WHERE email=#{email} AND phone=#{phone} AND name=#{name}
     </select>
 </mapper>

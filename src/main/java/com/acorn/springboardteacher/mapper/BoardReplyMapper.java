@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface BoardReplyMapper {
     //게시글에 댓글 리스트 (parent_br_id is null)
-    //대댓글 리스트
+    //대댓글 리스트(+대댓댓글 ... )
     //댓글 수정 폼 출력시 댓글 상세
     //댓글 등록
     //댓글 수정

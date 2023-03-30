@@ -1,6 +1,8 @@
 package com.acorn.springboardteacher.dto;
 import lombok.Data;
 import java.util.Date;
+import java.util.List;
+
 @Data
 //Table board_replies
 public class BoardReplyDto {
@@ -13,4 +15,6 @@ public class BoardReplyDto {
     private String status;//[PUBLIC,PRIVATE,REPORT,BLOCK]
     private String imgPath;
     private String content;
+    private List<BoardReplyDto> replies;//대댓글 (리스트로 나자신의 타입을 참조 셀프조인)
+    //board_replies : board_replies = 1 : N (self join)
 }
