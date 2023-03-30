@@ -15,6 +15,7 @@ public class BoardReplyDto {
     private String status;//[PUBLIC,PRIVATE,REPORT,BLOCK]
     private String imgPath;
     private String content;
+    private LikeStatusCntDto likes;//board_replies : reply_likes = 1 : N (그렇지만 집계한 결과만 가져옴)
     private List<BoardReplyDto> replies;//대댓글 (리스트로 나자신의 타입을 참조 셀프조인)
     //board_replies : board_replies = 1 : N (self join)
 }

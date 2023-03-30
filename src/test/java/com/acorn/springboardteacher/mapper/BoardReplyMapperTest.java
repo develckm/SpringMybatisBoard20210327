@@ -14,7 +14,7 @@ class BoardReplyMapperTest {
     private BoardReplyMapper boardReplyMapper;
     @Test
     void findByBIdAndParentBrIdIsNull() {
-        List<BoardReplyDto> boardReplies=boardReplyMapper.findByBIdAndParentBrIdIsNull(6);
+        List<BoardReplyDto> boardReplies=boardReplyMapper.findByBIdAndParentBrIdIsNull(4);
         System.out.println("boardReplies = " + boardReplies);
         assertNotNull(boardReplies);
     }
