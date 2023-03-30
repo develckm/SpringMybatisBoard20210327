@@ -12,7 +12,7 @@
         <result property="status" column="status"/>
         <result property="content" column="content"/>
     </resultMap>
-    <insert id="insertOne" parameterType="BoardReplyDto">
+    <insert useGeneratedKeys="true" keyProperty="brId" id="insertOne" parameterType="BoardReplyDto">
         INSERT INTO board_replies
             (b_id, u_id, parent_br_id, img_path, content) VALUE
             (#{bId}, #{uId}, #{parentBrId}, #{imgPath}, #{content})
@@ -34,6 +34,5 @@
     </select>
     <select id="findByBrId" resultMap="BoardReplyMap">
         SELECT * FROM board_replies WHERE br_id=#{brId}
-
     </select>
 </mapper>
