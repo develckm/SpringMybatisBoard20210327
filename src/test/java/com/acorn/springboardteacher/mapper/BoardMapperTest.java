@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 //Junit 은 단위 테스트는 spring 과 는 별개로 실행되기 때문에 객체 주입을 받을 수 없는데
 //Spring boot 3.0 부터  @SpringBootTest 테스트에 정의하면 spring 에서 생성하는 객체를 주입 받을 수 있다.
@@ -20,7 +22,7 @@ class BoardMapperTest {
     void findAll() {
         List<BoardDto> boardList=boardMapper.findAll();
         System.out.println("boardList = " + boardList);
-        Assertions.assertNotNull(boardList);
+        assertNotNull(boardList);
     }
 
     @Test
@@ -32,7 +34,7 @@ class BoardMapperTest {
         System.out.println("board.getUser() = " + board.getUser());
         System.out.println("board.getImgs() = " + board.getImgs());
         System.out.println("board.getLikes() = " + board.getLikes());
-        Assertions.assertNotNull(board);
+        assertNotNull(board);
         //board_imgs 를 collection 조회하세요~
     }
 
@@ -48,7 +50,7 @@ class BoardMapperTest {
         
         int delete=boardMapper.deleteOne(board.getBId());
         System.out.println("delete = " + delete);
-        Assertions.assertEquals(insert+delete,2);
+        assertEquals(insert+delete,2);
     }
     //view 하기 전에 user 로 조인 boardLike join  test~~
 
@@ -59,7 +61,7 @@ class BoardMapperTest {
         board.setContent("수정 내용 입니다.");
         board.setBId(6);
         int update=boardMapper.updateOne(board);
-        Assertions.assertEquals(update,1); //수정 성공
+        assertEquals(update,1); //수정 성공
         BoardDto updateBoard=boardMapper.findByBId(6);
         System.out.println("updateBoard = " + updateBoard);
     }
@@ -70,9 +72,15 @@ class BoardMapperTest {
         board.setBId(6);
         board.setStatus("REPORT");
         int update=boardMapper.updateStatusByBId(board);
-        Assertions.assertEquals(update,1); //수정 성공
+        assertEquals(update,1); //수정 성공
         BoardDto updateBoard=boardMapper.findByBId(6);
         System.out.println("updateBoard = " + updateBoard);
 
+    }
+
+    @Test
+    void updateIncrementViewCountBId() {
+        int updateIncrementViewCountBId = boardMapper.updateIncrementViewCountBId(1);
+        assertEquals(updateIncrementViewCountBId,1);
     }
 }

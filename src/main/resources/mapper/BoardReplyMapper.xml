@@ -11,8 +11,18 @@
         <result property="imgPath" column="img_path"/>
         <result property="status" column="status"/>
         <result property="content" column="content"/>
+        <association property="likes">
+            <result property="like" column="like"/>
+            <result property="bad" column="bad"/>
+            <result property="best" column="best"/>
+            <result property="sad" column="sad"/>
+        </association>
+        <collection property="replies"
+                    select="findByParentBrId"
+                    column="br_id"
+                    fetchType="lazy"/>
     </resultMap>
-    <insert id="insertOne" parameterType="BoardReplyDto">
+    <insert useGeneratedKeys="true" keyProperty="brId" id="insertOne" parameterType="BoardReplyDto">
         INSERT INTO board_replies
             (b_id, u_id, parent_br_id, img_path, content) VALUE
             (#{bId}, #{uId}, #{parentBrId}, #{imgPath}, #{content})
@@ -27,13 +37,30 @@
             WHERE br_id=#{brId}
     </delete>
     <select id="findByBIdAndParentBrIdIsNull" resultMap="BoardReplyMap">
-        SELECT * FROM board_replies WHERE parent_br_id IS NULL AND b_id=#{bId}
+        SELECT r.*,
+            COUNT(CASE WHEN l.status='LIKE' THEN 1 END ) 'like',
+            COUNT(CASE WHEN l.status='BAD' THEN 1 END ) 'bad',
+            COUNT(CASE WHEN l.status='BEST' THEN 1 END ) 'best',
+            COUNT(CASE WHEN l.status='SAD' THEN 1 END ) 'sad'
+            FROM board_replies r LEFT JOIN reply_likes l ON r.br_id=l.br_id
+            WHERE parent_br_id IS NULL AND b_id=#{bId}
+            GROUP BY r.br_id
+            ORDER BY 'like'
     </select>
+
     <select id="findByParentBrId"  resultMap="BoardReplyMap">
-        SELECT * FROM board_replies WHERE parent_br_id=#{brId}
+        SELECT r.*,
+               COUNT(CASE WHEN l.status='LIKE' THEN 1 END ) 'like',
+               COUNT(CASE WHEN l.status='BAD' THEN 1 END ) 'bad',
+               COUNT(CASE WHEN l.status='BEST' THEN 1 END ) 'best',
+               COUNT(CASE WHEN l.status='SAD' THEN 1 END ) 'sad'
+        FROM board_replies r LEFT JOIN reply_likes l ON r.br_id=l.br_id
+        WHERE parent_br_id=#{brId}
+        GROUP BY r.br_id
+        ORDER BY 'like'
     </select>
+    <!-- 댓글 수정시 불러올 예정이라 좋아요를 받으수는 필요없음   -->
     <select id="findByBrId" resultMap="BoardReplyMap">
         SELECT * FROM board_replies WHERE br_id=#{brId}
-
     </select>
 </mapper>
