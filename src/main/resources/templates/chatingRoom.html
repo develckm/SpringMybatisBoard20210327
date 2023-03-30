@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <header th:include="headerNav.html"></header>
+    <h1>채팅방</h1>
+    <section style="background-color: #eee;">
+        <div class="container py-5">
+
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-4">
+
+                    <div class="card" id="chat1" style="border-radius: 15px;">
+                        <div
+                                class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0"
+                                style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                            <i class="fas fa-angle-left"></i>
+                            <p class="mb-0 fw-bold">Live chat</p>
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-start mb-4">
+                                <div>
+                                    <strong class="rounded-circle border d-flex justify-content-center align-items-center" style="width: 45px; height: 45px;">
+                                        경민
+                                    </strong>
+                                </div>
+                                <div class="p-3 ms-3 border rounded-2 bg-primary bg-opacity-10">
+                                    Hello and thank you for visiting MDBootstrap. Please click the video
+                                        below.
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end mb-4">
+                                <div class="p-3 me-3 border rounded-2 bg-secondary bg-opacity-10">
+                                    Thank you, I really like your product.
+                                </div>
+                                <div>
+                                    <strong class="rounded-circle border d-flex justify-content-center align-items-center" style="width: 45px; height: 45px;">
+                                        유저1
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="form-floating w-25">
+                                <input class="form-control h-100" name="user" value="경민" placeholder="유저">
+                                <label>닉네임</label>
+                            </div>
+                            <textarea class="form-control w-50" name="msg" rows="2"></textarea>
+                            <button class="btn btn-outline-secondary w-25">전송</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</body>
+</html>

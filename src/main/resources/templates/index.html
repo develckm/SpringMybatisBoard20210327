@@ -67,7 +67,7 @@
                 </ul>
             </li>
             <li>delete,update,insert : DML 을 작성할 때 사용하고 몇개 성공했음의 정수(int,long)를 반환</li>
-            <li>mybatis 와 매개변수(PreparedStatement) : Dto 의 필드명이나 변수명을 #{}을 작성하면 매개변수로 동작</li>
+            <li>mybatis 와 매개변수(PreparedStatement) : Dto 의 필드명(String uId="user01")이나 변수명을 #{uId}('user01')을 작성하면 매개변수로 동작</li>
             <li>만약 필드명이나 변수명을 사용하고 싶지 않다면 @Param(value="바꿀이름")을 작성하면 된다.</li>
             <li>order by 에서 필드명을 매개변수로 받아야 한다면 ${}에 작성하면 된다. order by #{filed} => order by 'b_id' (동작 x)</li>
         </ul>
