@@ -28,7 +28,7 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	compile 'org.webjars.npm:bootstrap:5.2.3'
+	implementation 'org.webjars.npm:bootstrap:5.2.3'
 
 }
 
