@@ -50,14 +50,14 @@
 
     <select id="findByParentBrId"  resultMap="BoardReplyMap">
         SELECT r.*,
-               COUNT(CASE WHEN l.status='LIKE' THEN 1 END ) 'like',
-               COUNT(CASE WHEN l.status='BAD' THEN 1 END ) 'bad',
-               COUNT(CASE WHEN l.status='BEST' THEN 1 END ) 'best',
-               COUNT(CASE WHEN l.status='SAD' THEN 1 END ) 'sad'
-        FROM board_replies r LEFT JOIN reply_likes l ON r.br_id=l.br_id
-        WHERE parent_br_id=#{brId}
-        GROUP BY r.br_id
-        ORDER BY 'like'
+            COUNT(CASE WHEN l.status='LIKE' THEN 1 END ) 'like',
+            COUNT(CASE WHEN l.status='BAD' THEN 1 END ) 'bad',
+            COUNT(CASE WHEN l.status='BEST' THEN 1 END ) 'best',
+            COUNT(CASE WHEN l.status='SAD' THEN 1 END ) 'sad'
+            FROM board_replies r LEFT JOIN reply_likes l ON r.br_id=l.br_id
+            WHERE parent_br_id=#{brId}
+            GROUP BY r.br_id
+            ORDER BY 'like'
     </select>
     <!-- 댓글 수정시 불러올 예정이라 좋아요를 받으수는 필요없음   -->
     <select id="findByBrId" resultMap="BoardReplyMap">

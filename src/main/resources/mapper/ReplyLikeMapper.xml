@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.ReplyLikeMapper">
+    <resultMap id="ReplyLikeMap" type="ReplyLikeDto">
+        <id property="rlId" column="rl_id"/>
+        <result property="brId" column="br_id"/>
+        <result property="uId" column="u_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <insert id="insertOne" parameterType="ReplyLikeDto">
+        INSERT INTO reply_likes (br_id, u_id, status) VALUE (#{brId},#{uId},#{status})
+    </insert>
+    <update id="updateOne" parameterType="ReplyLikeDto">
+        UPDATE reply_likes SET status=#{status} WHERE u_id=#{uId} AND br_id=#{brId}
+    </update>
+    <delete id="deleteOne" parameterType="ReplyLikeDto">
+        DELETE FROM reply_likes WHERE u_id=#{uId} AND br_id=#{brId}
+
+    </delete>
+    <select id="countStatusByBrId" resultType="LikeStatusCntDto">
+        SELECT
+            COUNT(CASE WHEN status='LIKE' THEN 1 END ) 'like',
+            COUNT(CASE WHEN status='BAD' THEN 1 END ) 'bad',
+            COUNT(CASE WHEN status='BEST' THEN 1 END ) 'best',
+            COUNT(CASE WHEN status='SAD' THEN 1 END ) 'sad'
+            FROM reply_likes WHERE br_id=#{brId}
+    </select>
+    <select id="countStatusByUId" resultType="LikeStatusCntDto">
+        SELECT
+            COUNT(CASE WHEN status='LIKE' THEN 1 END ) 'like',
+            COUNT(CASE WHEN status='BAD' THEN 1 END ) 'bad',
+            COUNT(CASE WHEN status='BEST' THEN 1 END ) 'best',
+            COUNT(CASE WHEN status='SAD' THEN 1 END ) 'sad'
+            FROM reply_likes WHERE u_id=#{uId}
+
+    </select>
+    <select id="findByUidAndBrId" resultMap="ReplyLikeMap">
+        SELECT * FROM reply_likes WHERE u_id=#{uId} AND br_id=#{brId}
+    </select>
+</mapper>

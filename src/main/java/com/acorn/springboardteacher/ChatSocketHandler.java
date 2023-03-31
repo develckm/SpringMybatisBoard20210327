@@ -1,5 +1,6 @@
 package com.acorn.springboardteacher;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ChatSocketHandler extends TextWebSocketHandler {
     //채팅방에 접속하면 유지되는 소켓 리스트
     private static List<WebSocketSession> sessionList=new ArrayList<>();
+
     //채팅방에 유저가 접속하면 실행
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
