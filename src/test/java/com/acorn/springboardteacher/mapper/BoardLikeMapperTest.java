@@ -13,15 +13,20 @@ class BoardLikeMapperTest {
     @Autowired
     private BoardLikeMapper boardLikeMapper;
     @Test
+    void findByBIdAndUId(){
+        BoardLikeDto boardLikeDto = boardLikeMapper.findByBIdAndUId( 1,"user01");
+        assertNotNull(boardLikeDto);
+    }
+    @Test
     void countStatusByBId() {
         LikeStatusCntDto likeStatusCnt = boardLikeMapper.countStatusByBId(10);
-        Assertions.assertNotNull(likeStatusCnt);
+        assertNotNull(likeStatusCnt);
     }
 
     @Test
     void countStatusByUId() {
         LikeStatusCntDto likeStatusCntDto = boardLikeMapper.countStatusByUId("user01");
-        Assertions.assertNotNull(likeStatusCntDto);
+        assertNotNull(likeStatusCntDto);
     }
     @Test
     void insertUpdateDeleteOne() {
@@ -33,7 +38,7 @@ class BoardLikeMapperTest {
         boardLike.setStatus("BAD");
         int update = boardLikeMapper.updateOne(boardLike);
         int delete = boardLikeMapper.deleteOne(boardLike);
-        Assertions.assertEquals(insert+update+delete,3);
+        assertEquals(insert+update+delete,3);
     }
 
 }
