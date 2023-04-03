@@ -152,7 +152,8 @@ public class UserController {
             UserDto user,
             Integer autoLogin,
             HttpSession session,
-            RedirectAttributes redirectAttributes){
+            RedirectAttributes redirectAttributes,
+            @SessionAttribute(required = false) String redirectPage){
         //redirect 페이지에 메세지를 전달하는 방법 ~2가지
         //1. 파라미터로 ?msg=로그인 성공 (권장 x)
         //2. Session 에서 추가한 후에 사용하고 삭제 (권장 o)
@@ -166,6 +167,10 @@ public class UserController {
         if(loginUser!=null){
             redirectAttributes.addFlashAttribute("msg","로그인 성공");
             session.setAttribute("loginUser",loginUser);
+            if(redirectPage!=null){
+                session.removeAttribute("redirectPage");
+                return "redirect:"+redirectPage;
+            }
             return "redirect:/";
             //*get 을 제외한 다른 메스드는 양식을 제출하거나 ajax로 페이지를 호출할때만 가능
         }else{

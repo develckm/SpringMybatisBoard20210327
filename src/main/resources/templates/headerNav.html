@@ -33,7 +33,7 @@
         </div>
     </div>
 </nav>
-<th:block th:if="${msg!=null}">
+<th:block th:if="${msg!=null || session.msg !=null}">
     <div id="actionModal" class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -43,6 +43,7 @@
                 </div>
                 <div class="modal-body">
                     <p th:text="${msg}"></p>
+                    <p th:text="${session.msg}"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -50,7 +51,8 @@
             </div>
         </div>
     </div>
-    <script>
+    <!--타임리프 문서에서 session 을 삭제할 수 없다.-->
+    <script th:inline="javascript">
         const actionModal=document.getElementById("actionModal");
         new bootstrap.Modal(actionModal).show();
     </script>
