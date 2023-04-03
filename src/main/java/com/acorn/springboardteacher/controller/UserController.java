@@ -6,7 +6,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @AllArgsConstructor //모든 필드를 pojo 형식의 생성자로 자동 생성
@@ -18,6 +20,99 @@ public class UserController {
     // "/user/login.do" 동적페이지 정의
 
     private UserService userService;
+
+    @GetMapping("/{uId}/modify.do")
+    public String modifyForm(
+            @PathVariable String uId,
+            @SessionAttribute UserDto loginUser,
+            Model model){//렌더할 뷰에 바로 객체 전달
+        UserDto user=userService.detail(uId);
+        model.addAttribute("user",user);
+        return "/user/modify";
+    }
+    @PostMapping("/modify.do")
+    public String modifyAction(
+            @SessionAttribute UserDto loginUser,
+            @ModelAttribute UserDto user,
+            RedirectAttributes redirectAttributes){
+        int modify=0;
+        String msg="수정 실패";
+        String redirectPage="redirect:/user/"+user.getUId()+"/modify.do";
+        try {
+            modify= userService.modify(user);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            msg+=" 에러 :"+e.getMessage();
+        }
+        if(modify>0){
+            redirectPage="redirect:/user/"+user.getUId()+"/detail.do";
+            msg="수정 성공";
+        }
+
+        redirectAttributes.addFlashAttribute("msg",msg);
+        return redirectPage;
+    }
+
+
+
+    //filter(interceptor) : 해당페이지를 요청하기 전에 로그인 했는지 검사
+    //controller : 해당페이지에서 로그인 했는지 검사
+    @GetMapping("/{uId}/detail.do")
+    public ModelAndView detail(
+            @SessionAttribute(required = false) UserDto loginUser,
+            // UserDto loginUser=(UserDto)session.getAttribute("loginUser")
+            // 세션 객체를 파라미터 취급(required=true)해서 없으면 400 에러
+            @PathVariable String uId,
+            ModelAndView modelAndView,
+            RedirectAttributes redirectAttributes
+            ){ //ModelAndView : 렌더하는 뷰 설정 및 전달할 객체 설정
+        if(loginUser==null){
+            redirectAttributes.addFlashAttribute("msg","로그인 하셔야 이용할 수 있는 페이지 입니다.");
+            modelAndView.setViewName("redirect:/user/login.do");
+            return modelAndView;
+        }
+
+        UserDto user=userService.detail(uId);
+        modelAndView.setViewName("/user/detail");
+        modelAndView.addObject("user",user);
+        return  modelAndView;
+    }
+
+
+
+    @GetMapping("/signup.do")
+    public void signupForm(){}
+    @PostMapping("/signup.do")
+    public String signupAction(
+            @ModelAttribute UserDto user,
+            RedirectAttributes redirectAttributes){
+        int signup=0;
+        String errorMsg=null;
+        try {
+            signup=userService.signup(user);
+        }catch (Exception e){
+            log.error(e);
+            errorMsg=e.getMessage();
+        }
+        if(signup>0){
+            redirectAttributes.addFlashAttribute("msg","회원가입을 축하합니다!! 로그인 하세요.");
+            return "redirect:/";
+        }else{
+            redirectAttributes.addFlashAttribute("msg","회원가입 실패 에러:"+errorMsg);
+            return "redirect:/user/signup.do";
+        }
+    }
+
+    @GetMapping("/logout.do")
+    public String logoutAction(
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+            ){
+        //session.invalidate();
+        session.removeAttribute("loginUser");
+        redirectAttributes.addFlashAttribute("msg","로그아웃 되었습니다.");
+        return "redirect:/";
+    }
 
     @GetMapping("/login.do")
     public String loginForm(){

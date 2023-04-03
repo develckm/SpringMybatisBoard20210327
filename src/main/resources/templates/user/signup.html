@@ -1,0 +1,64 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>회원가입 폼</title>
+</head>
+<div layout:fragment="content">
+    <form name="signupForm" action="./signup.do" method="post" style="width: 500px;margin: 0 auto;">
+        <h1 class="my-4">회원가입</h1>
+        <p class="form-floating">
+            <input id="uIdInput" type="text" name="uId" value="mybatisTest1" class="form-control" placeholder="??">
+            <label class="">아이디</label>
+        </p>
+        <p class="form-floating">
+            <input type="text" name="name" value="테스트유저" class="form-control" placeholder="??">
+            <label>이름</label>
+        </p>
+        <p class="form-floating">
+            <input type="password" name="pw" value="1234" class="form-control" placeholder="??">
+            <label>패스워드</label>
+        </p>
+        <p class="form-floating">
+            <input type="password" name="check_pw" value="1234" class="form-control" placeholder="??">
+            <label>패스워드 체크</label>
+        </p>
+        <p class="input-group">
+            <label class="input-group-text">프로필</label>
+            <input type="file" name="imgPath" value="" class="form-control" placeholder="??">
+        </p>
+        <p class="form-floating">
+            <input type="text" name="phone" value="11122223334" class="form-control" placeholder="??">
+            <label>핸드폰</label>
+        </p>
+        <p class="form-floating">
+            <input type="text" name="email" value="mybatisTest1@gamil.com" class="form-control" placeholder="??">
+            <label>이메일</label>
+        </p>
+        <p class="form-floating">
+            <input type="date" name="birth" value="1986-05-25" class="form-control" placeholder="??">
+            <label>생일</label>
+        </p>
+        <p class="form-floating">
+            <select name="gender" class="form-control">
+                <option value="MALE">남자</option>
+                <option value="FEMALE">여자</option>
+                <option value="NONE" selected>없음</option>
+            </select>
+            <label>성별</label>
+        </p>
+        <p class="form-floating">
+            <input type="text" name="address" value="서울시" class="form-control" placeholder="??">
+            <label>주소</label>
+        </p>
+        <p class="form-floating">
+            <input type="text" name="detailAddress" value="압구정" class="form-control" placeholder="??">
+            <label>주소상세</label>
+        </p>
+        <p class="text-end">
+            <button class="btn btn-outline-warning" type="reset">초기화</button>
+            <button class="btn btn-outline-primary">회원가입</button>
+        </p>
+    </form>
+</div>
+</html>

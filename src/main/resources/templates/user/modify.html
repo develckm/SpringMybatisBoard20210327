@@ -1,0 +1,70 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>회원수정 폼</title>
+</head>
+<div layout:fragment="content">
+    <form name="signupForm" action="/user/modify.do" method="post" style="width: 500px;margin: 0 auto;">
+        <h1 class="my-4">회원수정</h1>
+        <p class="form-floating">
+            <input th:value="${user.uId}" readonly id="uIdInput" type="text" name="uId" class="form-control" placeholder="??">
+            <label class="">아이디</label>
+        </p>
+        <p class="form-floating">
+            <input th:value="${user.name}" type="text" name="name" class="form-control" placeholder="??">
+            <label>이름</label>
+        </p>
+        <p class="form-floating">
+            <input th:value="${user.pw}" type="password" name="pw" class="form-control" placeholder="??">
+            <label>패스워드</label>
+        </p>
+        <p class="form-floating">
+            <input type="password" name="check_pw" class="form-control" placeholder="??">
+            <label>패스워드 체크</label>
+        </p>
+        <p th:if="${user.imgPath!=null}">
+            <img th:src="@{'{path}'(path=${user.imgPath})}" class="img-thumbnail" alt="원본 이미지">
+        </p>
+        <p class="input-group">
+            <label class="input-group-text">변경할 프로필</label>
+            <input type="hidden" name="imgPath" th:value="${user.imgPath}">
+            <input type="file" name="newImg" value="" class="form-control" placeholder="??">
+        </p>
+        <p class="form-floating">
+            <input th:value="${user.phone}" type="text" name="phone" class="form-control" placeholder="??">
+            <label>핸드폰</label>
+        </p>
+        <p class="form-floating">
+            <input th:value="${user.email}" type="text" name="email" class="form-control" placeholder="??">
+
+            <label>이메일</label>
+        </p>
+        <p class="form-floating">
+            <input th:value="${user.birth}" type="date" name="birth" class="form-control" placeholder="??">
+            <label>생일</label>
+        </p>
+        <p class="form-floating">
+            <select name="gender" class="form-control">
+                <option value="MALE" th:selected="${#strings.equals(user.gender,'MALE')}">남자</option>
+                <option value="FEMALE" th:selected="${#strings.equals(user.gender,'FEMALE')}">여자</option>
+                <option value="NONE"  th:selected="${#strings.equals(user.gender,'NONE')}">없음</option>
+            </select>
+            <label>성별</label>
+        </p>
+        <p class="form-floating">
+            <input th:value="${user.address}" type="text" name="address"  class="form-control" placeholder="??">
+            <label>주소</label>
+        </p>
+        <p class="form-floating">
+            <input th:value="${user.detailAddress}" type="text" name="detailAddress"  class="form-control" placeholder="??">
+            <label>주소상세</label>
+        </p>
+        <p class="text-end">
+            <a href="/user/dropout.do" class="btn btn-outline-danger">탈퇴</a>
+            <button class="btn btn-outline-warning" type="reset">초기화</button>
+            <button class="btn btn-outline-primary">수정</button>
+        </p>
+    </form>
+</div>
+</html>

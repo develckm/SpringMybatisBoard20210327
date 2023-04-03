@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>댓글 게시판</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.2.3/dist/css/bootstrap.min.css">
+    <script src="/webjars/bootstrap/5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <header th:replace="/headerNav"></header>
+    <main class="container">
+            <th:block layout:fragment="content"></th:block>
+    </main>
+</body>
+</html>

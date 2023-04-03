@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>spring board </title>
-</head>
-<body>
-    <header th:include="headerNav.html"></header>
-    <main class="container">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+    <div layout:fragment="content">
         <h1 class="my-4">Spring Boot (Mybatis)로 댓글 게시판 만들기</h1>
         <h2>maven vs gradle</h2>
 
@@ -88,6 +85,29 @@
         </ul>
         <h2>webJar</h2>
         <p>Gradle 과 Maven 같은 빌드 및 라이브러리(jar) 관리도구에서 클라이언트(js,css) 측 라이브러를 관리하는 방법</p>
-    </main>
-</body>
+        <h2>spring-boot-devtools 개발자 도구</h2>
+        <ul>
+            <li>spring 내부의 코드가 변경되면 서버 재시작 및 배포를 진행</li>
+            <li>크롬 브라우저와 소켓 통신을 하다가 서버 재시작을 하면 브라우저를 새로고침 한다.</li>
+            <li>intelliJ에서 컴파일러 설정에서 자동새로고침을 허용해야 한다.</li>
+            <li>크롬 확장 프로그램에서 liveReload 를 추가해야 한다.</li>
+            <li>https://chrome.google.com/webstore/detail/livereload%2B%2B/ciehpookapcdlakedibajeccomagbfab?hl=ko</li>
+            <li>인텔리제이의 Build Project Automatically 설정이 체크되어 있는지 확인합니다. (File -> Settings -> Build, Execution, Deployment -> Compiler)</li>
+            <li>인텔리제이의 고급설정>개발된 애플리케이션이 현재 실행 중인 경우에도 auto-make가 시작되도록 허용</li>
+        </ul>
+        <h2>spring-boot-start-web 웹앱을 개발하는 프레임워크</h2>
+        <ul>
+            <li>tomcat(10.~) 이 포함 (이클립스재단에서 개발중인 jakarta)</li>
+            <li>톰캣 서블릿에 해당하는 컨트롤러(@Controller)를 작성할 수 있다.(요청과 응답 처리)</li>
+            <li>컨트롤러를 작성할때 꼭 처음 생성된 패키지 하위에 작성해야한다.(component-scan : 어노테이션 검색 후 bean 객체 등록)</li>
+            <li>Jackson 라이브러리가 포함되어 있어서 json 파싱을 편하게 작성할 수 있다.</li>
+            <li>RESTFull API 를 제공 (다양한 메서드[GET,POST+PUT,DELETE,PATCH],패스의 파라미터 전송)</li>
+            <li>
+                <a href="/sum.do?a=1&b=10">sum.do?a=1&b=10</a>
+            </li>
+            <li>
+                <a href="/mult.do?a=3&b=7">mult.do?a=3&b=7</a>
+            </li>
+        </ul>
+    </div>
 </html>
