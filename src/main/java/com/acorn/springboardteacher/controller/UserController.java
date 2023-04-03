@@ -20,6 +20,34 @@ public class UserController {
     // "/user/login.do" 동적페이지 정의
 
     private UserService userService;
+    @GetMapping("/dropout.do")
+    public String dropoutForm(
+            @SessionAttribute UserDto loginUser){
+        return "/user/dropoutForm";
+    }
+    @PostMapping("/dropout.do")
+    public String dropoutAction(
+            @ModelAttribute UserDto user,
+            @SessionAttribute UserDto loginUser,
+            RedirectAttributes redirectAttributes,
+            HttpSession session){
+        String msg="회원 탈퇴 실패 (비밀번호 확인)";
+        String redirectPage="redirect:/user/dropout.do";
+        int dropout=0;
+        try {
+            dropout=userService.dropout(user);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            msg+=" 에러 :"+e.getMessage();
+        }
+        if(dropout>0){
+            msg="이용해 주셔서 감사합니다.(회원탈퇴 성공)";
+            redirectPage="redirect:/";
+            session.removeAttribute("loginUser");
+        }
+        redirectAttributes.addFlashAttribute("msg",msg);
+        return redirectPage;
+    }
 
     @GetMapping("/{uId}/modify.do")
     public String modifyForm(
