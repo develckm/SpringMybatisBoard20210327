@@ -1,7 +1,10 @@
 package com.acorn.springboardteacher.controller;
 
 import com.acorn.springboardteacher.dto.UserDto;
+import com.acorn.springboardteacher.lib.AESEncryption;
 import com.acorn.springboardteacher.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -134,9 +137,22 @@ public class UserController {
     @GetMapping("/logout.do")
     public String logoutAction(
             HttpSession session,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            @CookieValue(value = "SPRING_LOGIN_ID",required = false) String loginIdVal,
+            @CookieValue(value = "SPRING_LOGIN_PW",required = false) String loginPwVal,
+            HttpServletResponse resp
             ){
         //session.invalidate();
+        if(loginIdVal!=null || loginPwVal!=null){
+            Cookie loginId=new Cookie("SPRING_LOGIN_ID","");
+            Cookie loginPw=new Cookie("SPRING_LOGIN_PW","");
+            loginId.setMaxAge(0);
+            loginPw.setMaxAge(0);
+            loginId.setPath("/");
+            loginPw.setPath("/");
+            resp.addCookie(loginId);
+            resp.addCookie(loginPw);
+        }
         session.removeAttribute("loginUser");
         redirectAttributes.addFlashAttribute("msg","로그아웃 되었습니다.");
         return "redirect:/";
@@ -153,7 +169,8 @@ public class UserController {
             Integer autoLogin,
             HttpSession session,
             RedirectAttributes redirectAttributes,
-            @SessionAttribute(required = false) String redirectPage){
+            @SessionAttribute(required = false) String redirectPage,
+            HttpServletResponse resp) throws Exception {
         //redirect 페이지에 메세지를 전달하는 방법 ~2가지
         //1. 파라미터로 ?msg=로그인 성공 (권장 x)
         //2. Session 에서 추가한 후에 사용하고 삭제 (권장 o)
@@ -165,6 +182,18 @@ public class UserController {
             log.error(e.getMessage());
         }
         if(loginUser!=null){
+            if(autoLogin!=null && autoLogin==1){
+                String encryptIdValue = AESEncryption.encryptValue(loginUser.getUId());
+                String encryptPwValue = AESEncryption.encryptValue(loginUser.getPw());
+                Cookie loginId=new Cookie("SPRING_LOGIN_ID",encryptIdValue);
+                Cookie loginPw=new Cookie("SPRING_LOGIN_PW",encryptPwValue);
+                loginId.setPath("/");
+                loginPw.setPath("/");
+                loginId.setMaxAge(7*24*60*60);
+                loginPw.setMaxAge(7*24*60*60);
+                resp.addCookie(loginId);
+                resp.addCookie(loginPw);
+            }
             redirectAttributes.addFlashAttribute("msg","로그인 성공");
             session.setAttribute("loginUser",loginUser);
             if(redirectPage!=null){

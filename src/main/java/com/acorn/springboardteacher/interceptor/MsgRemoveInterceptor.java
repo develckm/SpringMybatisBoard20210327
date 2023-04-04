@@ -14,6 +14,5 @@ public class MsgRemoveInterceptor implements HandlerInterceptor {
         if(session.getAttribute("msg")!=null){
             session.removeAttribute("msg");
         }
-
     }
 }
