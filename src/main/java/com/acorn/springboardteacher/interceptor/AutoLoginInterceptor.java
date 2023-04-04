@@ -1,6 +1,7 @@
 package com.acorn.springboardteacher.interceptor;
 
 import com.acorn.springboardteacher.dto.UserDto;
+import com.acorn.springboardteacher.lib.AESEncryption;
 import com.acorn.springboardteacher.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,8 +38,10 @@ public class AutoLoginInterceptor implements HandlerInterceptor {
             String msg=null;
             try {
                 UserDto user=new UserDto();
-                user.setUId(loginId.getValue());
-                user.setPw(loginPw.getValue());
+                //FqBqSA2/0xW9LbYtu2h2Jw== (해시코드)  =>(복호화) "user01" (평문)
+                //9YnqkRYf2AT+a7hmuVBK7g==   => "1234"
+                user.setUId(AESEncryption.decryptValue(loginId.getValue()));
+                user.setPw(AESEncryption.decryptValue(loginPw.getValue()));
                 loginUser=userService.login(user);
             }catch (Exception e){
                 log.error(e.getMessage());

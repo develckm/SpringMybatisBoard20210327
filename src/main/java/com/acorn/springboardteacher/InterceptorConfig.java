@@ -18,8 +18,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     //addInterceptors : 인터셉터 설정
     public void addInterceptors(InterceptorRegistry registry) {
-        //registry.addInterceptor(autoLoginInterceptor).order(1)
-        //        .addPathPatterns("/**");
+        registry.addInterceptor(autoLoginInterceptor).order(1)
+                .addPathPatterns("/**");
         registry.addInterceptor(loginCheckInterceptor).order(2)
                 .addPathPatterns("/user/**")
                 .excludePathPatterns("/user/login.do")

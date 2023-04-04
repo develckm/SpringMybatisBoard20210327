@@ -142,7 +142,6 @@ public class UserController {
             @CookieValue(value = "SPRING_LOGIN_PW",required = false) String loginPwVal,
             HttpServletResponse resp
             ){
-        //session.invalidate();
         if(loginIdVal!=null || loginPwVal!=null){
             Cookie loginId=new Cookie("SPRING_LOGIN_ID","");
             Cookie loginPw=new Cookie("SPRING_LOGIN_PW","");
@@ -157,7 +156,6 @@ public class UserController {
         redirectAttributes.addFlashAttribute("msg","로그아웃 되었습니다.");
         return "redirect:/";
     }
-
     @GetMapping("/login.do")
     public String loginForm(){
 
@@ -171,10 +169,6 @@ public class UserController {
             RedirectAttributes redirectAttributes,
             @SessionAttribute(required = false) String redirectPage,
             HttpServletResponse resp) throws Exception {
-        //redirect 페이지에 메세지를 전달하는 방법 ~2가지
-        //1. 파라미터로 ?msg=로그인 성공 (권장 x)
-        //2. Session 에서 추가한 후에 사용하고 삭제 (권장 o)
-        //3. redirectAttributes.addFlashAttribute("msg","로그인성공"); 세션저장되었다가 사용하면 바로 삭제
         UserDto loginUser=null;
         try {
             loginUser=userService.login(user);
@@ -201,7 +195,6 @@ public class UserController {
                 return "redirect:"+redirectPage;
             }
             return "redirect:/";
-            //*get 을 제외한 다른 메스드는 양식을 제출하거나 ajax로 페이지를 호출할때만 가능
         }else{
             redirectAttributes.addFlashAttribute("msg","아이디나 패스워드를 확인하세요!");
             return "redirect:/user/login.do";
