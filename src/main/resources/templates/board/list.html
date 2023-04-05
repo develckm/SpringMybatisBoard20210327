@@ -10,8 +10,8 @@
 <div layout:fragment="content">
     <h1 class="my-4">게시판 리스트</h1>
     <section id="boardListCont" class="row row-cols-lg-2 row-cols-1 g-5">
-        <div class="col">
-            <div class="card" th:each="b:${boards}">
+        <div class="col" th:each="b:${boards}">
+            <div class="card" >
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <div>
                         <img
