@@ -27,8 +27,9 @@
                 </button>
             </div>
             <div class="col ps-0">
-                <div class="card col" >
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card col" style="height: 75vh; overflow-y: auto" >
+                    <div class="card-header d-flex justify-content-between align-items-center
+                                bg-light position-sticky top-0" style="z-index: 999">
                         <div>
                             <img
                                     th:if="${b.user.imgPath!=null}"
@@ -88,11 +89,16 @@
                             <hr>
                             <div class="replyCont">
                                 <h6 class="card-title">댓글 리스트</h6>
-                                <p th:text="${b.replies}"></p>
+                                <ul class="list-group">
+                                    <li class="list-group-item" th:each="r:${b.replies}">
+                                        <th:block th:include="/reply/detail"></th:block>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer d-flex align-items-center">
+                    <div class="card-footer d-flex align-items-center
+                                position-sticky bottom-0 bg-light">
                         <div class="likesCont">
                             <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="좋아요" data-bs-placement="top">
                                 <i class="bi bi-emoji-heart-eyes fs-4"></i>
