@@ -128,16 +128,16 @@
                             <input type="hidden" name="uId" th:value="${session.loginUser.uId}">
                             <input type="hidden" name="bId" th:value="${b.bId}">
                             <div class="mb-2 row justify-content-end">
-                                <div class="col-2 p-0 ">
+                                <div class="col-3 p-0 ">
                                     <input type="text" readonly class="form-control" name="parentBrId"
                                         placeholder="부모 댓글">
                                 </div>
-                                <div class="col-6 p-0 ">
+                                <div class="col p-0 ">
                                     <input type="text" class="form-control " name="content"
                                         placeholder="내용">
                                 </div>
-                                <button class="btn btn-primary col-2">제출</button>
-                                <label class="btn btn-info" style="width: fit-content">
+                                <button class="btn btn-primary col-auto">제출</button>
+                                <label class="btn btn-info col-auto">
                                     <i class="bi bi-file-image text-light"></i>
                                     <input class="d-none" type="file" name="img">
                                 </label>
