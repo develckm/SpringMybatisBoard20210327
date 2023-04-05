@@ -29,7 +29,9 @@
                             <i class="bi bi-list fs-3"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">상세</a></li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{'/board/{bId}/detail.do'(bId=${b.bId})}">상세</a>
+                            </li>
                             <li><a class="dropdown-item" href="#">글쓴이가 작성한 글목록</a></li>
                             <li><a class="dropdown-item" href="#">계정 정보</a></li>
                             <li>

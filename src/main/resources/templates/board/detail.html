@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout}">
+<head>
+    <title>게시판 상세</title>
+</head>
+<p></p>
+<div layout:fragment="content">
+    <h1 class="my-4">게시판 상세</h1>
+    <section id="boardCont" class="">
+        <div class="row">
+            <div id="carouselExampleControls2" class="carousel slide d-none d-md-block col pe-0" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="/public/img/board/a.jpg" class="d-block w-100" alt="게시글 이미지">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <div class="col ps-0">
+                <div class="card col" >
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <img
+                                    th:if="${b.user.imgPath!=null}"
+                                    th:src="@{'{path}'(path=${b.user.imgPath})}"
+                                    alt="프로필 이미지"
+                                    style="width: 60px; height: 60px; object-fit: cover;" class="img-thumbnail">
+                            <strong class="ms-2" th:text="${b.user.uId}"></strong>
+                            (<strong th:text="${b.user.name}"></strong>)
+                            <small class="text-muted"> • </small>
+                        </div>
+                        <div class="dropdown">
+                            <a href="#" role="button" class="" data-bs-toggle="dropdown">
+                                <i class="bi bi-list fs-3"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" th:href="@{'/board/{bId}/detail.do'(bId=${b.bId})}">상세</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#">글쓴이가 작성한 글목록</a></li>
+                                <li><a class="dropdown-item" href="#">계정 정보</a></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="#">
+                                        <i class="bi bi-bell-fill"></i>
+                                        신고
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="carouselExampleControls" class="carousel slide d-md-none" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="/public/img/board/a.jpg" class="d-block w-100" alt="게시글 이미지">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <div>
+                            <div class="d-flex my-2">
+                                <div class="me-2">
+                                    작성일 : <small th:text="${#dates.format(b.postTime,'yyyy-MM-dd')}"></small>
+                                </div>
+                                <div class="">
+                                    수정일 : <small th:text="${#dates.format(b.updateTime,'yyyy-MM-dd')}"></small>
+                                </div>
+                            </div>
+                            <h5 class="card-title" th:text="${b.title}"></h5>
+                            <p class="card-text" th:text="${b.content}"></p>
+                            <hr>
+                            <div class="replyCont">
+                                <h6 class="card-title">댓글 리스트</h6>
+                                <p th:text="${b.replies}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center">
+                        <div class="likesCont">
+                            <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="좋아요" data-bs-placement="top">
+                                <i class="bi bi-emoji-heart-eyes fs-4"></i>
+                                <span th:text="${b.likes.like}"></span>
+                            </a>
+                            <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="최고야">
+                                <i class="bi bi-emoji-sunglasses fs-4"></i>
+                                <span th:text="${b.likes.best}"></span>
+                            </a>
+                            <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="나빠요">
+                                <i class="bi bi-emoji-expressionless fs-4"></i>
+                                <span th:text="${b.likes.bad}"></span>
+                            </a>
+                            <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="슬퍼요">
+                                <i class="bi bi-emoji-frown fs-4"></i>
+                                <span th:text="${b.likes.sad}"></span>
+                            </a>
+                        </div>
+                        <small class="text-muted"> • </small>
+                        <div class="viewCont ms-2" data-bs-toggle="tooltip" data-bs-title="조회수">
+                            <i class="bi bi-eye fs-4"></i>
+                            <span th:text="${b.viewCount}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+</html>
