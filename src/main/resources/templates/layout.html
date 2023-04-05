@@ -14,5 +14,11 @@
     <main class="container">
             <th:block layout:fragment="content"></th:block>
     </main>
+
+    <script>
+        //툴팁생성
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
 </body>
 </html>
