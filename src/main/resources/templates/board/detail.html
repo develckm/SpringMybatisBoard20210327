@@ -97,31 +97,52 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer d-flex align-items-center
-                                position-sticky bottom-0 bg-light">
-                        <div class="likesCont">
-                            <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="좋아요" data-bs-placement="top">
-                                <i class="bi bi-emoji-heart-eyes fs-4"></i>
-                                <span th:text="${b.likes.like}"></span>
-                            </a>
-                            <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="최고야">
-                                <i class="bi bi-emoji-sunglasses fs-4"></i>
-                                <span th:text="${b.likes.best}"></span>
-                            </a>
-                            <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="나빠요">
-                                <i class="bi bi-emoji-expressionless fs-4"></i>
-                                <span th:text="${b.likes.bad}"></span>
-                            </a>
-                            <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="슬퍼요">
-                                <i class="bi bi-emoji-frown fs-4"></i>
-                                <span th:text="${b.likes.sad}"></span>
-                            </a>
+                    <div class="card-footer position-sticky bottom-0 bg-light">
+                        <div class="d-flex align-items-center">
+                            <div class="likesCont">
+                                <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="좋아요" data-bs-placement="top">
+                                    <i class="bi bi-emoji-heart-eyes fs-4"></i>
+                                    <span th:text="${b.likes.like}"></span>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="최고야">
+                                    <i class="bi bi-emoji-sunglasses fs-4"></i>
+                                    <span th:text="${b.likes.best}"></span>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="나빠요">
+                                    <i class="bi bi-emoji-expressionless fs-4"></i>
+                                    <span th:text="${b.likes.bad}"></span>
+                                </a>
+                                <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="슬퍼요">
+                                    <i class="bi bi-emoji-frown fs-4"></i>
+                                    <span th:text="${b.likes.sad}"></span>
+                                </a>
+                            </div>
+                            <small class="text-muted"> • </small>
+                            <div class="viewCont ms-2" data-bs-toggle="tooltip" data-bs-title="조회수">
+                                <i class="bi bi-eye fs-4"></i>
+                                <span th:text="${b.viewCount}"></span>
+                            </div>
                         </div>
-                        <small class="text-muted"> • </small>
-                        <div class="viewCont ms-2" data-bs-toggle="tooltip" data-bs-title="조회수">
-                            <i class="bi bi-eye fs-4"></i>
-                            <span th:text="${b.viewCount}"></span>
-                        </div>
+                        <form name="replyInsertForm" action="/reply/insert.do" method="post" th:if="${session.loginUser!=null}">
+                            <hr>
+                            <input type="hidden" name="uId" th:value="${session.loginUser.uId}">
+                            <input type="hidden" name="bId" th:value="${b.bId}">
+                            <div class="mb-2 row justify-content-end">
+                                <div class="col-2 p-0 ">
+                                    <input type="text" readonly class="form-control" name="parentBrId"
+                                        placeholder="부모 댓글">
+                                </div>
+                                <div class="col-6 p-0 ">
+                                    <input type="text" class="form-control " name="content"
+                                        placeholder="내용">
+                                </div>
+                                <button class="btn btn-primary col-2">제출</button>
+                                <label class="btn btn-info" style="width: fit-content">
+                                    <i class="bi bi-file-image text-light"></i>
+                                    <input class="d-none" type="file" name="img">
+                                </label>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

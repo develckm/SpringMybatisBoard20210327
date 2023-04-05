@@ -31,11 +31,12 @@
             <span th:text="${r.likes.sad}"></span>
         </a>
     </div>
-    <a href="#">댓글 달기</a>
+    <a href="javascript:void(0)" th:onclick="replyInsertForm.parentBrId.value=[[${r.brId}]]">댓글 달기</a>
 </div>
 <ul class="list-group">
     <li class="list-group-item" th:each="r:${r.replies}">
         <th:block th:include="/reply/detail"></th:block>
     </li>
 </ul>
+<!--3시 5분까지 쉬었다가 오겠습니다.~ -->
 </html>
