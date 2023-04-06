@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div class="header d-flex justify-content-between">
+<div class="header d-flex justify-content-between pb-1 border-primary"
+     th:classappend="${(session.loginUser!=null && session.loginUser.uId==r.uId)?'border-bottom':''}">
     <div>
         @<strong th:text="${r.uId}"></strong>
         <small class="text-muted">•</small>
@@ -31,7 +32,15 @@
             <span th:text="${r.likes.sad}"></span>
         </a>
     </div>
-    <a href="javascript:void(0)" th:onclick="replyInsertForm.parentBrId.value=[[${r.brId}]]">댓글 달기</a>
+    <div>
+        <a href="javascript:void(0)" th:onclick="replyInsertForm.parentBrId.value=[[${r.brId}]]">댓글 달기</a>
+        <a href="javascript:void(0)"
+           th:if="${session.loginUser!=null && session.loginUser.uId==r.uId}"
+           th:onclick="loadModifyReply([[${r.brId}]])"
+            class="ms-2">
+            수정 폼
+        </a>
+    </div>
 </div>
 <ul class="list-group">
     <li class="list-group-item" th:each="r:${r.replies}">

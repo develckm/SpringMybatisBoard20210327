@@ -87,8 +87,12 @@
                             <h5 class="card-title" th:text="${b.title}"></h5>
                             <p class="card-text" th:text="${b.content}"></p>
                             <hr>
-                            <div class="replyCont">
-                                <h6 class="card-title">댓글 리스트</h6>
+                            <h5 class="card-title d-flex justify-content-between">
+                                <span>댓글 리스트</span>
+                                <button type="button" class="btn btn-light"
+                                        th:onclick="loadReplies([[${b.bId}]])">새로고침</button>
+                            </h5>
+                            <div id="replyCont">
                                 <ul class="list-group">
                                     <li class="list-group-item" th:each="r:${b.replies}">
                                         <th:block th:include="/reply/detail"></th:block>
@@ -123,7 +127,7 @@
                                 <span th:text="${b.viewCount}"></span>
                             </div>
                         </div>
-                        <form name="replyInsertForm" action="/reply/insert.do" method="post" th:if="${session.loginUser!=null}">
+                        <form enctype="multipart/form-data" name="replyInsertForm" action="/reply/insert.do" method="post" th:if="${session.loginUser!=null}">
                             <hr>
                             <input type="hidden" name="uId" th:value="${session.loginUser.uId}">
                             <input type="hidden" name="bId" th:value="${b.bId}">
@@ -148,6 +152,47 @@
             </div>
         </div>
     </section>
+    <script th:inline="javascript">
+        const replyCont=document.getElementById("replyCont");
+        const replyInsertForm=document.forms["replyInsertForm"];
+        async function loadReplies(bId){
+            let url=`/reply/${bId}/list.do`
+            const resp=await fetch(url);
+            if(resp.status===200){
+                alert("댓글 리스트 로드 성공");
+                let text=await resp.text();
+                replyCont.innerHTML=text;
+            }
+        }
+        replyInsertForm.onsubmit=registerReply;
+        async function registerReply(e){
+            e.preventDefault();
+            //multipart/form-data 로 지정된 form 은 new FormData(formNode) 객체를 생성해서 body에 추가
+            const data=new FormData(replyInsertForm);
+            let url="/reply/handler.do" //register:1(성공),0(실패)
+            const resp=await fetch(url,{method:"POST",body:data});
+            if(resp.status===200){
+                const json=await resp.json();
+                if(json.register>0){
+                    alert("등록성공");
+                    await loadReplies(replyInsertForm.bId.value);
+                }
+            }else {
+                alert("등록 실패");
+            }
+        }
 
+    </script>
 </div>
 </html>
+
+
+
+
+
+
+
+
+
+
+

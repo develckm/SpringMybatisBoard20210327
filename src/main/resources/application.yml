@@ -6,6 +6,15 @@ spring:
     password: mysql123
     #driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  servlet:
+    multipart:
+      location: ${user.dir}/SpringMybatisBoard20210327/src/main/resources/static/public/img
+      max-file-size: 1MB
+      max-request-size: 5MB
+img:
+  upload:
+    path: ${user.dir}/SpringMybatisBoard20210327/src/main/resources/static/public/img
+
 server:
   port: 8080
 mybatis:

@@ -1,0 +1,5 @@
+<ul class="list-group">
+    <li class="list-group-item" th:each="r : ${replies}">
+        <th:block th:include="/reply/detail"></th:block>
+    </li>
+</ul>
