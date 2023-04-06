@@ -69,12 +69,6 @@ public class ReplyController {
         handlerDto.setRegister(register);
         return handlerDto;
     }
-
-
-
-
-
-
     @PostMapping("/insert.do")
     public String insertAction(
             @ModelAttribute BoardReplyDto reply,
