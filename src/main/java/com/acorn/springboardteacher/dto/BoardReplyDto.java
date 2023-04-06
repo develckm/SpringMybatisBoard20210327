@@ -1,9 +1,12 @@
 package com.acorn.springboardteacher.dto;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
 @Data
+@JsonIgnoreProperties({"handler"})
+//프록시~~
 //Table board_replies
 public class BoardReplyDto {
     private int brId;//pk generate key(==Auto increment)

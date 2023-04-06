@@ -151,10 +151,50 @@
                 </div>
             </div>
         </div>
+        <div id="replyModifyModal" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <form class="modal-content" name="replyModifyForm" method="post" enctype="multipart/form-data">
+                    <input type="text" name="bId">
+                    <input type="text" name="brId">
+                    <input type="text" name="imgPath">
+                    <div class="modal-header">
+                        <h5 class="modal-title">리플 수정 폼</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="replyModifyModalBody" class="modal-body">
+                        <p class="form-floating">
+                            <input type="text" name="uId" readonly class="form-control" placeholder="글쓴이">
+                            <label>글쓴이</label>
+                        </p>
+                        <p>
+                            <img name="imgPath" src="" alt="댓글 이미지">
+                        </p>
+                        <p class="form-floating">
+                            <input type="text" name="parentBrId" readonly class="form-control" placeholder="참조하는 부모 댓글">
+                            <label>참조하는 부모 댓글</label>
+                        </p>
+                        <p>
+                            <input type="file" name="img" class="form-control">
+                        </p>
+                        <p class="form-floating">
+                            <input type="text" name="content" class="form-control" placeholder="내용">
+                            <label>내용</label>
+                        </p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </section>
     <script th:inline="javascript">
+        const replyModifyModal=new bootstrap.Modal(document.getElementById("replyModifyModal"),{});
         const replyCont=document.getElementById("replyCont");
         const replyInsertForm=document.forms["replyInsertForm"];
+        const replyModifyForm=document.forms["replyModifyForm"];
         async function loadReplies(bId){
             let url=`/reply/${bId}/list.do`
             const resp=await fetch(url);
@@ -178,10 +218,19 @@
                     await loadReplies(replyInsertForm.bId.value);
                 }
             }else {
-                alert("등록 실패");
+                alert("등록 실패 status :"+resp.status);
             }
         }
-
+        async function loadModifyReply(brId){
+            let url=`/reply/${brId}/detail.do`;
+            const resp=await fetch(url);
+            if(resp.status===200){
+                const json=await resp.json();
+                replyModifyModal.show();
+            }else{
+                alert("불러오기 실패 stauts : "+resp.status)
+            }
+        }
     </script>
 </div>
 </html>

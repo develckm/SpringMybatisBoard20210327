@@ -30,7 +30,12 @@ public class ReplyController {
     public ReplyController(BoardReplyService boardReplyService) {
         this.boardReplyService = boardReplyService;
     }
-    //http://localhost:8080/reply/1/list.do
+    @GetMapping("/{brId}/detail.do")
+    public @ResponseBody BoardReplyDto detail(@PathVariable int brId){
+        BoardReplyDto reply=boardReplyService.detail(brId);
+        log.info(reply);
+        return reply;
+    }
     @GetMapping("/{bId}/list.do")
     public String list(
             @PathVariable int bId,
