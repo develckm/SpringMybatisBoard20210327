@@ -6,6 +6,7 @@
         <result property="bad" column="bad"/>
         <result property="best" column="best"/>
         <result property="sad" column="sad"/>
+        <result property="id" column="b_id"/>
         <association property="status"
                      select="findByBIdAndUIdIsLoginUserId"
                      column="b_id"
