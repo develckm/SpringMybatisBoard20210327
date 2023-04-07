@@ -15,6 +15,12 @@
         <result column="detail_address" property="detailAddress"/>
         <result column="permission" property="permission"/>
     </resultMap>
+    <update id="setLoginUserId">
+        SET @loginUserId=#{uId}
+    </update>
+    <update id="setLoginUserIdNull">
+        SET @loginUserId=NULL;
+    </update>
     <insert id="insertOne" parameterType="UserDto">
         INSERT INTO users (u_id, pw, name, phone, img_path, email, birth, gender, address, detail_address)
         VALUE (#{uId},#{pw},#{name},#{phone},#{imgPath},#{email},#{birth},#{gender},#{address},#{detailAddress})

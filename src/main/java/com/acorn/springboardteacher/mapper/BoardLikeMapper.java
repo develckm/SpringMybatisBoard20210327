@@ -14,6 +14,7 @@ public interface BoardLikeMapper {
     //게시글에서 유저가 좋아요를 했다면 싫어요 최고에요 나빠요 로 수정
     //게시글에서 유저가 좋아요를 했다면 좋아요를 취소(삭제)
     BoardLikeDto findByBIdAndUId(@Param("bId")int bId, @Param("uId")String uId);
+    BoardLikeDto findByBIdAndUIdIsLoginUserId(@Param("bId")int bId); //로그인한 유저가 좋아요를 한 내역
     LikeStatusCntDto countStatusByBId(int bId);
     LikeStatusCntDto countStatusByUId(String uId);
     int insertOne(BoardLikeDto boardLike);

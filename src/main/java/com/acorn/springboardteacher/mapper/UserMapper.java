@@ -15,5 +15,6 @@ public interface UserMapper {
     int updatePwByUId(UserDto user);
     int insertOne(UserDto user);
     int deleteByUIdAndPw(UserDto user);
-
+    int setLoginUserId(String uId); //mysql에서 사용할 변수 등록
+    int setLoginUserIdNull();
 }

@@ -1,6 +1,7 @@
 package com.acorn.springboardteacher.controller;
 
 import com.acorn.springboardteacher.dto.BoardDto;
+import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.service.BoardService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.List;
 
@@ -18,8 +20,16 @@ public class BoardController {
     private BoardService boardService;
 
     @GetMapping("/list.do")
-    public String list(Model model){
-        List<BoardDto> boards=boardService.list();
+    public String list(
+            Model model,
+            @SessionAttribute(required = false) UserDto loginUser){
+
+        List<BoardDto> boards;
+        if(loginUser==null){
+            boards=boardService.list();
+        }else{
+            boards=boardService.list(loginUser.getUId());
+        }
         model.addAttribute("boards",boards);
 
         return "/board/list";

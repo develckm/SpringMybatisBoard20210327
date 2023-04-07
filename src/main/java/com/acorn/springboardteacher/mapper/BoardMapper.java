@@ -13,6 +13,7 @@ public interface BoardMapper {
     //리스트,상세,등록,수정,삭제,신고
     //상세보기시 조회수 올리기
     List<BoardDto> findAll();
+    List<BoardDto> findAll(String loginUserId);
     BoardDto findByBId(int bId);
     int insertOne(BoardDto board);
     int updateOne(BoardDto board);
