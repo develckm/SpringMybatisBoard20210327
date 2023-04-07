@@ -9,9 +9,29 @@
     </div>
     <small th:text="${#dates.format(r.updateTime,'yyyy-MM-dd')}"></small>
 </div>
-<div class="body p-1">
-    <img th:src="@{'{path}'(path=${r.imgPath})}" alt="댓글 이미지">
-    <span th:text="${r.content}"></span>
+<div class="body p-1 row">
+    <div th:if="${r.imgPath!=null}" class="col-4">
+        <a href="#" role="button" th:data-bs-target="'#imgModal'+${r.brId}" data-bs-toggle="modal" >
+            <img class="img-thumbnail w-100" style="max-height: 100px; object-fit: cover" th:src="@{'{path}'(path=${r.imgPath})}" alt="댓글 이미지">
+        </a>
+        <div th:id="'imgModal'+${r.brId}" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img class="img-thumbnail w-100"  th:src="@{'{path}'(path=${r.imgPath})}" alt="댓글 이미지">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <span th:text="${r.content}"></span>
+    </div>
+
 </div>
 <div class="footer d-flex justify-content-between align-items-center">
     <div class="likesCont">

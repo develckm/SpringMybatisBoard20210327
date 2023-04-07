@@ -15,6 +15,9 @@ img:
   upload:
     path: ${user.dir}/SpringMybatisBoard20210327/src/main/resources/static/public/img
 
+static:
+  path: ${user.dir}/SpringMybatisBoard20210327/src/main/resources/static
+
 server:
   port: 8080
 mybatis:

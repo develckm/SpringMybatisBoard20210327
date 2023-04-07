@@ -154,9 +154,9 @@
         <div id="replyModifyModal" class="modal" tabindex="-1">
             <div class="modal-dialog">
                 <form class="modal-content" name="replyModifyForm" method="post" enctype="multipart/form-data">
-                    <input type="text" name="bId">
-                    <input type="text" name="brId">
-                    <input type="text" name="imgPath">
+                    <input type="hidden" name="bId">
+                    <input type="hidden" name="brId">
+                    <input type="hidden" name="imgPath">
                     <div class="modal-header">
                         <h5 class="modal-title">리플 수정 폼</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -167,7 +167,7 @@
                             <label>글쓴이</label>
                         </p>
                         <p>
-                            <img name="imgPath" src="" alt="댓글 이미지">
+                            <img name="imgPath" class="img-thumbnail" src="" alt="댓글 이미지">
                         </p>
                         <p class="form-floating">
                             <input type="text" name="parentBrId" readonly class="form-control" placeholder="참조하는 부모 댓글">
@@ -183,7 +183,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button id="removeReplyBtn" type="button" class="btn btn-danger">삭제</button>
                         <button type="submit" class="btn btn-primary">수정</button>
                     </div>
                 </form>
@@ -193,13 +193,59 @@
     <script th:inline="javascript">
         const replyModifyModal=new bootstrap.Modal(document.getElementById("replyModifyModal"),{});
         const replyCont=document.getElementById("replyCont");
+        const removeReplyBtn=document.getElementById("removeReplyBtn");
         const replyInsertForm=document.forms["replyInsertForm"];
         const replyModifyForm=document.forms["replyModifyForm"];
+        replyModifyForm.onsubmit=modifyReply;
+        removeReplyBtn.addEventListener("click",removeReply);
+
+        async function removeReply(){
+            let c=confirm("삭제 하시겠습니까?");
+            let url="/reply/handler.do";
+            let data=new FormData(replyModifyForm);
+            if(c){
+                const resp=await fetch(url,{method:"DELETE",body:data})
+                if(resp.status===200){
+                    const json=await resp.json();
+                    if(json.remove>0){
+                        alert("삭제 성공");
+                        loadReplies(replyModifyForm.bId.value);
+                    }else {
+                        alert("삭제 실패 (삭제된 레코드)")
+                    }
+                }else{
+                    alert("삭제 실패 status:"+resp.status);
+                }
+            }
+            replyModifyModal.hide();
+        }
+
+        async function modifyReply(e){
+            e.preventDefault();
+            let url="/reply/handler.do";
+            const data=new FormData(replyModifyForm);
+            //method GET,POST RESTAPI(ajax) PUT,DELETE,PATCH ...
+            const resp=await fetch(url,{method:"PUT",body:data});
+            if(resp.status===200){
+                const json=await resp.json();
+                if(json.modify>0){
+                    alert("수정 성공");
+                    loadReplies(replyModifyForm.bId.value);
+                }
+
+            }else{
+                alert("수정 실패 status :"+resp.status);
+            }
+            replyModifyModal.hide();
+        }
+
+
+
         async function loadReplies(bId){
             let url=`/reply/${bId}/list.do`
             const resp=await fetch(url);
             if(resp.status===200){
-                alert("댓글 리스트 로드 성공");
+                //alert("댓글 리스트 로드 성공");
                 let text=await resp.text();
                 replyCont.innerHTML=text;
             }
@@ -226,6 +272,16 @@
             const resp=await fetch(url);
             if(resp.status===200){
                 const json=await resp.json();
+                //{"brId":28,"parentBrId":2,"postTime":"2023-04-06T00:52:11.000+00:00","updateTime":"2023-04-06T00:52:11.000+00:00","status":"PUBLIC","imgPath":null,"content":"2번 글에 대댓글 안녕~ ","likes":null,"replies":[{"brId":29,"parentBrId":28,"postTime":"2023-04-06T00:52:37.000+00:00","updateTime":"2023-04-06T00:52:37.000+00:00","status":"PUBLIC","imgPath":null,"content":"대대댓글 안녕~","likes":{"like":0,"sad":0,"bad":0,"best":0},"replies":[],"bId":1,"uId":"Kyoungmin"}
+                replyModifyForm.querySelectorAll("[name]").forEach((input)=>{
+                   let key=input.name;
+                   //input.value : input type='file'에는 value 가 없음
+                    if(key in json){
+                        if(key==="imgPath"){input.src=json[key];}
+                        input.value=json[key];
+
+                    }
+                });
                 replyModifyModal.show();
             }else{
                 alert("불러오기 실패 stauts : "+resp.status)

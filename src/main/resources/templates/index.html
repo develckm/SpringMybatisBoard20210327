@@ -109,5 +109,15 @@
                 <a href="/mult.do?a=3&b=7">mult.do?a=3&b=7</a>
             </li>
         </ul>
+        <h2>스프링 관점지향 언어 구현과 프록시 객체</h2>
+        <p>IoC(제어의 역전) 컨테이너는 컨포넌트를 관리하고 주입하는데 컨포넌트에 추가적인 기능을 구현하기 위해 프록시를 생성 </p>
+        <p>
+            mybatis 지연로딩 : 디비에서 자료를 호출할때 필요한 곳(트리거 toString,get)이 있다면 호출
+            (개발자가 작성한 Dto 클래스로는 지연로딩을 구현할 방법이 없다.)
+        </p>
+        <p>mybatis 가 지연로딩을 구현하기 위해 Dto 클래스를 기반으로 프록시(대리자) 객체를 구현( handler 필드 추가) 및 생성</p>
+        <p>프록시 객체가 구현한 handler~ 필드들은 직렬화(Serializable)가 불가능 하다</p>
+        <p>class UserDto{ String name; ...get,set} new UserDto("경민") jackson.jar(직렬화) => {\"name\" :\"경민\"}</p>
+        <p>DTO 객체에 @JsonIgnoreProperties({"handler"}) 추가해서 직렬화가 불가능한 handler 필드를 제외~ </p>
     </div>
 </html>

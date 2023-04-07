@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,13 +27,14 @@ public class ReplyController {
     private BoardReplyService boardReplyService;
     @Value("${img.upload.path}") //application.yml의 설정 값 가져오기
     private String imgUploadPath;
-
+    @Value("${static.path}")
+    private String staticPath;
     public ReplyController(BoardReplyService boardReplyService) {
         this.boardReplyService = boardReplyService;
     }
     @GetMapping("/{brId}/detail.do")
     public @ResponseBody BoardReplyDto detail(@PathVariable int brId){
-        BoardReplyDto reply=boardReplyService.detail(brId);
+        BoardReplyDto reply=boardReplyService.detail(brId); //프록시 객체
         log.info(reply);
         return reply;
     }
@@ -47,6 +49,8 @@ public class ReplyController {
     @Data
     class HandlerDto{
         private int register;
+        private int modify;
+        private int remove;
     }
     // @ResponseBody HandlerDto : view 를 응답하지 않고 해당 객체를 json 으로 파싱해서 패포!
     @PostMapping("/handler.do")
@@ -69,9 +73,45 @@ public class ReplyController {
         handlerDto.setRegister(register);
         return handlerDto;
     }
+    @PutMapping("/handler.do")
+    public @ResponseBody HandlerDto modify(
+            @ModelAttribute BoardReplyDto reply,
+            MultipartFile img,
+            @SessionAttribute UserDto loginUser) throws IOException {
+        HandlerDto handlerDto=new HandlerDto();
+        if(!img.isEmpty()){
+            String [] contentTypes=img.getContentType().split("/");
+            if(contentTypes[0].equals("image")){
+                String fileName=System.currentTimeMillis()+"_"+(int)(Math.random()*10000)+"."+contentTypes[1];
+                Path path=Paths.get(imgUploadPath+"/reply/"+fileName);
+                img.transferTo(path);//저장
+                //만약에 수정하기 전 이미지파일이 있으면 삭제
+                if(reply.getImgPath()!=null){
+                    File imgFile = new File(staticPath + reply.getImgPath());
+                    if(imgFile.exists())imgFile.delete();
+                }
+                //새로 등록된 파일을 set
+                reply.setImgPath("/public/img/reply/"+fileName);
+            }
+        }
+        int modify=boardReplyService.modify(reply);
+        handlerDto.setModify(modify);
+        return handlerDto;
+    }
 
-
-
+    @DeleteMapping("/handler.do")
+    public @ResponseBody HandlerDto remove(
+            BoardReplyDto reply,
+            @SessionAttribute UserDto loginUser){
+        HandlerDto handlerDto=new HandlerDto();
+        int remove= boardReplyService.remove(reply.getBrId());
+        handlerDto.setRemove(remove);
+        if(remove>0 && reply.getImgPath()!=null){
+            File imgFile=new File(staticPath+reply.getImgPath());
+            if(imgFile.exists())imgFile.delete();
+        }
+        return handlerDto;
+    }
 
 
 

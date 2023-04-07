@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.acorn.springboardteacher.mapper.BoardReplyMapper">
+    <!--  BoardReplyMap : 마이바티스가 생성하는 프록시 객체    -->
     <resultMap id="BoardReplyMap" type="BoardReplyDto">
         <id property="brId" column="br_id"/>
         <result property="bId" column="b_id"/>
