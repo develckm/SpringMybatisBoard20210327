@@ -1,6 +1,8 @@
-DROP DATABASE webAppBoard;
+DROP DATABASE IF EXISTS webAppBoard;
+DROP USER IF EXISTS  'boardDba'@'localhost';
+DROP USER IF EXISTS 'boardServerDev'@'localhost';
+
 CREATE DATABASE webAppBoard CHARACTER SET utf8;
-#CREATE DATABASE IF NOT EXISTS webAppBoard CHARACTER SET utf8;
 
 CREATE USER 'boardDba'@'localhost' IDENTIFIED BY 'mysql123';
 GRANT ALL PRIVILEGES ON webAppBoard.* TO 'boardDba'@'localhost';
@@ -108,38 +110,42 @@ CREATE TABLE hash_tags
     FOREIGN KEY (br_id) REFERENCES board_replies (br_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
-USE webAppBoard;
-
 CREATE TABLE hashtags (
     h_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     UNIQUE(name)
-) COMMENT='해시태그 테이블';
+);
 
 CREATE TABLE board_hashtags (
+    bh_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     b_id INT UNSIGNED NOT NULL,
     h_id INT UNSIGNED NOT NULL,
     PRIMARY KEY(b_id, h_id),
     FOREIGN KEY(b_id) REFERENCES boards(b_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(h_id) REFERENCES hashtags(h_id) ON DELETE CASCADE ON UPDATE CASCADE
-) COMMENT='게시글 해시태그 테이블';
+);
 
 CREATE TABLE reply_hashtags (
+    rh_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     br_id INT UNSIGNED NOT NULL,
     h_id INT UNSIGNED NOT NULL,
     PRIMARY KEY(br_id, h_id),
     FOREIGN KEY(br_id) REFERENCES board_replies(br_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(h_id) REFERENCES hashtags(h_id) ON DELETE CASCADE ON UPDATE CASCADE
-) COMMENT='댓글 해시태그 테이블';
+);
 
--- 더미데이터 추가
-
-
+CREATE TABLE follows (
+    f_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '팔로우 아이디',
+    from_id VARCHAR(255) NOT NULL COMMENT '팔로워 아이디',
+    to_id VARCHAR(255) NOT NULL COMMENT '팔로잉 아이디',
+    follow_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '팔로우한 시간',
+    UNIQUE (from_id, to_id),
+    FOREIGN KEY (from_id) REFERENCES users(u_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (to_id) REFERENCES users(u_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 -- users 테이블에 더미 데이터 생성
-INSERT INTO users(u_id, pw, name, phone, email, birth, gender, address, detail_address, permission)
-VALUES
+INSERT INTO users(u_id, pw, name, phone, email, birth, gender, address, detail_address, permission) VALUES
     ('user01', '1234', '김철수', '01012345678', 'user01@gmail.com', '1990-01-01', 'MALE', '서울특별시', '강남구', 'USER'),
     ('user02', '1234', '이영희', '01087654321', 'user02@gmail.com', '1992-03-02', 'FEMALE', '서울특별시', '관악구', 'USER'),
     ('user03', '1234', '박민수', '01011112222', 'user03@gmail.com', '1995-07-03', 'MALE', '경기도', '성남시', 'SILVER'),
@@ -161,8 +167,7 @@ VALUES
     ('user19', '1234', '장미희', '01019191919', 'user19@gmail.com', '1989-09-19', 'FEMALE', '서울특별시', '송파구', 'PRIVATE'),
     ('user20', '1234', '이선규', '01020202020', 'user20@gmail.com', '1992-11-20', 'MALE', '서울특별시', '용산구', 'USER');
 
-INSERT INTO boards(u_id, title, content)
-VALUES
+INSERT INTO boards(u_id, title, content) VALUES
     ('user01', '첫 번째 글입니다.', '안녕하세요. 첫 번째 글입니다.'),
     ('user02', '두 번째 글입니다.', '안녕하세요. 두 번째 글입니다.'),
     ('user03', '세 번째 글입니다.', '안녕하세요. 세 번째 글입니다.'),
@@ -184,8 +189,7 @@ VALUES
     ('user19', '열아홉 번째 글입니다.', '안녕하세요. 열아홉 번째 글입니다.'),
     ('user20', '스무 번째 글입니다.', '안녕하세요. 스무 번째 글입니다.');
 
-INSERT INTO board_replies(b_id,u_id, content)
-VALUES
+INSERT INTO board_replies(b_id,u_id, content) VALUES
     (1,'user01', '첫 번째 글에 대한 1댓글입니다.'),
     (1,'user01', '첫 번째 글에 대한 댓글 2번째입니다.'),
     (1,'user01', '첫 번째 글에 대한 댓글 3번째입니다.'),
@@ -204,15 +208,14 @@ VALUES
     (6,'user08', '여섯 번째 글에 대한 16댓글입니다.'),
     (6,'user09', '여섯 번째 글에 대한 댓글 17번째입니다.'),
     (6,'user10', '여섯 번째 글에 대한 댓글 18번째입니다.');
+
 INSERT INTO board_replies(b_id, parent_br_id, u_id, content) values
     (1, 1,'user10', '첫 번째 댓글에 대한 대댓글 19번째입니다.'),
     (1, 1,'user10', '첫 번째 댓글에 대한 대댓글 20번째입니다.'),
     (1, 20,'user10', '첫 번째 댓글에 대한 20 대댓글의 대대댓글 21번째입니다.'),
     (1, 20,'user10', '첫 번째 댓글에 대한 20 대댓글의 대대댓글 22번째입니다.');
 
-
-INSERT INTO board_likes(b_id, u_id, status)
-VALUES
+INSERT INTO board_likes(b_id, u_id, status) VALUES
     (1, 'user01', 'LIKE'),
     (2, 'user01', 'BEST'),
     (3, 'user01', 'BAD'),
@@ -238,40 +241,39 @@ VALUES
     (10, 'user17', 'LIKE'),
     (10, 'user18', 'BAD');
 
+INSERT INTO board_imgs(b_id, img_path) VALUES
+    (1, '/public/img/board/1.jpg'),
+    (1, '/public/img/board/2.jpg'),
+    (2, '/public/img/board/3.jpg'),
+    (2, '/public/img/board/4.jpg'),
+    (3, '/public/img/board/5.jpg'),
+    (4, '/public/img/board/6.jpg'),
+    (4, '/public/img/board/7.jpg'),
+    (4, '/public/img/board/8.jpg'),
+    (5, '/public/img/board/9.jpg'),
+    (5, '/public/img/board/10.jpg'),
+    (5, '/public/img/board/11.jpg'),
+    (6, '/public/img/board/12.jpg'),
+    (6, '/public/img/board/13.jpg'),
+    (7, '/public/img/board/14.jpg'),
+    (8, '/public/img/board/15.jpg'),
+    (9, '/public/img/board/99.jpg'),
+    (10, '/public/img/board/17.jpg'),
+    (11, '/public/img/board/18.jpg'),
+    (12, '/public/img/board/19.jpg'),
+    (12, '/public/img/board/20.jpg'),
+    (13, '/public/img/board/21.jpg'),
+    (13, '/public/img/board/22.jpg'),
+    (14, '/public/img/board/23.jpg'),
+    (15, '/public/img/board/24.jpg'),
+    (15, '/public/img/board/25.jpg'),
+    (16, '/public/img/board/26.jpg'),
+    (16, '/public/img/board/27.jpg'),
+    (17, '/public/img/board/28.jpg'),
+    (18, '/public/img/board/29.jpg'),
+    (19, '/public/img/board/30.jpg'),
+    (20, '/public/img/board/31.jpg');
 
-INSERT INTO board_imgs(b_id, img_path)
-VALUES
-(1, '/public/img/board/1.jpg'),
-(1, '/public/img/board/2.jpg'),
-(2, '/public/img/board/3.jpg'),
-(2, '/public/img/board/4.jpg'),
-(3, '/public/img/board/5.jpg'),
-(4, '/public/img/board/6.jpg'),
-(4, '/public/img/board/7.jpg'),
-(4, '/public/img/board/8.jpg'),
-(5, '/public/img/board/9.jpg'),
-(5, '/public/img/board/10.jpg'),
-(5, '/public/img/board/11.jpg'),
-(6, '/public/img/board/12.jpg'),
-(6, '/public/img/board/13.jpg'),
-(7, '/public/img/board/14.jpg'),
-(8, '/public/img/board/15.jpg'),
-(9, '/public/img/board/99.jpg'),
-(10, '/public/img/board/17.jpg'),
-(11, '/public/img/board/18.jpg'),
-(12, '/public/img/board/19.jpg'),
-(12, '/public/img/board/20.jpg'),
-(13, '/public/img/board/21.jpg'),
-(13, '/public/img/board/22.jpg'),
-(14, '/public/img/board/23.jpg'),
-(15, '/public/img/board/24.jpg'),
-(15, '/public/img/board/25.jpg'),
-(16, '/public/img/board/26.jpg'),
-(16, '/public/img/board/27.jpg'),
-(17, '/public/img/board/28.jpg'),
-(18, '/public/img/board/29.jpg'),
-(19, '/public/img/board/30.jpg'),
-(20, '/public/img/board/31.jpg');
 -- hashtags
 INSERT INTO hashtags(name) VALUES
    ('#food'),
@@ -356,17 +358,9 @@ INSERT INTO reply_hashtags(br_id, h_id) VALUES
     (8, 1),
     (8, 3),
     (9, 2);
-CREATE TABLE follows (
-    f_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '팔로우 아이디',
-    from_id VARCHAR(255) NOT NULL COMMENT '팔로워 아이디',
-    to_id VARCHAR(255) NOT NULL COMMENT '팔로잉 아이디',
-    follow_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '팔로우한 시간',
-    UNIQUE (from_id, to_id),
-    FOREIGN KEY (from_id) REFERENCES users(u_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (to_id) REFERENCES users(u_id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+
 -- follows
-INSERT INTO follows(to_id, from_id) VALUES
+INSERT INTO follows(from_id, to_id) VALUES
     ('user01', 'user02'), ('user01', 'user03'), ('user01', 'user04'), ('user01', 'user05'), ('user01', 'user06'),
     ('user02', 'user01'), ('user02', 'user03'), ('user02', 'user05'), ('user02', 'user06'), ('user02', 'user07'),
     ('user03', 'user01'), ('user03', 'user04'), ('user03', 'user05'), ('user03', 'user06'), ('user03', 'user07'),
