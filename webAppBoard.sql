@@ -2,6 +2,12 @@ DROP DATABASE webAppBoard;
 CREATE DATABASE webAppBoard CHARACTER SET utf8;
 #CREATE DATABASE IF NOT EXISTS webAppBoard CHARACTER SET utf8;
 
+CREATE USER 'boardDba'@'localhost' IDENTIFIED BY 'mysql123';
+GRANT ALL PRIVILEGES ON webAppBoard.* TO 'boardDba'@'localhost';
+
+CREATE USER 'boardServerDev'@'localhost' IDENTIFIED BY 'mysql123';
+GRANT SELECT, INSERT, UPDATE, DELETE ON webAppBoard.* TO 'boardServerDev'@'localhost';
+
 USE webAppBoard;
 
 CREATE TABLE users
@@ -103,6 +109,33 @@ CREATE TABLE hash_tags
 );
 
 
+USE webAppBoard;
+
+CREATE TABLE hashtags (
+    h_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    UNIQUE(name)
+) COMMENT='해시태그 테이블';
+
+CREATE TABLE board_hashtags (
+    b_id INT UNSIGNED NOT NULL,
+    h_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY(b_id, h_id),
+    FOREIGN KEY(b_id) REFERENCES boards(b_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(h_id) REFERENCES hashtags(h_id) ON DELETE CASCADE ON UPDATE CASCADE
+) COMMENT='게시글 해시태그 테이블';
+
+CREATE TABLE reply_hashtags (
+    br_id INT UNSIGNED NOT NULL,
+    h_id INT UNSIGNED NOT NULL,
+    PRIMARY KEY(br_id, h_id),
+    FOREIGN KEY(br_id) REFERENCES board_replies(br_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(h_id) REFERENCES hashtags(h_id) ON DELETE CASCADE ON UPDATE CASCADE
+) COMMENT='댓글 해시태그 테이블';
+
+-- 더미데이터 추가
+
+
 
 -- users 테이블에 더미 데이터 생성
 INSERT INTO users(u_id, pw, name, phone, email, birth, gender, address, detail_address, permission)
@@ -153,28 +186,39 @@ VALUES
 
 INSERT INTO board_replies(b_id,u_id, content)
 VALUES
-    (1,'user01', '첫 번째 글에 대한 댓글입니다.'),
+    (1,'user01', '첫 번째 글에 대한 1댓글입니다.'),
     (1,'user01', '첫 번째 글에 대한 댓글 2번째입니다.'),
     (1,'user01', '첫 번째 글에 대한 댓글 3번째입니다.'),
-    (2,'user02', '두 번째 글에 대한 댓글입니다.'),
-    (2,'user02', '두 번째 글에 대한 댓글 2번째입니다.'),
-    (2,'user02', '두 번째 글에 대한 댓글 3번째입니다.'),
-    (3,'user03', '세 번째 글에 대한 댓글입니다.'),
-    (3,'user03', '세 번째 글에 대한 댓글 2번째입니다.'),
-    (3,'user03', '세 번째 글에 대한 댓글 3번째입니다.'),
-    (4,'user04', '네 번째 글에 대한 댓글입니다.'),
-    (4,'user04', '네 번째 글에 대한 댓글 2번째입니다.'),
-    (4,'user04', '네 번째 글에 대한 댓글 3번째입니다.'),
-    (5,'user05', '다섯 번째 글에 대한 댓글입니다.'),
-    (5,'user06', '다섯 번째 글에 대한 댓글 2번째입니다.'),
-    (5,'user07', '다섯 번째 글에 대한 댓글 3번째입니다.'),
-    (6,'user08', '여섯 번째 글에 대한 댓글입니다.'),
-    (6,'user09', '여섯 번째 글에 대한 댓글 2번째입니다.'),
-    (6,'user10', '여섯 번째 글에 대한 댓글 3번째입니다.');
+    (2,'user02', '두 번째 글에 대한 3댓글입니다.'),
+    (2,'user02', '두 번째 글에 대한 댓글 4번째입니다.'),
+    (2,'user02', '두 번째 글에 대한 댓글 5번째입니다.'),
+    (3,'user03', '세 번째 글에 대한 6댓글입니다.'),
+    (3,'user03', '세 번째 글에 대한 댓글 7번째입니다.'),
+    (3,'user03', '세 번째 글에 대한 댓글 8번째입니다.'),
+    (4,'user04', '네 번째 글에 대한 10댓글입니다.'),
+    (4,'user04', '네 번째 글에 대한 댓글 11번째입니다.'),
+    (4,'user04', '네 번째 글에 대한 댓글 12번째입니다.'),
+    (5,'user05', '다섯 번째 글에 대한 13댓글입니다.'),
+    (5,'user06', '다섯 번째 글에 대한 댓글 14번째입니다.'),
+    (5,'user07', '다섯 번째 글에 대한 댓글 15번째입니다.'),
+    (6,'user08', '여섯 번째 글에 대한 16댓글입니다.'),
+    (6,'user09', '여섯 번째 글에 대한 댓글 17번째입니다.'),
+    (6,'user10', '여섯 번째 글에 대한 댓글 18번째입니다.');
+INSERT INTO board_replies(b_id, parent_br_id, u_id, content) values
+    (1, 1,'user10', '첫 번째 댓글에 대한 대댓글 19번째입니다.'),
+    (1, 1,'user10', '첫 번째 댓글에 대한 대댓글 20번째입니다.'),
+    (1, 20,'user10', '첫 번째 댓글에 대한 20 대댓글의 대대댓글 21번째입니다.'),
+    (1, 20,'user10', '첫 번째 댓글에 대한 20 대댓글의 대대댓글 22번째입니다.');
+
 
 INSERT INTO board_likes(b_id, u_id, status)
 VALUES
     (1, 'user01', 'LIKE'),
+    (2, 'user01', 'BEST'),
+    (3, 'user01', 'BAD'),
+    (4, 'user01', 'SAD'),
+    (5, 'user01', 'LIKE'),
+    (6, 'user01', 'LIKE'),
     (1, 'user02', 'BAD'),
     (2, 'user02', 'SAD'),
     (3, 'user03', 'BEST'),
@@ -197,40 +241,141 @@ VALUES
 
 INSERT INTO board_imgs(b_id, img_path)
 VALUES
-(1, '/img/board/1.jpg'),
-(1, '/img/board/2.jpg'),
-(2, '/img/board/3.jpg'),
-(2, '/img/board/4.jpg'),
-(3, '/img/board/5.jpg'),
-(4, '/img/board/6.jpg'),
-(4, '/img/board/7.jpg'),
-(4, '/img/board/8.jpg'),
-(5, '/img/board/9.jpg'),
-(5, '/img/board/10.jpg'),
-(5, '/img/board/11.jpg'),
-(6, '/img/board/12.jpg'),
-(6, '/img/board/13.jpg'),
-(7, '/img/board/14.jpg'),
-(8, '/img/board/15.jpg'),
-(9, '/img/board/99.jpg'),
-(10, '/img/board/17.jpg'),
-(11, '/img/board/18.jpg'),
-(12, '/img/board/19.jpg'),
-(12, '/img/board/20.jpg'),
-(13, '/img/board/21.jpg'),
-(13, '/img/board/22.jpg'),
-(14, '/img/board/23.jpg'),
-(15, '/img/board/24.jpg'),
-(15, '/img/board/25.jpg'),
-(16, '/img/board/26.jpg'),
-(16, '/img/board/27.jpg'),
-(17, '/img/board/28.jpg'),
-(18, '/img/board/29.jpg'),
-(19, '/img/board/30.jpg'),
-(20, '/img/board/31.jpg');
+(1, '/public/img/board/1.jpg'),
+(1, '/public/img/board/2.jpg'),
+(2, '/public/img/board/3.jpg'),
+(2, '/public/img/board/4.jpg'),
+(3, '/public/img/board/5.jpg'),
+(4, '/public/img/board/6.jpg'),
+(4, '/public/img/board/7.jpg'),
+(4, '/public/img/board/8.jpg'),
+(5, '/public/img/board/9.jpg'),
+(5, '/public/img/board/10.jpg'),
+(5, '/public/img/board/11.jpg'),
+(6, '/public/img/board/12.jpg'),
+(6, '/public/img/board/13.jpg'),
+(7, '/public/img/board/14.jpg'),
+(8, '/public/img/board/15.jpg'),
+(9, '/public/img/board/99.jpg'),
+(10, '/public/img/board/17.jpg'),
+(11, '/public/img/board/18.jpg'),
+(12, '/public/img/board/19.jpg'),
+(12, '/public/img/board/20.jpg'),
+(13, '/public/img/board/21.jpg'),
+(13, '/public/img/board/22.jpg'),
+(14, '/public/img/board/23.jpg'),
+(15, '/public/img/board/24.jpg'),
+(15, '/public/img/board/25.jpg'),
+(16, '/public/img/board/26.jpg'),
+(16, '/public/img/board/27.jpg'),
+(17, '/public/img/board/28.jpg'),
+(18, '/public/img/board/29.jpg'),
+(19, '/public/img/board/30.jpg'),
+(20, '/public/img/board/31.jpg');
+-- hashtags
+INSERT INTO hashtags(name) VALUES
+   ('#food'),
+   ('#travel'),
+   ('#music'),
+   ('#fashion'),
+   ('#photography'),
+   ('#한국'),
+   ('#일본'),
+   ('#미국'),
+   ('#유럽'),
+   ('#인테리어'),
+   ('#뷰티'),
+   ('#운동'),
+   ('#영화'),
+   ('#꽃'),
+   ('#동물'),
+   ('#일상'),
+   ('#여름'),
+   ('#가을'),
+   ('#겨울'),
+   ('#봄'),
+   ('#풍경'),
+   ('#먹방'),
+   ('#카페'),
+   ('#선팔'),
+   ('#소통'),
+   ('#셀카'),
+   ('#스타일'),
+   ('#축구'),
+   ('#야구'),
+   ('#농구'),
+   ('#배구'),
+   ('#테니스'),
+   ('#골프'),
+   ('#스키'),
+   ('#수영'),
+   ('#춤'),
+   ('#노래'),
+   ('#기타'),
+   ('#피아노'),
+   ('#드라마'),
+   ('#해외여행'),
+   ('#국내여행'),
+   ('#육아'),
+   ('#공부'),
+   ('#일'),
+   ('#금요일'),
+   ('#토요일'),
+   ('#일요일'),
+   ('#월요일'),
+   ('#화요일'),
+   ('#수요일'),
+   ('#목요일');
 
-CREATE USER 'boardDba'@'localhost' IDENTIFIED BY 'mysql123';
-GRANT ALL PRIVILEGES ON webAppBoard.* TO 'boardDba'@'localhost';
+-- board_hashtags
+INSERT INTO board_hashtags(b_id, h_id) VALUES
+   (1, 1),
+   (1, 2),
+   (2, 2),
+   (3, 3),
+   (4, 1),
+   (4, 4),
+   (5, 1),
+   (6, 2),
+   (7, 5),
+   (8, 1),
+   (8, 3),
+   (9, 2);
 
-CREATE USER 'boardServerDev'@'localhost' IDENTIFIED BY 'mysql123';
-GRANT SELECT, INSERT, UPDATE, DELETE ON webAppBoard.* TO 'boardServerDev'@'localhost';
+-- reply_hashtags
+INSERT INTO reply_hashtags(br_id, h_id) VALUES
+    (1, 1),
+    (1, 2),
+    (2, 2),
+    (3, 3),
+    (4, 1),
+    (4, 4),
+    (5, 1),
+    (6, 2),
+    (7, 5),
+    (8, 1),
+    (8, 3),
+    (9, 2);
+CREATE TABLE follows (
+    f_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '팔로우 아이디',
+    from_id VARCHAR(255) NOT NULL COMMENT '팔로워 아이디',
+    to_id VARCHAR(255) NOT NULL COMMENT '팔로잉 아이디',
+    follow_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '팔로우한 시간',
+    UNIQUE (from_id, to_id),
+    FOREIGN KEY (from_id) REFERENCES users(u_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (to_id) REFERENCES users(u_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+-- follows
+INSERT INTO follows(to_id, from_id) VALUES
+    ('user01', 'user02'), ('user01', 'user03'), ('user01', 'user04'), ('user01', 'user05'), ('user01', 'user06'),
+    ('user02', 'user01'), ('user02', 'user03'), ('user02', 'user05'), ('user02', 'user06'), ('user02', 'user07'),
+    ('user03', 'user01'), ('user03', 'user04'), ('user03', 'user05'), ('user03', 'user06'), ('user03', 'user07'),
+    ('user04', 'user01'), ('user04', 'user03'), ('user04', 'user05'), ('user04', 'user07'), ('user04', 'user08'),
+    ('user05', 'user01'), ('user05', 'user03'), ('user05', 'user04'), ('user05', 'user07'), ('user05', 'user10'),
+    ('user06', 'user02'), ('user06', 'user03'), ('user06', 'user04'), ('user06', 'user05'), ('user06', 'user07'),
+    ('user07', 'user02'), ('user07', 'user05'), ('user07', 'user06'), ('user07', 'user08'), ('user07', 'user10'),
+    ('user08', 'user04'), ('user08', 'user05'), ('user08', 'user06'), ('user08', 'user09'), ('user08', 'user10'),
+    ('user09', 'user03'), ('user09', 'user05'), ('user09', 'user06'), ('user09', 'user07'), ('user09', 'user08'),
+    ('user10', 'user01'), ('user10', 'user02'), ('user10', 'user05'), ('user10', 'user08'), ('user10', 'user09');
+
+
