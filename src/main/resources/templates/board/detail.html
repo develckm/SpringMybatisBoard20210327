@@ -5,6 +5,7 @@
       layout:decorate="~{/layout}">
 <head>
     <title>게시판 상세</title>
+    <script src="/public/js/HashTag.js"></script>
 </head>
 <p></p>
 <div layout:fragment="content">
@@ -137,14 +138,34 @@
                                         placeholder="부모 댓글">
                                 </div>
                                 <div class="col p-0 ">
-                                    <input type="text" class="form-control " name="content"
-                                        placeholder="내용">
+                                    <textarea list="hashtags" class="form-control " name="content" placeholder="내용" rows="1"></textarea>
                                 </div>
                                 <button class="btn btn-primary col-auto">제출</button>
                                 <label class="btn btn-info col-auto">
                                     <i class="bi bi-file-image text-light"></i>
                                     <input class="d-none" type="file" name="img">
                                 </label>
+                            </div>
+                            <div class="form-control">
+                                <ul id="tagList" class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <button class="btn btn-light btn-sm" type="button">
+                                            <span>javascipt</span>
+                                            <i class="bi bi-x-circle"></i>
+                                        </button>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <div class="badge text-bg-secondary">
+                                            <span>javascipt</span>
+                                        </div>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <div class="badge text-bg-secondary">
+                                            <span>javascipt</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <input type="text" id="tagInput">
                             </div>
                         </form>
                     </div>
@@ -177,7 +198,7 @@
                             <input type="file" name="img" class="form-control">
                         </p>
                         <p class="form-floating">
-                            <input type="text" name="content" class="form-control" placeholder="내용">
+                            <textarea name="content" class="form-control" placeholder="내용"></textarea>
                             <label>내용</label>
                         </p>
 
@@ -194,11 +215,21 @@
         const replyModifyModal=new bootstrap.Modal(document.getElementById("replyModifyModal"),{});
         const replyCont=document.getElementById("replyCont");
         const removeReplyBtn=document.getElementById("removeReplyBtn");
+        const hashtags=document.getElementById("hashtags");
         const replyInsertForm=document.forms["replyInsertForm"];
         const replyModifyForm=document.forms["replyModifyForm"];
         replyModifyForm.onsubmit=modifyReply;
         removeReplyBtn.addEventListener("click",removeReply);
 
+        async function searchHashTags(name){
+            let url=`/hashtag/${name}/search.do`;
+            const resp=await fetch(url);
+            if(resp.status===200){
+                const json=await resp.json();
+                console.log(json);
+            }
+
+        }
         async function removeReply(){
             let c=confirm("삭제 하시겠습니까?");
             let url="/reply/handler.do";

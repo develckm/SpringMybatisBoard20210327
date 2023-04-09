@@ -100,15 +100,6 @@ CREATE TABLE board_imgs
 #fk : 다른 table pk => 이때 부모 자식 관계가 된다. (관계형 데이터 베이스)
 #fk 로는 pk 만 지정할 수 있고 존재하지 않는 부모를 참조할 수 없도록 제약된다.(참조의 무결성 적용)
 #해시태그로 검색기능 구현
-CREATE TABLE hash_tags
-(
-    h_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '해시태그 아이디',
-    b_id INT UNSIGNED COMMENT '게시글 아이디',
-    br_id INT UNSIGNED COMMENT '댓글 아이디',
-    tag VARCHAR(255) NOT NULL COMMENT '태그 내용',
-    FOREIGN KEY (b_id) REFERENCES boards (b_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (br_id) REFERENCES board_replies (br_id) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 CREATE TABLE hashtags (
     h_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -120,7 +111,6 @@ CREATE TABLE board_hashtags (
     bh_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     b_id INT UNSIGNED NOT NULL,
     h_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY(b_id, h_id),
     FOREIGN KEY(b_id) REFERENCES boards(b_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(h_id) REFERENCES hashtags(h_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -129,7 +119,6 @@ CREATE TABLE reply_hashtags (
     rh_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     br_id INT UNSIGNED NOT NULL,
     h_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY(br_id, h_id),
     FOREIGN KEY(br_id) REFERENCES board_replies(br_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(h_id) REFERENCES hashtags(h_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -142,6 +131,24 @@ CREATE TABLE follows (
     UNIQUE (from_id, to_id),
     FOREIGN KEY (from_id) REFERENCES users(u_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (to_id) REFERENCES users(u_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE chat_rooms (
+    cr_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '채팅방 아이디',
+    u_id VARCHAR(255) NOT NULL COMMENT '채팅방 생성자 아이디',
+    name VARCHAR(255) NOT NULL COMMENT '채팅방 이름',
+    description TEXT COMMENT '채팅방 설명',
+    post_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '채팅방 생성 시간',
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '채팅방 최근 업데이트 시간'
+);
+
+CREATE TABLE chat_messages (
+    cm_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '메시지 아이디',
+    cr_id INT UNSIGNED NOT NULL COMMENT '채팅방 아이디',
+    u_id VARCHAR(255) NOT NULL COMMENT '송신자 아이디',
+    content TEXT NOT NULL COMMENT '메시지 내용',
+    post_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '메시지 전송 시간',
+    FOREIGN KEY (cr_id) REFERENCES chat_rooms(cr_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (u_id) REFERENCES users(u_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- users 테이블에 더미 데이터 생성
@@ -276,58 +283,67 @@ INSERT INTO board_imgs(b_id, img_path) VALUES
 
 -- hashtags
 INSERT INTO hashtags(name) VALUES
-   ('#food'),
-   ('#travel'),
-   ('#music'),
-   ('#fashion'),
-   ('#photography'),
-   ('#한국'),
-   ('#일본'),
-   ('#미국'),
-   ('#유럽'),
-   ('#인테리어'),
-   ('#뷰티'),
-   ('#운동'),
-   ('#영화'),
-   ('#꽃'),
-   ('#동물'),
-   ('#일상'),
-   ('#여름'),
-   ('#가을'),
-   ('#겨울'),
-   ('#봄'),
-   ('#풍경'),
-   ('#먹방'),
-   ('#카페'),
-   ('#선팔'),
-   ('#소통'),
-   ('#셀카'),
-   ('#스타일'),
-   ('#축구'),
-   ('#야구'),
-   ('#농구'),
-   ('#배구'),
-   ('#테니스'),
-   ('#골프'),
-   ('#스키'),
-   ('#수영'),
-   ('#춤'),
-   ('#노래'),
-   ('#기타'),
-   ('#피아노'),
-   ('#드라마'),
-   ('#해외여행'),
-   ('#국내여행'),
-   ('#육아'),
-   ('#공부'),
-   ('#일'),
-   ('#금요일'),
-   ('#토요일'),
-   ('#일요일'),
-   ('#월요일'),
-   ('#화요일'),
-   ('#수요일'),
-   ('#목요일');
+   ('홍대'),
+   ('홍대놀이터'),
+   ('홍대맛집'),
+   ('홍대입구'),
+   ('홍대카페'),
+   ('홍대애견'),
+   ('food'),
+   ('travel'),
+   ('music'),
+   ('fashion'),
+   ('photography'),
+   ('한국'),
+   ('일본'),
+   ('미국'),
+   ('유럽'),
+   ('인테리어'),
+   ('뷰티'),
+   ('운동'),
+   ('영화'),
+   ('꽃'),
+   ('동물'),
+   ('일상'),
+   ('여름'),
+   ('가을'),
+   ('겨울'),
+   ('봄'),
+   ('풍경'),
+   ('먹방'),
+   ('먹심'),
+   ('먹보'),
+   ('먹짱'),
+   ('카페'),
+   ('선팔'),
+   ('소통'),
+   ('셀카'),
+   ('스타일'),
+   ('축구'),
+   ('야구'),
+   ('농구'),
+   ('배구'),
+   ('테니스'),
+   ('골프'),
+   ('스키'),
+   ('수영'),
+   ('춤'),
+   ('노래'),
+   ('기타'),
+   ('피아노'),
+   ('드라마'),
+   ('해외여행'),
+   ('국내여행'),
+   ('육아'),
+   ('공부'),
+   ('일'),
+   ('금요일'),
+   ('토요일'),
+   ('일요일'),
+   ('월요일'),
+   ('화요일'),
+   ('수요일'),
+   ('목요일');
 
 -- board_hashtags
 INSERT INTO board_hashtags(b_id, h_id) VALUES
@@ -372,4 +388,33 @@ INSERT INTO follows(from_id, to_id) VALUES
     ('user09', 'user03'), ('user09', 'user05'), ('user09', 'user06'), ('user09', 'user07'), ('user09', 'user08'),
     ('user10', 'user01'), ('user10', 'user02'), ('user10', 'user05'), ('user10', 'user08'), ('user10', 'user09');
 
+-- chat_rooms
+INSERT INTO chat_rooms(u_id, name, post_time)
+VALUES
+    ('user01', 'Room1', '2022-01-01 12:00:00'),
+    ('user02', 'Room2', '2022-01-02 13:00:00'),
+    ('user03', 'Room3', '2022-01-03 14:00:00'),
+    ('user04', 'Room4', '2022-01-04 15:00:00'),
+    ('user05', 'Room5', '2022-01-05 16:00:00');
+
+-- chat_messages
+INSERT INTO chat_messages(cr_id, u_id, content, post_time)
+VALUES
+    (1, 'user01', 'Hi, how are you?', '2022-01-01 12:10:00'),
+    (1, 'user02', 'I\'m fine. Thanks, and you?', '2022-01-01 12:12:00'),
+    (1, 'user01', 'I\'m good, too.', '2022-01-01 12:13:00'),
+    (2, 'user03', 'Hello, what are you doing?', '2022-01-02 13:05:00'),
+    (2, 'user02', 'I\'m watching TV. You?', '2022-01-02 13:06:00'),
+    (2, 'user03', 'I\'m reading a book.', '2022-01-02 13:07:00'),
+    (3, 'user05', 'What do you want to do today?', '2022-01-03 14:10:00'),
+    (3, 'user03', 'I want to go shopping.', '2022-01-03 14:11:00'),
+    (3, 'user05', 'That sounds like a good idea!', '2022-01-03 14:12:00'),
+    (3, 'user03', 'Where do you want to go?', '2022-01-03 14:13:00'),
+    (3, 'user05', 'Let\'s go to the mall.', '2022-01-03 14:14:00'),
+    (4, 'user04', 'Hi, I miss you so much.', '2022-01-04 15:00:00'),
+    (4, 'user01', 'Me too. Let\'s meet up soon!', '2022-01-04 15:01:00'),
+    (5, 'user05', 'Do you want to have dinner together tonight?', '2022-01-05 16:00:00'),
+    (5, 'user02', 'Sure! Where should we go?', '2022-01-05 16:01:00'),
+    (5, 'user05', 'Let\'s go to that new Italian place on Main Street.', '2022-01-05 16:02:00'),
+    (5, 'user02', 'Sounds good to me!', '2022-01-05 16:03:00');
 
