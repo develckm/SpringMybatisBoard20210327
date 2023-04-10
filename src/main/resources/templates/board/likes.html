@@ -1,31 +1,22 @@
-<div class="likesCont">
+<div>
   <a href="javascript:void(0)"
-     th:onclick="boardLikeHandler('LIKE',[[${likes.id}]])"
-     class="btn btn-sm btn-light text-danger" data-bs-toggle="tooltip" data-bs-title="좋아요" data-bs-placement="top">
-    <i class="bi fs-4"
-       th:classappend="${#strings.equals(likes.status,'LIKE')?'bi-emoji-heart-eyes-fill':'bi-emoji-heart-eyes'}"></i>
+     class="btn btn-sm btn-light text-danger disabled" data-bs-toggle="tooltip" data-bs-title="좋아요" data-bs-placement="top">
+    <i class="bi fs-4 bi-emoji-heart-eyes"></i>
     <span th:text="${likes.like}"></span>
   </a>
   <a href="javascript:void(0)"
-     th:onclick="boardLikeHandler('BEST',[[${likes.id}]])"
-     class="btn btn-sm btn-light text-primary" data-bs-toggle="tooltip" data-bs-title="최고야">
-    <i class="bi fs-4"
-       th:classappend="${#strings.equals(likes.status,'BEST')?'bi-emoji-sunglasses-fill':'bi-emoji-sunglasses'}"></i>
+     class="btn btn-sm btn-light text-primary disabled" data-bs-toggle="tooltip" data-bs-title="최고야">
+    <i class="bi fs-4 bi-emoji-sunglasses"></i>
     <span th:text="${likes.best}"></span>
   </a>
   <a href="javascript:void(0)"
-     th:onclick="boardLikeHandler('BAD',[[${likes.id}]])"
-     class="btn btn-sm btn-light" data-bs-toggle="tooltip" data-bs-title="나빠요">
-    <i class="bi fs-4"
-       th:classappend="${#strings.equals(likes.status,'BAD')?'bi-emoji-expressionless-fill':'bi-emoji-expressionless'}"></i>
+     class="btn btn-sm btn-light disabled" data-bs-toggle="tooltip" data-bs-title="나빠요">
+    <i class="bi fs-4 bi-emoji-expressionless"></i>
     <span th:text="${likes.bad}"></span>
   </a>
   <a href="javascript:void(0)"
-     th:onclick="boardLikeHandler('SAD',[[${likes.id}]])"
-     class="btn btn-sm btn-light text-warning" data-bs-toggle="tooltip" data-bs-title="슬퍼요">
-    <i class="bi fs-4"
-       th:classappend="${#strings.equals(likes.status,'SAD')?'bi-emoji-frown-fill':'bi-emoji-frown'}"></i>
+     class="btn btn-sm btn-light text-warning disabled" data-bs-toggle="tooltip" data-bs-title="슬퍼요">
+    <i class="bi fs-4 bi-emoji-frown"></i>
     <span th:text="${likes.sad}"></span>
-    <span th:text="${likes.id}"></span>
   </a>
 </div>

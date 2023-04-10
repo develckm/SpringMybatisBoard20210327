@@ -22,15 +22,19 @@ public class BoardLikeController {
             @PathVariable int bId,
             @SessionAttribute(required = false)UserDto loginUser,
             Model model){
+        String templatePage;
         LikeStatusCntDto likes;
+        model.addAttribute("id",bId);
         if(loginUser!=null){
             likes=boardLikeService.read(bId,loginUser.getUId());
+            templatePage="/board/loginLikes";
         }else{
             likes=boardLikeService.read(bId);
+            templatePage="/board/likes";
         }
         log.info(likes);
         model.addAttribute("likes",likes);
-        return "/board/likes";
+        return templatePage;
     }
     @Data
     class HandlerDto{
@@ -46,7 +50,9 @@ public class BoardLikeController {
             @SessionAttribute UserDto loginUser){
         HandlerDto handlerDto=new HandlerDto();
         handlerDto.setStatus(status);
+
         BoardLikeDto boardLike=boardLikeService.detail(bId,loginUser.getUId());
+
         int handler=0;
         BoardLikeDto like=new BoardLikeDto();
         like.setStatus(status);

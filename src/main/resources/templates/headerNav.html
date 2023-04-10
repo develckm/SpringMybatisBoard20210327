@@ -11,6 +11,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/board/list.do">게시판</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/board/register.do">
+                        게시글 등록
+                        <i class="bi bi-plus-square"></i>
+                    </a>
+                </li>
+
             </ul>
             <ul class="navbar-nav">
                 <th:block th:if="${session.loginUser==null}">

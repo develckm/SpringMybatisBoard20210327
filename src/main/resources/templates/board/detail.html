@@ -5,13 +5,14 @@
       layout:decorate="~{/layout}">
 <head>
     <title>게시판 상세</title>
+    <script src="/public/js/BoardLike.js" defer></script>
 </head>
 <p></p>
 <div layout:fragment="content">
     <h1 class="my-4">게시판 상세</h1>
     <section id="boardCont" class="">
         <div class="row">
-            <div id="carouselExampleControls2" class="carousel slide d-none d-md-block col pe-0" data-bs-ride="carousel">
+            <div id="carouselExampleControls2" class="carousel slide d-none d-lg-block col pe-0" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src="/public/img/board/a.jpg" class="d-block w-100" alt="게시글 이미지">
@@ -60,7 +61,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div id="carouselExampleControls" class="carousel slide d-md-none" data-bs-ride="carousel">
+                        <div id="carouselExampleControls" class="carousel slide d-lg-none" data-bs-ride="carousel">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
                                     <img src="/public/img/board/a.jpg" class="d-block w-100" alt="게시글 이미지">
@@ -103,23 +104,9 @@
                     </div>
                     <div class="card-footer position-sticky bottom-0 bg-light">
                         <div class="d-flex align-items-center">
-                            <div class="likesCont">
-                                <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="좋아요" data-bs-placement="top">
-                                    <i class="bi bi-emoji-heart-eyes fs-4"></i>
-                                    <span th:text="${b.likes.like}"></span>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="최고야">
-                                    <i class="bi bi-emoji-sunglasses fs-4"></i>
-                                    <span th:text="${b.likes.best}"></span>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="나빠요">
-                                    <i class="bi bi-emoji-expressionless fs-4"></i>
-                                    <span th:text="${b.likes.bad}"></span>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-link" data-bs-toggle="tooltip" data-bs-title="슬퍼요">
-                                    <i class="bi bi-emoji-frown fs-4"></i>
-                                    <span th:text="${b.likes.sad}"></span>
-                                </a>
+                            <div th:id="'likeCont'+${b.bId}">
+                                <th:block th:if="${session.loginUser!=null}" th:include="/board/loginLikes" th:with="likes=${b.likes},id=${b.bId}"></th:block>
+                                <th:block th:unless="${session.loginUser!=null}" th:include="/board/likes" th:with="likes=${b.likes}"></th:block>
                             </div>
                             <small class="text-muted"> • </small>
                             <div class="viewCont ms-2" data-bs-toggle="tooltip" data-bs-title="조회수">

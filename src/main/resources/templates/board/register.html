@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>게시글 등록</title>
+</head>
+<div layout:fragment="content">
+  <form enctype="multipart/form-data" name="signupForm" action="./signup.do" method="post" style="width: 500px;margin: 0 auto;">
+    <h1 class="my-4">게시글 등록</h1>
+    <p class="form-floating">
+      <input id="uIdInput" type="text" name="uId" th:value="${session.loginUser.uId}" readonly class="form-control" placeholder="??">
+      <label class="">아이디(글쓴이)</label>
+    </p>
+    <p id="imgCont">
+      <button id="imgAddBtn" class="btn btn-light w-100" type="button">
+          이미지
+          <i class="bi bi-plus-square"></i>
+      </button>
+
+
+    </p>
+    <p class="form-floating">
+      <input id="titleInput" type="text" name="title" value="" class="form-control" placeholder="??">
+      <label class="">글 제목</label>
+    </p>
+    <p>
+      <label for="contentInput" class="form-label">글 내용</label>
+      <textarea id="contentInput" name="title" value="" rows="4" class="form-control" placeholder=""></textarea>
+    </p>
+  </form>
+  <script>
+    const imgAddBtn=document.getElementById("imgAddBtn");
+    const imgCont=document.getElementById("imgCont");
+    imgAddBtn.addEventListener("click",(e)=>{
+      imgCont.insertAdjacentHTML("beforeend",imgInputComponent());
+    });
+
+    function imgInputComponent( label="이미지",name="img"){
+      return `    <div class="input-group mt-2">
+                    <label class="input-group-text">${label}</label>
+                    <input class="form-control" type="file" name="${name}">
+                    <button type="button" class="btn btn-danger" onclick="this.closest('.input-group').remove()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                  </div>
+              `;
+    } //10분까지 쉬었다가 오세요~
+
+  </script>
+</div>
+</html>

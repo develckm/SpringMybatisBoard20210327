@@ -43,6 +43,7 @@ public class BoardController {
         model.addAttribute("b",board);
         return "/board/detail";
     }
-
+    @GetMapping("/register.do")
+    public void registerForm(@SessionAttribute UserDto loginUser){}
 
 }
