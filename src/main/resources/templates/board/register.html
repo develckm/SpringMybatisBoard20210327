@@ -8,7 +8,7 @@
   <title>게시글 등록</title>
 </head>
 <div layout:fragment="content">
-  <form enctype="multipart/form-data" name="signupForm" action="./signup.do" method="post" style="width: 500px;margin: 0 auto;">
+  <form enctype="multipart/form-data" name="registerForm" action="./register.do" method="post" style="width: 500px;margin: 0 auto;">
     <h1 class="my-4">게시글 등록</h1>
     <p class="form-floating">
       <input id="uIdInput" type="text" name="uId" th:value="${session.loginUser.uId}" readonly class="form-control" placeholder="??">
@@ -19,8 +19,6 @@
           이미지
           <i class="bi bi-plus-square"></i>
       </button>
-
-
     </p>
     <p class="form-floating">
       <input id="titleInput" type="text" name="title" value="" class="form-control" placeholder="??">
@@ -29,6 +27,10 @@
     <p>
       <label for="contentInput" class="form-label">글 내용</label>
       <textarea id="contentInput" name="title" value="" rows="4" class="form-control" placeholder=""></textarea>
+    </p>
+    <p class="text-end">
+      <button type="reset" class="btn btn-warning">초기화</button>
+      <button type="submit" class="btn btn-primary">등록</button>
     </p>
   </form>
   <script>
