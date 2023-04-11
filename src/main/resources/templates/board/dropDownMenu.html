@@ -1,0 +1,21 @@
+<div class="dropdown">
+    <a href="#" role="button" class="" data-bs-toggle="dropdown">
+        <i class="bi bi-list fs-3"></i>
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <a class="dropdown-item" th:href="@{'/board/{bId}/detail.do'(bId=${b.bId})}">상세</a>
+        </li>
+        <li th:if="${session.loginUser!=null && #strings.equals(session.loginUser.uId,b.uId)}">
+            <a class="dropdown-item" th:href="@{'/board/{bId}/modify.do'(bId=${b.bId})}">수정 폼</a>
+        </li>
+        <li><a class="dropdown-item" href="#">글쓴이가 작성한 글목록</a></li>
+        <li><a class="dropdown-item" href="#">계정 정보</a></li>
+        <li>
+            <a class="dropdown-item text-danger" href="#">
+                <i class="bi bi-bell-fill"></i>
+                신고
+            </a>
+        </li>
+    </ul>
+</div>

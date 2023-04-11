@@ -23,7 +23,10 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginCheckInterceptor).order(2)
                 .addPathPatterns("/user/**")
                 .excludePathPatterns("/user/login.do")
-                .excludePathPatterns("/user/signup.do");
+                .excludePathPatterns("/user/signup.do")
+                .addPathPatterns("/board/**")
+                .excludePathPatterns("/board/list.do")
+                .excludePathPatterns("/board/*/detail.do");
         registry.addInterceptor(msgRemoveInterceptor).order(3)
                 .addPathPatterns("/**");
     }

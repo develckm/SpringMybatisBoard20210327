@@ -16,7 +16,7 @@
             <div id="carouselExampleControls2" class="carousel slide d-none d-lg-block col pe-0" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="/public/img/board/a.jpg" class="d-block w-100" alt="게시글 이미지">
+                        <img src="/public/img/board/5.jpg" class="d-block w-100" alt="게시글 이미지">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -42,37 +42,20 @@
                             (<strong th:text="${b.user.name}"></strong>)
                             <small class="text-muted"> • </small>
                         </div>
-                        <div class="dropdown">
-                            <a href="#" role="button" class="" data-bs-toggle="dropdown">
-                                <i class="bi bi-list fs-3"></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" th:href="@{'/board/{bId}/detail.do'(bId=${b.bId})}">상세</a>
-                                </li>
-                                <li><a class="dropdown-item" href="#">글쓴이가 작성한 글목록</a></li>
-                                <li><a class="dropdown-item" href="#">계정 정보</a></li>
-                                <li>
-                                    <a class="dropdown-item text-danger" href="#">
-                                        <i class="bi bi-bell-fill"></i>
-                                        신고
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <th:block th:include="/board/dropDownMenu"></th:block>
                     </div>
                     <div class="card-body">
-                        <div id="carouselExampleControls" class="carousel slide d-lg-none" data-bs-ride="carousel">
+                        <div th:if="${b.imgs!=null}" th:id="'carousel'+${b.bId}" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img src="/public/img/board/a.jpg" class="d-block w-100" alt="게시글 이미지">
+                                <div class="carousel-item" th:each="img,state:${b.imgs}" th:classappend="${(state.first)?'active':''}">
+                                    <img th:src="@{'{path}'(path=${img.imgPath})}" class="d-block w-100" alt="게시글 이미지">
                                 </div>
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                            <button class="carousel-control-prev" type="button" th:data-bs-target="'#carousel'+${b.bId}" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Previous</span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                            <button class="carousel-control-next" type="button" th:data-bs-target="'#carousel'+${b.bId}" data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </button>

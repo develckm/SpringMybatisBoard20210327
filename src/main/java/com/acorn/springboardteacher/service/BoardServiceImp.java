@@ -1,6 +1,8 @@
 package com.acorn.springboardteacher.service;
 
 import com.acorn.springboardteacher.dto.BoardDto;
+import com.acorn.springboardteacher.dto.BoardImgDto;
+import com.acorn.springboardteacher.mapper.BoardImgMapper;
 import com.acorn.springboardteacher.mapper.BoardMapper;
 import com.acorn.springboardteacher.mapper.UserMapper;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.List;
 public class BoardServiceImp implements  BoardService{
     private BoardMapper boardMapper;
     private UserMapper userMapper;
+    private BoardImgMapper boardImgMapper;
     @Override
     public List<BoardDto> list() {
         List<BoardDto> list=boardMapper.findAll();
@@ -37,16 +40,30 @@ public class BoardServiceImp implements  BoardService{
         //예외 : dataSource.getConnection().rollBack()
         return detail;
     }
-
+    @Transactional
     @Override
     public int register(BoardDto board) {
-        int register=boardMapper.insertOne(board);
+        //bId 가 null
+        int register=0;
+        register=boardMapper.insertOne(board);
+        //insert 할때 생성되고 그 값을 마이바티스가 파라미터인 board 에 전달
+        if (board.getImgs()!=null){
+            for(BoardImgDto img : board.getImgs()){
+                img.setBId(board.getBId());
+                register+=boardImgMapper.insertOne(img);
+            }
+        }
         return register;
     }
-
+    @Transactional
     @Override
-    public int modify(BoardDto board) {
+    public int modify(BoardDto board, int[] delImgIds) {
         int modify=boardMapper.updateOne(board);
+        if(delImgIds!=null){
+            for(int biId : delImgIds){
+                modify+=boardImgMapper.deleteOne(biId);
+            }
+        }
         return modify;
     }
 
