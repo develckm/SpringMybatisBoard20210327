@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -47,6 +48,34 @@ public class BoardController {
         return "/board/list";
     }
     //?bId=1 //bId 동적 동적 페에지에 꼭 필요(400) 명시적으로 나타내는 것
+    @GetMapping("/{bId}/modify.do")
+    public String modifyForm(
+            Model model,
+            @PathVariable int bId,
+            @SessionAttribute UserDto loginUser){
+        BoardDto board=boardService.detail(bId);
+        model.addAttribute("b",board);
+        return "/board/modify";
+    }
+    @PostMapping("/modify.do")
+    public String modifyAction(
+            @ModelAttribute BoardDto board,
+            @RequestParam(value = "delImgId",required = false) int [] delImgIds,
+            @RequestParam(value="img",required = false) MultipartFile [] imgs
+            ){
+        String redirectPath="redirect:/board/"+board.getBId()+"/modify.do";
+
+        int modify=0;
+        try {
+            modify=boardService.modify(board,delImgIds);
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+        if(modify>0){
+            redirectPath="redirect:/board/list.do";
+        }
+        return redirectPath;
+    }
     @GetMapping("/{bId}/detail.do")
     public String detail(
             Model model,
@@ -77,10 +106,22 @@ public class BoardController {
                         img.transferTo(path);
                         BoardImgDto imgDto=new BoardImgDto();
                         imgDto.setImgPath("/public/img/board/"+fileName);
-                        //10분까지 쉬었다가 오세요~
+                        imgDtos.add(imgDto);
                     }
                 }
             }
+        }
+        board.setImgs(imgDtos);
+        int register=0;
+        try {
+            register=boardService.register(board);
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+        if (register>0){
+            redirectPage="redirect:/board/list.do";
+        }else{
+            //등록 실패시 저장했던 파일 삭제~
         }
 
         return redirectPage;

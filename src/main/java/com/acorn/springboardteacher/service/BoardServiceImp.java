@@ -55,10 +55,15 @@ public class BoardServiceImp implements  BoardService{
         }
         return register;
     }
-
+    @Transactional
     @Override
-    public int modify(BoardDto board) {
+    public int modify(BoardDto board, int[] delImgIds) {
         int modify=boardMapper.updateOne(board);
+        if(delImgIds!=null){
+            for(int biId : delImgIds){
+                modify+=boardImgMapper.deleteOne(biId);
+            }
+        }
         return modify;
     }
 
