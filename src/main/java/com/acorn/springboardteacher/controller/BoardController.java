@@ -1,23 +1,35 @@
 package com.acorn.springboardteacher.controller;
 
 import com.acorn.springboardteacher.dto.BoardDto;
+import com.acorn.springboardteacher.dto.BoardImgDto;
 import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.service.BoardService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/board")
-@AllArgsConstructor
 @Log4j2
 public class BoardController {
     private BoardService boardService;
+    @Value("${img.upload.path}")
+    private String uploadPath; //등록 (프로젝트위치+/static/public/img)
+    @Value("${static.path}")
+    private String staticPath; //삭제 (imgPath 를 정적 리소스 경로로 하기 때문)
+    public BoardController(BoardService boardService) {
+        this.boardService = boardService;
+    }
 
     @GetMapping("/list.do")
     public String list(
@@ -49,10 +61,28 @@ public class BoardController {
     public String registerAction(
             @SessionAttribute UserDto loginUser,
             @ModelAttribute BoardDto board,
-            MultipartFile [] imgs){
+            @RequestParam(name = "img") MultipartFile [] imgs) throws IOException {
+
         String redirectPage="redirect:/board/register.do";
         if(!loginUser.getUId().equals(board.getUId())) return redirectPage;
-        log.info(board);
+        List<BoardImgDto> imgDtos=null;
+        if(imgs!=null){
+            imgDtos=new ArrayList<>();
+            for(MultipartFile img : imgs){
+                if(!img.isEmpty()){
+                    String[] contentTypes=img.getContentType().split("/"); // text/xml application/json image/png
+                    if(contentTypes[0].equals("image")){
+                        String fileName=System.currentTimeMillis()+"_"+(int)(Math.random()*10000)+"."+contentTypes[1];
+                        Path path= Paths.get(uploadPath+"/board/"+fileName);
+                        img.transferTo(path);
+                        BoardImgDto imgDto=new BoardImgDto();
+                        imgDto.setImgPath("/public/img/board/"+fileName);
+                        //10분까지 쉬었다가 오세요~
+                    }
+                }
+            }
+        }
+
         return redirectPage;
     }
 }
