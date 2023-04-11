@@ -67,7 +67,12 @@
                 </div>
                 <div class="card-footer d-flex align-items-center">
                     <!-- th:with 지역 변수 등록 -->
-                    <th:block th:with="likes=${b.likes}" th:include="/board/likes"></th:block>
+                    <div class="likeCont" th:id="'likeCont'+${b.bId}">
+                        <th:block th:if="${session.loginUser!=null}" th:with="likes=${b.likes},id=${b.bId}" th:include="/board/loginLikes"></th:block>
+                        <th:block th:unless="${session.loginUser!=null}" th:with="likes=${b.likes},id=${b.bId}" th:include="/board/likes"></th:block>
+                    </div>
+
+
                     <small class="text-muted"> • </small>
                     <div class="viewCont ms-2" data-bs-toggle="tooltip" data-bs-title="조회수">
                         <i class="bi bi-eye fs-4"></i>

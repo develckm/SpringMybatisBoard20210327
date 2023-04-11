@@ -21,7 +21,7 @@
         INSERT INTO reply_hashtags (br_id, h_id) VALUE (#{brId}, #{hId})
     </insert>
     <select id="findByNameContaining" resultMap="HashTagMap">
-        SELECT * FROM hashtags WHERE name LIKE CONCAT('%',#{name},'%')
+        SELECT * FROM hashtags WHERE name LIKE CONCAT(#{name},'%')
     </select>
     <select id="boardHashTagCountByHId" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM board_hashtags WHERE h_id=#{hId}

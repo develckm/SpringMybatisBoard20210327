@@ -4,18 +4,18 @@ import com.acorn.springboardteacher.dto.BoardDto;
 import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.service.BoardService;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/board")
 @AllArgsConstructor
+@Log4j2
 public class BoardController {
     private BoardService boardService;
 
@@ -43,6 +43,16 @@ public class BoardController {
         model.addAttribute("b",board);
         return "/board/detail";
     }
-
-
+    @GetMapping("/register.do")
+    public void registerForm(@SessionAttribute UserDto loginUser){}
+    @PostMapping("/register.do")
+    public String registerAction(
+            @SessionAttribute UserDto loginUser,
+            @ModelAttribute BoardDto board,
+            MultipartFile [] imgs){
+        String redirectPage="redirect:/board/register.do";
+        if(!loginUser.getUId().equals(board.getUId())) return redirectPage;
+        log.info(board);
+        return redirectPage;
+    }
 }
