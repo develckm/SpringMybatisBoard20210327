@@ -6,7 +6,7 @@
         <result property="tag" column="tag"/>
         <result property="brId" column="br_id"/>
     </resultMap>
-    <select id="countByHId" resultType="java.lang.Integer">
+    <select id="countByTag" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM reply_hashtags WHERE tag=#{tag}
     </select>
     <select id="findByBrId" resultMap="ReplyHashTagMap">

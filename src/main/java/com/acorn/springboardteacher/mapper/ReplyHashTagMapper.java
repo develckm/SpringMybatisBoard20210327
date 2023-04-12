@@ -9,6 +9,6 @@ import java.util.List;
 public interface ReplyHashTagMapper {
     List<ReplyHashTagDto> findByBrId(int brId);
     int insertOne(ReplyHashTagDto boardHashTag);
-    int countByHId(int hId);
+    int countByTag(String tag);
 
 }

@@ -25,16 +25,16 @@
                         <img class="img-thumbnail w-100"  th:src="@{'{path}'(path=${r.imgPath})}" alt="댓글 이미지">
                     </div>
                 </div>
-            </div>
+            </div>bh_id
         </div>
     </div>
     <div class="col">
         <div th:text="${r.content}"></div>
         <div class="tagsCont">
-            <ul class="breadcrumb">
-                <li th:each="tag:${r.tags}" class="breadcrumb-item">
+            <ul class="list-unstyled">
+                <li th:each="t:${r.tags}" class="badge bg-light text-muted me-2">
                     <i class="bi bi-hash"></i>
-                    <span th:text="${tag.name}"></span>
+                    <span th:text="${t.tag}"></span>
                 </li>
             </ul>
         </p>

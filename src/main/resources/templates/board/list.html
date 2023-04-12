@@ -46,6 +46,9 @@
                     <div>
                         <h5 class="card-title" th:text="${b.title}"></h5>
                         <p class="card-text" th:text="${b.content}"></p>
+                        <p>
+                            <th:block th:include="/board/hashTags"></th:block>
+                        </p>
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center">

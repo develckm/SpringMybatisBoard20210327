@@ -4,11 +4,11 @@
     <resultMap id="HashTagMap" type="HashTagDto">
         <id property="tag" column="tag"/>
         <association property="rCnt"
-                     select="com.acorn.springboardteacher.mapper.BoardHashTagMapper.countByHId"
-                     column="h_id"/>
+                     select="com.acorn.springboardteacher.mapper.BoardHashTagMapper.countByTag"
+                     column="tag"/>
         <association property="bCnt"
-                     select="com.acorn.springboardteacher.mapper.ReplyHashTagMapper.countByHId"
-                     column="h_id"/>
+                     select="com.acorn.springboardteacher.mapper.ReplyHashTagMapper.countByTag"
+                     column="tag"/>
 
     </resultMap>
     <insert id="insertOne">

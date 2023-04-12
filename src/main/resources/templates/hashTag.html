@@ -1,6 +1,6 @@
 <div class="hashTagCont">
-  <ul id="tagList" class="breadcrumb">
-  </ul>
+  <div id="tagList" class="list-unstyled">
+  </div>
   <div class="input-group">
     <label class="input-group-text">#</label>
     <input type="text" id="tagInput" list="tagDataList" class="form-control" placeholder="해시태그">
@@ -11,20 +11,21 @@
   <script>
     const tagDataList=document.getElementById("tagDataList");
     const tagInput=document.getElementById("tagInput");
-    const tagList=document.getElementById("tagList")
-    const tagBtn=document.getElementById("tagBtn")
+    const tagList=document.getElementById("tagList");
+    const tagBtn=document.getElementById("tagBtn");
+    const tagsSet=new Set();//중복 허용하지 않음
     function listComponent(tagName){
-      return `<li class="breadcrumb-item">
+      return `<div class="d-inline-block tagCont mb-2">
                   <button class="btn btn-light btn-sm" type="button">
                       <span>${tagName}</span>
-                      <i class="bi bi-x" onclick="this.closest('.breadcrumb-item').remove()"></i>
+                      <i class="bi bi-x" onclick="removeTag(this.closest('.tagCont'),'${tagName}')"></i>
                   </button>
                   <input type="hidden" name="hashTag" value="${tagName}">
-              </li>`;
+              </div>`;
     }
     function optComponent(tagObj){
-      return `<option value="${tagObj.name}" onclick="appendList('${tagObj.name}')">
-                  <span>${tagObj.name}</span>
+      return `<option value="${tagObj.tag}">
+                  <span>${tagObj.tag}</span>
                   <small class="badge">${tagObj.bcnt+tagObj.rcnt}</small>
               </option>`;
     }
@@ -33,22 +34,42 @@
       if(val.length>0){
         tagDataList.innerHTML="";
         const tags=await searchHashTags(val);
-        console.log(tags);
         tags.forEach((tag)=>{
           tagDataList.insertAdjacentHTML("beforeend",optComponent(tag));
         });
       }
     });
-    tagBtn.addEventListener("click",()=>{
-      let val=tagInput.value;
-      appendList(val);
+    tagInput.addEventListener("compositionend", (e) => {
+      //한글입력이 끝나고 마지막에 공백이 들어갈경우
+      if ( tagInput.value.slice(-1) === " ") {
+        appendTagList();
+      }
+    });
+    tagInput.addEventListener("keypress",(e)=>{
+      if (e.code==="Enter" || e.code==="Space"){
+        e.preventDefault();
+        appendTagList();
+      }
     })
     tagInput.addEventListener("change",()=>{
-      let val=tagInput.value;
-      appendList(val);
+      appendTagList();
     })
-    function appendList(name){
-      tagList.insertAdjacentHTML("beforeend",listComponent(name));
+    function removeTag(tagCont,tag) {
+      console.log("삭제",tag)
+      tagsSet.delete(tag);
+      tagCont.remove();
+
+    }
+    function appendTagList(){
+      let val=tagInput.value.trim(); //한글입력후 스페이스바 입력시 공백포함
+      if(tagsSet.has(val)){
+        alert("이미 등록한 태그입니다.");
+        tagInput.value="";
+      }else {
+        tagsSet.add(val);
+        tagInput.value="";
+        tagList.insertAdjacentHTML("beforeend",listComponent(val));
+      }
     }
     async function searchHashTags(name){
       let url=`/hashtag/${name}/search.do`;

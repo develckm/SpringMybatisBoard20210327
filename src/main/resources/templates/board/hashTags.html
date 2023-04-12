@@ -1,0 +1,6 @@
+<ul class="list-unstyled">
+  <li th:each="t:${b.tags}" class="badge bg-light text-muted me-2">
+    <i class="bi bi-hash"></i>
+    <span th:text="${t.tag}"></span>
+  </li>
+</ul>
