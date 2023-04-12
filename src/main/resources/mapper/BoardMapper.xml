@@ -28,6 +28,10 @@
                     select="com.acorn.springboardteacher.mapper.BoardImgMapper.findByBId"
                     column="b_id"
                     fetchType="lazy"/>
+        <collection property="tags"
+                    select="com.acorn.springboardteacher.mapper.BoardHashTagMapper.findByBId"
+                    column="b_id"
+                    fetchType="lazy"/>
     </resultMap>
     <insert useGeneratedKeys="true" keyProperty="bId" id="insertOne" parameterType="BoardDto">
         INSERT INTO boards (u_id, title, content) VALUE (#{uId},#{title},#{content})
