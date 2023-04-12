@@ -1,6 +1,14 @@
-DROP DATABASE webAppBoard;
+DROP DATABASE IF EXISTS webAppBoard;
+DROP USER IF EXISTS 'boardDba'@'localhost';
+DROP USER IF EXISTS 'boardServerDev'@'localhost';
+
 CREATE DATABASE webAppBoard CHARACTER SET utf8;
-#CREATE DATABASE IF NOT EXISTS webAppBoard CHARACTER SET utf8;
+
+CREATE USER 'boardDba'@'localhost' IDENTIFIED BY 'mysql123';
+GRANT ALL PRIVILEGES ON webAppBoard.* TO 'boardDba'@'localhost';
+
+CREATE USER 'boardServerDev'@'localhost' IDENTIFIED BY 'mysql123';
+GRANT SELECT, INSERT, UPDATE, DELETE ON webAppBoard.* TO 'boardServerDev'@'localhost';
 
 USE webAppBoard;
 
@@ -110,10 +118,10 @@ CREATE TABLE board_hashtags
 CREATE TABLE reply_hashtags
 (
     rh_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '댓글 해시태그 pk',
-    r_id INT UNSIGNED COMMENT '게시글의 댓글 아이디',
+    br_id INT UNSIGNED COMMENT '댓글 아이디',
     tag VARCHAR(255) NOT NULL COMMENT '태그 내용',
-    UNIQUE (r_id,tag) COMMENT '댓글에 똑같은 태그가 등록되지 않도록',
-    FOREIGN KEY (r_id) REFERENCES boards (b_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE (br_id,tag) COMMENT '댓글에 똑같은 태그가 등록되지 않도록',
+    FOREIGN KEY (br_id) REFERENCES board_replies (br_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (tag) REFERENCES hashtags (tag) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -212,40 +220,118 @@ VALUES
 
 INSERT INTO board_imgs(b_id, img_path)
 VALUES
-(1, '/img/board/1.jpg'),
-(1, '/img/board/2.jpg'),
-(2, '/img/board/3.jpg'),
-(2, '/img/board/4.jpg'),
-(3, '/img/board/5.jpg'),
-(4, '/img/board/6.jpg'),
-(4, '/img/board/7.jpg'),
-(4, '/img/board/8.jpg'),
-(5, '/img/board/9.jpg'),
-(5, '/img/board/10.jpg'),
-(5, '/img/board/11.jpg'),
-(6, '/img/board/12.jpg'),
-(6, '/img/board/13.jpg'),
-(7, '/img/board/14.jpg'),
-(8, '/img/board/15.jpg'),
-(9, '/img/board/99.jpg'),
-(10, '/img/board/17.jpg'),
-(11, '/img/board/18.jpg'),
-(12, '/img/board/19.jpg'),
-(12, '/img/board/20.jpg'),
-(13, '/img/board/21.jpg'),
-(13, '/img/board/22.jpg'),
-(14, '/img/board/23.jpg'),
-(15, '/img/board/24.jpg'),
-(15, '/img/board/25.jpg'),
-(16, '/img/board/26.jpg'),
-(16, '/img/board/27.jpg'),
-(17, '/img/board/28.jpg'),
-(18, '/img/board/29.jpg'),
-(19, '/img/board/30.jpg'),
-(20, '/img/board/31.jpg');
+(1, '/public/img/board/1.jpg'),
+(1, '/public/img/board/2.jpg'),
+(2, '/public/img/board/3.jpg'),
+(2, '/public/img/board/4.jpg'),
+(3, '/public/img/board/5.jpg'),
+(4, '/public/img/board/6.jpg'),
+(4, '/public/img/board/7.jpg'),
+(4, '/public/img/board/8.jpg'),
+(5, '/public/img/board/9.jpg'),
+(5, '/public/img/board/10.jpg'),
+(5, '/public/img/board/11.jpg'),
+(6, '/public/img/board/12.jpg'),
+(6, '/public/img/board/13.jpg'),
+(7, '/public/img/board/14.jpg'),
+(8, '/public/img/board/15.jpg'),
+(9, '/public/img/board/99.jpg'),
+(10, '/public/img/board/17.jpg'),
+(11, '/public/img/board/18.jpg'),
+(12, '/public/img/board/19.jpg'),
+(12, '/public/img/board/20.jpg'),
+(13, '/public/img/board/21.jpg'),
+(13, '/public/img/board/22.jpg'),
+(14, '/public/img/board/23.jpg'),
+(15, '/public/img/board/24.jpg'),
+(15, '/public/img/board/25.jpg'),
+(16, '/public/img/board/26.jpg'),
+(16, '/public/img/board/27.jpg'),
+(17, '/public/img/board/28.jpg'),
+(18, '/public/img/board/29.jpg'),
+(19, '/public/img/board/30.jpg'),
+(20, '/public/img/board/31.jpg');
 
-CREATE USER 'boardDba'@'localhost' IDENTIFIED BY 'mysql123';
-GRANT ALL PRIVILEGES ON webAppBoard.* TO 'boardDba'@'localhost';
-
-CREATE USER 'boardServerDev'@'localhost' IDENTIFIED BY 'mysql123';
-GRANT SELECT, INSERT, UPDATE, DELETE ON webAppBoard.* TO 'boardServerDev'@'localhost';
+-- hashtags
+INSERT INTO hashtags(tag)
+VALUES ('홍대'),
+       ('홍대놀이터'),
+       ('홍대맛집'),
+       ('홍대입구'),
+       ('홍대카페'),
+       ('홍대애견'),
+       ('food'),
+       ('travel'),
+       ('music'),
+       ('fashion'),
+       ('photography'),
+       ('한국'),
+       ('일본'),
+       ('미국'),
+       ('유럽'),
+       ('인테리어'),
+       ('뷰티'),
+       ('운동'),
+       ('영화'),
+       ('꽃'),
+       ('동물'),
+       ('일상'),
+       ('여름'),
+       ('가을'),
+       ('겨울'),
+       ('봄'),
+       ('풍경'),
+       ('먹방'),
+       ('먹심'),
+       ('먹보'),
+       ('먹짱'),
+       ('카페'),
+       ('선팔'),
+       ('소통'),
+       ('셀카'),
+       ('스타일'),
+       ('축구'),
+       ('야구'),
+       ('농구'),
+       ('배구'),
+       ('테니스'),
+       ('골프'),
+       ('스키'),
+       ('수영'),
+       ('춤'),
+       ('노래'),
+       ('기타'),
+       ('피아노'),
+       ('드라마'),
+       ('해외여행'),
+       ('국내여행'),
+       ('육아'),
+       ('공부'),
+       ('일'),
+       ('금요일'),
+       ('토요일'),
+       ('일요일'),
+       ('월요일'),
+       ('화요일'),
+       ('수요일'),
+       ('에이콘아카데미'),
+       ('에이콘'),
+       ('acornacademy'),
+       ('목요일');
+INSERT INTO board_hashtags (b_id, tag)
+VALUES (1,'홍대'),
+       (2,'홍대'),
+       (3,'홍대'),
+       (4,'홍대'),
+       (5,'홍대'),
+       (7,'홍대'),
+       (10,'홍대'),
+       (11,'홍대'),
+       (1,'홍대맛집'),
+       (1,'한국'),
+       (1,'food'),
+       (1,'travel'),
+       (1,'먹심'),
+       (2,'홍대놀이터'),
+       (2,'홍대맛집'),
+       (2,'수요일');
