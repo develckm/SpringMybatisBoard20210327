@@ -6,6 +6,5 @@ import lombok.Data;
 public class ReplyHashTagDto {
     private int rhId;
     private int brId;
-    private int hId;
-    private String name;
+    private String tag;
 }

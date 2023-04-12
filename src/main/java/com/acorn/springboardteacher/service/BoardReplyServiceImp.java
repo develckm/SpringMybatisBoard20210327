@@ -33,7 +33,7 @@ public class BoardReplyServiceImp implements BoardReplyService{
         if( hashTags !=null){
             for (String tag : hashTags){
                 ReplyHashTagDto replyHashTag=new ReplyHashTagDto();
-                replyHashTag.setName(tag);
+                replyHashTag.setTag(tag);
                 replyHashTag.setBrId(reply.getBrId());
                 register+=hashTagService.replyHashTagRegister(replyHashTag);
             }

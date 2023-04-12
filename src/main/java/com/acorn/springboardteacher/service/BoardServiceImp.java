@@ -6,9 +6,12 @@ import com.acorn.springboardteacher.mapper.BoardImgMapper;
 import com.acorn.springboardteacher.mapper.BoardMapper;
 import com.acorn.springboardteacher.mapper.UserMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,6 +20,7 @@ public class BoardServiceImp implements  BoardService{
     private BoardMapper boardMapper;
     private UserMapper userMapper;
     private BoardImgMapper boardImgMapper;
+
     @Override
     public List<BoardDto> list() {
         List<BoardDto> list=boardMapper.findAll();
@@ -29,6 +33,19 @@ public class BoardServiceImp implements  BoardService{
         List<BoardDto> list=boardMapper.findAll(); //지연로딩으로 좋아요 불러오기
         userMapper.setLoginUserIdNull(); //사용이 끝나서 삭제
         return list;
+    }
+
+    @Override
+    public List<BoardImgDto> imgList(int[] biId) {
+        List<BoardImgDto> imgList=null;
+        if(biId!=null){
+            imgList=new ArrayList<>();
+            for (int id : biId){
+                BoardImgDto imgDto=boardImgMapper.findByBiId(id);
+                imgList.add(imgDto);
+            }
+        }
+        return imgList;
     }
 
     @Override

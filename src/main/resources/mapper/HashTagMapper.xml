@@ -2,25 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.acorn.springboardteacher.mapper.HashTagMapper">
     <resultMap id="HashTagMap" type="HashTagDto">
-        <id property="hId" column="h_id"/>
-        <result property="name" column="name"/>
+        <id property="tag" column="tag"/>
         <association property="rCnt"
                      select="com.acorn.springboardteacher.mapper.BoardHashTagMapper.countByHId"
                      column="h_id"/>
         <association property="bCnt"
                      select="com.acorn.springboardteacher.mapper.ReplyHashTagMapper.countByHId"
                      column="h_id"/>
+
     </resultMap>
-    <insert id="insertOne" useGeneratedKeys="true" keyProperty="hId" parameterType="HashTagDto">
-        INSERT INTO hashtags (h_id, name) VALUE (#{hId}, #{name})
+    <insert id="insertOne">
+        INSERT INTO hashtags (tag) value (#{tag});
     </insert>
-    <select id="findByNameContaining" resultMap="HashTagMap">
-        SELECT * FROM hashtags WHERE name LIKE CONCAT(#{name},'%')
+    <select id="findByTagContains" resultMap="HashTagMap">
+        SELECT * FROM hashtags WHERE tag like CONCAT(#{tag},'%')
     </select>
-    <select id="findByName" resultMap="HashTagMap" >
-        SELECT * FROM hashtags WHERE name=#{name}
-    </select>
-    <select id="findNameByHId" resultType="String">
-        SELECT name FROM hashtags WHERE h_id=#{hId}
+    <select id="findByTag" resultMap="HashTagMap">
+        SELECT * FROM hashtags WHERE tag=#{tag}
     </select>
 </mapper>

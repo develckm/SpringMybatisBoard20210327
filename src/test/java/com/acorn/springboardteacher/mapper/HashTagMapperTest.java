@@ -1,8 +1,6 @@
 package com.acorn.springboardteacher.mapper;
 
 import com.acorn.springboardteacher.dto.HashTagDto;
-import groovy.util.logging.Log4j2;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,9 +13,22 @@ class HashTagMapperTest {
     @Autowired
     private HashTagMapper hashTagMapper;
     @Test
-    void findByName() {
-        List<HashTagDto> tagList = hashTagMapper.findByNameContaining("홍");
-        assertNotNull(tagList);
-        System.out.println("tagList = " + tagList);
+    void findByTagContains() {
+        List<HashTagDto> tags = hashTagMapper.findByTagContains("홍대");
+        assertNotNull(tags);
+    }
+
+    @Test
+    void findByTag() {
+        HashTagDto tag = hashTagMapper.findByTag("홍대");
+        assertNotNull(tag);
+    }
+
+    @Test
+    void insertOne() {
+        HashTagDto tag=hashTagMapper.findByTag("가록수길맛집");
+        if(tag==null){
+            int insert=hashTagMapper.insertOne("가록수길맛집");
+        }
     }
 }

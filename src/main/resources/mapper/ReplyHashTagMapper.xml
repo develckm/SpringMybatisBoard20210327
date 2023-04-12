@@ -3,21 +3,17 @@
 <mapper namespace="com.acorn.springboardteacher.mapper.ReplyHashTagMapper">
     <resultMap id="ReplyHashTagMap" type="ReplyHashTagDto">
         <id property="rhId" column="rh_id"/>
-        <result property="hId" column="h_id"/>
+        <result property="tag" column="tag"/>
         <result property="brId" column="br_id"/>
-        <association
-                property="name"
-                select="com.acorn.springboardteacher.mapper.HashTagMapper.findNameByHId"
-                column="h_id"/>
     </resultMap>
     <select id="countByHId" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM reply_hashtags WHERE h_id=#{hId}
+        SELECT COUNT(*) FROM reply_hashtags WHERE tag=#{tag}
     </select>
     <select id="findByBrId" resultMap="ReplyHashTagMap">
         SELECT * FROM reply_hashtags WHERE br_id=#{brId}
     </select>
     <insert id="insertOne" parameterType="ReplyHashTagDto">
-        INSERT INTO reply_hashtags (br_id, h_id) VALUE (#{brId}, #{hId})
+        INSERT INTO reply_hashtags (br_id, tag) VALUE (#{brId}, #{tag})
     </insert>
 
 </mapper>

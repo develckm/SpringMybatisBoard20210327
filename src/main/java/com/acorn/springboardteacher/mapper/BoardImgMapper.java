@@ -12,6 +12,8 @@ public interface BoardImgMapper {
     //게시글에 이미지 등록
     //게시글의 이미지 삭제 (수정 x)
     List<BoardImgDto> findByBId(int bId);
+    BoardImgDto findByBiId(int biId);
+    List<BoardImgDto> findByBiIdIn(List<Integer> biIds);
     int insertOne(BoardImgDto boardImg);
     int deleteOne(int biId);
 }

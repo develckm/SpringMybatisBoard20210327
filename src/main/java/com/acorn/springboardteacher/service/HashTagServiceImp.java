@@ -20,33 +20,31 @@ public class HashTagServiceImp implements HashTagService{
     private ReplyHashTagMapper replyHashTagMapper;
     @Override
     public List<HashTagDto> searchName(String name){
-        List<HashTagDto> searchName=hashTagMapper.findByNameContaining(name);
+        List<HashTagDto> searchName=hashTagMapper.findByTagContains(name);
         return searchName;
     }
     @Override
     public int  replyHashTagRegister(ReplyHashTagDto replyHashTag){
-        HashTagDto hashTag=hashTagMapper.findByName(replyHashTag.getName());
+        HashTagDto hashTag=hashTagMapper.findByTag(replyHashTag.getTag());
         int register=0;
         if (hashTag==null){
             hashTag=new HashTagDto();
-            hashTag.setName(replyHashTag.getName());
-            register=hashTagMapper.insertOne(hashTag);
+            hashTag.setTag(replyHashTag.getTag());
+            register=hashTagMapper.insertOne(hashTag.getTag());
         }
-        replyHashTag.setHId(hashTag.getHId());
         register+=replyHashTagMapper.insertOne(replyHashTag);
         return register;
 
     }
     @Override
     public int  boardHashTagRegister(BoardHashTagDto boardHashTag){
-        HashTagDto hashTag=hashTagMapper.findByName(boardHashTag.getName());
+        HashTagDto hashTag=hashTagMapper.findByTag(boardHashTag.getTag());
         int register=0;
         if (hashTag==null){
             hashTag=new HashTagDto();
-            hashTag.setName(boardHashTag.getName());
-            register=hashTagMapper.insertOne(hashTag);
+            hashTag.setTag(boardHashTag.getTag());
+            register=hashTagMapper.insertOne(hashTag.getTag());
         }
-        boardHashTag.setHId(hashTag.getHId());
         register+=boardHashTagMapper.insertOne(boardHashTag);
         return register;
 

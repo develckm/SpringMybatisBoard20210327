@@ -46,6 +46,7 @@
     </p>
     <p class="text-end">
       <button type="reset" class="btn btn-warning">초기화</button>
+      <a th:href="@{'/board/{bId}/remove.do'(bId=${b.bId})}" class="btn btn-danger">삭제 </a>
       <button type="submit" class="btn btn-primary">수정</button>
     </p>
   </form>

@@ -4,8 +4,7 @@ import lombok.Data;
 
 @Data
 public class BoardHashTagDto {
-    private int bhId;
-    private int bId;
-    private int hId;
-    private String name;
+    private int bhId;//pk generate key
+    private int bId;//fk boards.b_id
+    private String tag;//fk hashtags.tag
 }
