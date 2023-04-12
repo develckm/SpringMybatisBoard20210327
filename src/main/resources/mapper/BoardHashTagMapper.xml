@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.BoardHashTagMapper">
+    <resultMap id="BoardHashTagMap" type="BoardHashTagDto">
+        <id property="bhId" column="bh_id"/>
+        <result property="bId" column="b_id"/>
+        <result property="tag" column="tag"/>
+    </resultMap>
+    <insert id="insertOne">
+        INSERT INTO board_hashtags (b_id, tag) VALUES (#{bId},#{tag})
+    </insert>
+    <delete id="deleteOne">
+        DELETE FROM board_hashtags WHERE b_id=#{bId} AND tag=#{tag}
+    </delete>
+    <select id="findByBId" resultMap="BoardHashTagMap">
+        SELECT * FROM board_hashtags WHERE b_id=#{bId}
+    </select>
+    <select id="countByTag" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM board_hashtags WHERE tag=#{tag}
+    </select>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.HashTagMapper">
+    <resultMap id="HashTagMap" type="HashTagDto">
+        <id property="tag" column="tag"/>
+    </resultMap>
+    <insert id="insertOne">
+        INSERT INTO hashtags (tag) value (#{tag});
+    </insert>
+    <select id="findByTagContains" resultMap="HashTagMap">
+        SELECT * FROM hashtags WHERE tag like CONCAT(#{tag},'%')
+    </select>
+    <select id="findByTag" resultMap="HashTagMap">
+        SELECT * FROM hashtags WHERE tag=#{tag}
+    </select>
+</mapper>
