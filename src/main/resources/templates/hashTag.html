@@ -1,0 +1,63 @@
+<div class="hashTagCont">
+  <ul id="tagList" class="breadcrumb">
+  </ul>
+  <div class="input-group">
+    <label class="input-group-text">#</label>
+    <input type="text" id="tagInput" list="tagDataList" class="form-control" placeholder="해시태그">
+    <button id="tagBtn" type="button" class="btn btn-secondary">등록</button>
+  </div>
+  <datalist id="tagDataList" class="w-100">
+  </datalist>
+  <script>
+    const tagDataList=document.getElementById("tagDataList");
+    const tagInput=document.getElementById("tagInput");
+    const tagList=document.getElementById("tagList")
+    const tagBtn=document.getElementById("tagBtn")
+    function listComponent(tagName){
+      return `<li class="breadcrumb-item">
+                  <button class="btn btn-light btn-sm" type="button">
+                      <span>${tagName}</span>
+                      <i class="bi bi-x" onclick="this.closest('.breadcrumb-item').remove()"></i>
+                  </button>
+                  <input type="hidden" name="hashTag" value="${tagName}">
+              </li>`;
+    }
+    function optComponent(tagObj){
+      return `<option value="${tagObj.name}" onclick="appendList('${tagObj.name}')">
+                  <span>${tagObj.name}</span>
+                  <small class="badge">${tagObj.bcnt+tagObj.rcnt}</small>
+              </option>`;
+    }
+    tagInput.addEventListener("input",async (e)=>{
+      let val=tagInput.value;
+      if(val.length>0){
+        tagDataList.innerHTML="";
+        const tags=await searchHashTags(val);
+        console.log(tags);
+        tags.forEach((tag)=>{
+          tagDataList.insertAdjacentHTML("beforeend",optComponent(tag));
+        });
+      }
+    });
+    tagBtn.addEventListener("click",()=>{
+      let val=tagInput.value;
+      appendList(val);
+    })
+    tagInput.addEventListener("change",()=>{
+      let val=tagInput.value;
+      appendList(val);
+    })
+    function appendList(name){
+      tagList.insertAdjacentHTML("beforeend",listComponent(name));
+    }
+    async function searchHashTags(name){
+      let url=`/hashtag/${name}/search.do`;
+      const resp=await fetch(url);
+      if(resp.status===200){
+        const json=await resp.json();
+        return json;
+      }
+
+    }
+  </script>
+</div>

@@ -64,8 +64,8 @@ public class UserController {
     @PostMapping("/modify.do")
     public String modifyAction(
             @SessionAttribute UserDto loginUser,
-            @ModelAttribute UserDto user,
-            RedirectAttributes redirectAttributes){
+            @ModelAttribute UserDto user, //파라미터 파싱
+            RedirectAttributes redirectAttributes){//리다이렉트 페이지에 파라미터를 전달하는 객체(쿼리스트링 추가 or 세션)
         int modify=0;
         String msg="수정 실패";
         String redirectPage="redirect:/user/"+user.getUId()+"/modify.do";

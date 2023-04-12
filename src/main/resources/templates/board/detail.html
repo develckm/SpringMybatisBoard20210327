@@ -116,55 +116,7 @@
                                     <input class="d-none" type="file" name="img">
                                 </label>
                             </div>
-                            <div class="hashTagCont">
-                                <ul id="tagList" class="breadcrumb">
-                                    <li class="breadcrumb-item">
-                                        <button class="btn btn-light btn-sm" type="button">
-                                            <span>javascipt</span>
-                                            <i class="bi bi-x"></i>
-                                        </button>
-                                        <input type="hidden" name="hashTags.name" value="">
-                                    </li>
-                                </ul>
-                                <div class="input-group">
-                                    <label class="input-group-text">#</label>
-                                    <input type="text" id="tagInput" list="tagDataList" class="form-control" placeholder="해시태그">
-                                    <button type="button" class="btn btn-secondary">등록</button>
-                                </div>
-                                <datalist id="tagDataList" class="w-100">
-                                </datalist>
-                                <script>
-                                    const tagDataList=document.getElementById("tagDataList");
-                                    const tagInput=document.getElementById("tagInput");
-                                    const tagList=document.getElementById("tagList")
-                                    function optComponent(tagObj){
-                                        return `<option>
-                                                    <span>${tagObj.name}</span>
-                                                    <small class="badge">${tagObj.bcnt+tagObj.rcnt}</small>
-                                                </option>`;
-                                    }
-                                    tagInput.addEventListener("input",async (e)=>{
-                                       let val=tagInput.value;
-                                       if(val.length>0){
-                                           tagDataList.innerHTML="";
-                                            const tags=await searchHashTags(val);
-                                           console.log(tags);
-                                            tags.forEach((tag)=>{
-                                                tagDataList.insertAdjacentHTML("beforeend",optComponent(tag));
-                                            });
-                                       }
-                                    });
-                                    async function searchHashTags(name){
-                                        let url=`/hashtag/${name}/search.do`;
-                                        const resp=await fetch(url);
-                                        if(resp.status===200){
-                                            const json=await resp.json();
-                                            return json;
-                                        }
-
-                                    }
-                                </script>
-                            </div>
+                            <th:block th:include="/hashTag"></th:block>
                         </form>
                     </div>
                 </div>
@@ -199,7 +151,14 @@
                             <textarea name="content" class="form-control" placeholder="내용"></textarea>
                             <label>내용</label>
                         </p>
-
+                        <p class="tagsCont">
+                            <ul class="breadcrumb">
+                                <li th:each="tag:${b.tags}" class="breadcrumb-item">
+                                    <i class="bi bi-hash"></i>
+                                    <span th:text="${tag.name}"></span>
+                                </li>
+                            </ul>
+                        </p>
                     </div>
                     <div class="modal-footer">
                         <button id="removeReplyBtn" type="button" class="btn btn-danger">삭제</button>

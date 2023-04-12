@@ -5,31 +5,22 @@
         <id property="hId" column="h_id"/>
         <result property="name" column="name"/>
         <association property="rCnt"
-                     select="replyHashTagCountByHId"
+                     select="com.acorn.springboardteacher.mapper.BoardHashTagMapper.countByHId"
                      column="h_id"/>
         <association property="bCnt"
-                     select="boardHashTagCountByHId"
+                     select="com.acorn.springboardteacher.mapper.ReplyHashTagMapper.countByHId"
                      column="h_id"/>
     </resultMap>
-    <insert id="insertOne" useGeneratedKeys="true" keyProperty="bId" parameterType="HashTagDto">
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="hId" parameterType="HashTagDto">
         INSERT INTO hashtags (h_id, name) VALUE (#{hId}, #{name})
-    </insert>
-    <insert id="replyHashTagInsertOne" parameterType="BoardHashTagDto">
-        INSERT INTO board_hashtags (b_id, h_id) VALUE (#{bId}, #{hId})
-    </insert>
-    <insert id="boardHashTagInsertOne" parameterType="ReplyHashTagDto">
-        INSERT INTO reply_hashtags (br_id, h_id) VALUE (#{brId}, #{hId})
     </insert>
     <select id="findByNameContaining" resultMap="HashTagMap">
         SELECT * FROM hashtags WHERE name LIKE CONCAT(#{name},'%')
     </select>
-    <select id="boardHashTagCountByHId" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM board_hashtags WHERE h_id=#{hId}
-    </select>
-    <select id="replyHashTagCountByHId" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM reply_hashtags WHERE h_id=#{hId}
-    </select>
-    <select id="findByName" resultType="HashTagDto" >
+    <select id="findByName" resultMap="HashTagMap" >
         SELECT * FROM hashtags WHERE name=#{name}
+    </select>
+    <select id="findNameByHId" resultType="String">
+        SELECT name FROM hashtags WHERE h_id=#{hId}
     </select>
 </mapper>

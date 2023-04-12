@@ -2,9 +2,7 @@ package com.acorn.springboardteacher.controller;
 
 import com.acorn.springboardteacher.dto.BoardReplyDto;
 import com.acorn.springboardteacher.dto.UserDto;
-import com.acorn.springboardteacher.mapper.BoardReplyMapper;
 import com.acorn.springboardteacher.service.BoardReplyService;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,7 +55,8 @@ public class ReplyController {
     public @ResponseBody HandlerDto registerHandler(
             @ModelAttribute BoardReplyDto reply,
             @SessionAttribute UserDto loginUser, //400
-            MultipartFile img) throws IOException {
+            MultipartFile img,
+            @RequestParam(value = "hashTag",required = false) String[] hashTags) throws IOException {
         HandlerDto handlerDto=new HandlerDto();
         if(!img.isEmpty()){
             String[] cotentTypes=img.getContentType().split("/");
@@ -69,7 +68,7 @@ public class ReplyController {
                 reply.setImgPath("/public/img/reply/"+fileName);
             }
         }
-        int register=boardReplyService.register(reply); //500
+        int register=boardReplyService.register(reply,hashTags); //500
         handlerDto.setRegister(register);
         return handlerDto;
     }
@@ -136,7 +135,7 @@ public class ReplyController {
                     reply.setImgPath("/public/img/reply/"+fileName); //서버가 이미지를 배포하는 위치
                 }
             }
-            register=boardReplyService.register(reply);
+            register=boardReplyService.register(reply, null);
         }catch (Exception e){
             log.error(e.getMessage());
             msg+=" 에러 :"+e.getMessage();

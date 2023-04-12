@@ -11,10 +11,7 @@ import java.util.List;
 public interface HashTagMapper {
     List<HashTagDto> findByNameContaining(String name);
     HashTagDto findByName(String name);
+    String findNameByHId(int hId);
     int insertOne(HashTagDto hashTag);
-    int boardHashTagInsertOne(BoardHashTagDto boardHashTag);
-    int replyHashTagInsertOne(ReplyHashTagDto boardHashTag);
-    int boardHashTagCountByHId(int hId);
-    int replyHashTagCountByHId(int hId);
 
 }

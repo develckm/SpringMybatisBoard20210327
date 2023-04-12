@@ -29,9 +29,17 @@
         </div>
     </div>
     <div class="col">
-        <span th:text="${r.content}"></span>
-    </div>
+        <div th:text="${r.content}"></div>
+        <div class="tagsCont">
+            <ul class="breadcrumb">
+                <li th:each="tag:${r.tags}" class="breadcrumb-item">
+                    <i class="bi bi-hash"></i>
+                    <span th:text="${tag.name}"></span>
+                </li>
+            </ul>
+        </p>
 
+    </div>
 </div>
 <div class="footer d-flex justify-content-between align-items-center">
     <div class="likesCont">

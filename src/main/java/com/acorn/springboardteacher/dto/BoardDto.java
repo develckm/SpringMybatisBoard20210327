@@ -20,6 +20,6 @@ public class BoardDto {
     private UserDto user; //N : 1 = boards : users
     private List<BoardReplyDto> replies;//1 : N = boards : board_replies
     private List<BoardImgDto> imgs;//1:N = boars : board_imgs
-
+    private List<BoardHashTagDto> tags;
 
 }

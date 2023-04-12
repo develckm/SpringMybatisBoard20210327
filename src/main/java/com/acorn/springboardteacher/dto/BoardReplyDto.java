@@ -2,6 +2,8 @@ package com.acorn.springboardteacher.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.Date;
 import java.util.List;
 
@@ -22,5 +24,6 @@ public class BoardReplyDto {
     private String content;
     private LikeStatusCntDto likes;//board_replies : reply_likes = 1 : N (그렇지만 집계한 결과만 가져옴)
     private List<BoardReplyDto> replies;//대댓글 (리스트로 나자신의 타입을 참조 셀프조인)
+    private List<BoardHashTagDto> tags; //해시태그 리스트
     //board_replies : board_replies = 1 : N (self join)
 }

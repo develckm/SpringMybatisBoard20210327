@@ -22,6 +22,10 @@
                     select="findByParentBrId"
                     column="br_id"
                     fetchType="lazy"/>
+        <collection property="tags"
+                    select="com.acorn.springboardteacher.mapper.ReplyHashTagMapper.findByBrId"
+                    column="br_id"
+                    fetchType="lazy"/>
     </resultMap>
     <insert useGeneratedKeys="true" keyProperty="brId" id="insertOne" parameterType="BoardReplyDto">
         INSERT INTO board_replies

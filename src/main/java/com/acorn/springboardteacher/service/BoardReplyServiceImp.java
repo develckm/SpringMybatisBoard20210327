@@ -1,9 +1,11 @@
 package com.acorn.springboardteacher.service;
 
 import com.acorn.springboardteacher.dto.BoardReplyDto;
+import com.acorn.springboardteacher.dto.ReplyHashTagDto;
 import com.acorn.springboardteacher.mapper.BoardReplyMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BoardReplyServiceImp implements BoardReplyService{
     private BoardReplyMapper boardReplyMapper;
+    private HashTagService hashTagService;
     @Override
     public List<BoardReplyDto> list(int bId) {
         List<BoardReplyDto> list=boardReplyMapper.findByBIdAndParentBrIdIsNull(bId);
@@ -23,9 +26,18 @@ public class BoardReplyServiceImp implements BoardReplyService{
         return detail;
     }
 
+    @Transactional
     @Override
-    public int register(BoardReplyDto reply) {
+    public int register(BoardReplyDto reply, String[] hashTags) {
         int register=boardReplyMapper.insertOne(reply);
+        if( hashTags !=null){
+            for (String tag : hashTags){
+                ReplyHashTagDto replyHashTag=new ReplyHashTagDto();
+                replyHashTag.setName(tag);
+                replyHashTag.setBrId(reply.getBrId());
+                register+=hashTagService.replyHashTagRegister(replyHashTag);
+            }
+        }
         return register;
     }
 
