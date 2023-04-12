@@ -18,4 +18,10 @@
     <select id="findByBiId" resultMap="BoardImgMap">
         SELECT * FROM board_imgs WHERE bi_id=#{biId}
     </select>
+    <select id="findByBiIdIn" resultMap="BoardImgMap">
+        SELECT * FROM board_imgs WHERE bi_id in 
+        <foreach collection="biIds" item="biId" open="(" separator="," close=")">
+            ${biId}
+        </foreach>
+    </select>
 </mapper>

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardServiceImpTest {
     @Autowired
     private BoardService boardService;
-    @Test //10분까지 쉬었다가 오세요~
+    @Test
     void imgList() {
         List<BoardImgDto> boardImgDtos = boardService.imgList(new int[]{3, 4, 5});
         System.out.println("boardImgDtos = " + boardImgDtos);

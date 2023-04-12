@@ -92,14 +92,29 @@ CREATE TABLE board_imgs
 #fk : 다른 table pk => 이때 부모 자식 관계가 된다. (관계형 데이터 베이스)
 #fk 로는 pk 만 지정할 수 있고 존재하지 않는 부모를 참조할 수 없도록 제약된다.(참조의 무결성 적용)
 #해시태그로 검색기능 구현
-CREATE TABLE hash_tags
+CREATE TABLE hashtags
 (
-    h_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '해시태그 아이디',
+    tag VARCHAR(255) PRIMARY KEY COMMENT '태그 내용'
+);
+#게시글에 해시태그 추가
+CREATE TABLE board_hashtags
+(
+    bh_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '보드 해시태그 pk',
     b_id INT UNSIGNED COMMENT '게시글 아이디',
-    br_id INT UNSIGNED COMMENT '댓글 아이디',
     tag VARCHAR(255) NOT NULL COMMENT '태그 내용',
+    UNIQUE (b_id,tag) COMMENT '게시글에 똑같은 태그가 등록되지 않도록',
     FOREIGN KEY (b_id) REFERENCES boards (b_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (br_id) REFERENCES board_replies (br_id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (tag) REFERENCES hashtags (tag) ON DELETE CASCADE ON UPDATE CASCADE
+);
+#댓글에 해시태그 추가
+CREATE TABLE reply_hashtags
+(
+    rh_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '댓글 해시태그 pk',
+    r_id INT UNSIGNED COMMENT '게시글의 댓글 아이디',
+    tag VARCHAR(255) NOT NULL COMMENT '태그 내용',
+    UNIQUE (r_id,tag) COMMENT '댓글에 똑같은 태그가 등록되지 않도록',
+    FOREIGN KEY (r_id) REFERENCES boards (b_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (tag) REFERENCES hashtags (tag) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
