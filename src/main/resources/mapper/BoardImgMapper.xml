@@ -15,4 +15,7 @@
     <select id="findByBId" resultMap="BoardImgMap">
         SELECT * FROM board_imgs WHERE b_id=#{bId}
     </select>
+    <select id="findByBiId" resultMap="BoardImgMap">
+        SELECT * FROM board_imgs WHERE bi_id=#{biId}
+    </select>
 </mapper>
