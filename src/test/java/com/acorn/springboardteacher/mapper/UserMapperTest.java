@@ -5,6 +5,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -95,5 +97,22 @@ class UserMapperTest {
     void deleteByUIdAndPw() {
         int deleteByUIdAndPw = userMapper.deleteByUIdAndPw(user);
         assertEquals(1,deleteByUIdAndPw);
+    }
+
+    @Test
+    void findByFollowFromId() {
+        List<UserDto> following = userMapper.findByFollowFromId("user01");
+    }
+
+    @Test
+    void findByFollowToId() {
+        List<UserDto> follower = userMapper.findByFollowToId("user01");
+
+    }
+
+    @Test
+    void findByFollowing_ToIdEqualsFollower_FromIdAndFollowing_FromId() {
+        List<UserDto> followForFollw = userMapper.findByFollowing_ToIdEqualsFollower_FromIdAndFollowing_FromId("user01");
+
     }
 }

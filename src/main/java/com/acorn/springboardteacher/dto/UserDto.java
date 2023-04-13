@@ -16,5 +16,5 @@ public class UserDto {
     private String address;
     private String detailAddress;
     private String permission;
-
+    private boolean f4f;//followFormFollow 맞팔
 }

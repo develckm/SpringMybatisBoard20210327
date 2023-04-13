@@ -2,7 +2,8 @@ CREATE DATABASE gabojagoPlan CHARACTER SET utf8;
 
 #유저 테이블
 #MBTI NULL OR NOT NULL??필수 선택??
-CREATE TABLE `user` (
+CREATE TABLE `user`
+(
                         `u_id`	varchar(255) PRIMARY KEY COMMENT '사용자 아이디',
                         `pw`	varchar(255) NOT NULL COMMENT'비밀번호',
                         `name`	varchar(255) NOT NULL COMMENT'이름',
@@ -21,7 +22,8 @@ CREATE TABLE `user` (
                         `business_id`	varchar(255) COMMENT '사업자 번호'
 );
 #공지사항 테이블
-CREATE TABLE `notice` (
+CREATE TABLE `notice`
+(
                                 `n_id`	int unsigned AUTO_INCREMENT PRIMARY KEY COMMENT '공지사항 아이디',
                                 `u_id`	varchar(255)	NOT NULL COMMENT '작성자 아이디',
                                 `title`	varchar(255) NOT NULL COMMENT '제목',
@@ -34,7 +36,8 @@ CREATE TABLE `notice` (
 );
 #공지사항 조회수 테이블
 #제약조건 추가 조회수1번만 가능하게
-CREATE TABLE `notice_viewcount` (
+CREATE TABLE `notice_viewcount`
+(
                                     `n_cnt`	int unsigned AUTO_INCREMENT PRIMARY KEY COMMENT '조회수 아이디',
                                     `n_id`	int unsigned NOT NULL COMMENT '게시글 아이디',
                                     `u_id`	varchar(255) NOT NULL COMMENT '유저 아이디',
@@ -45,7 +48,8 @@ CREATE TABLE `notice_viewcount` (
 );
 
 #마일리지 테이블
-CREATE TABLE `mileage` (
+CREATE TABLE `mileage`
+(
                            `m_id`	int unsigned AUTO_INCREMENT PRIMARY KEY COMMENT '판매글 아이디',
                            `u_id`	varchar(255) NOT NULL COMMENT '유저 아이디',
                            `mileage`	int	default 0 COMMENT '마일리지',

@@ -14,6 +14,7 @@
         <result column="address" property="address"/>
         <result column="detail_address" property="detailAddress"/>
         <result column="permission" property="permission"/>
+        <result column="f4f" property="f4f"/>
     </resultMap>
     <update id="setLoginUserId">
         SET @loginUserId=#{uId}
@@ -53,5 +54,29 @@
     </select>
     <select id="findUIdByEmailAndPhoneAndName" resultType="java.lang.String">
         SELECT u_id FROM users WHERE email=#{email} AND phone=#{phone} AND name=#{name}
+    </select>
+    <select id="findByFollowFromId" resultMap="UserMap">
+        SELECT u.* FROM follows following LEFT JOIN users u on following.to_id=u.u_id WHERE from_id=#{fromId}
+    </select>
+    <select id="findByFollowToId" resultMap="UserMap">
+        SELECT
+                u.*,
+               (SELECT COUNT(*) FROM follows WHERE from_id=follower.to_id AND to_id=follower.from_id) f4f
+            FROM follows follower
+                LEFT JOIN users u
+                    on follower.from_id=u.u_id
+            WHERE to_id=#{toId}
+    </select>
+
+    <select  id="findByFollowing_ToIdEqualsFollower_FromIdAndFollowing_FromId" resultMap="UserMap">
+        SELECT u.*
+            FROM follows following
+                inner join follows follower
+                    on following.to_id=follower.from_id
+                left join users u
+                    on following.to_id = u.u_id
+                WHERE following.from_id=follower.to_id
+                    AND following.from_id= #{fromId};
+
     </select>
 </mapper>

@@ -27,7 +27,7 @@ public class BoardServiceImp implements  BoardService{
         List<BoardDto> list=boardMapper.findAll(); //지연로딩으로 좋아요 불러오기
         if(loginUser!=null)userMapper.setLoginUserIdNull(); //사용이 끝나서 삭제
         return list;
-    }//15분까지 쉬었다가 오세요~
+    }
 
     @Override
     public List<BoardDto> tagList(String tag, UserDto loginUser) {
