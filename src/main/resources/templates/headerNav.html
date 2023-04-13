@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+    .list-group-item:hover{
+        background-color: #31363b !important;
+    }
+</style>
 <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">HOME</a>
@@ -15,6 +20,12 @@
                     <a class="nav-link" href="/board/register.do">
                         게시글 등록
                         <i class="bi bi-plus-square"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasSearch" role="button" aria-controls="offcanvasExample">
+                        해시태그 검색
+                        <i class="bi bi-search"></i>
                     </a>
                 </li>
 
@@ -40,6 +51,38 @@
         </div>
     </div>
 </nav>
+
+<div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasSearch" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">해시태그 검색</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="input-group">
+            <label class="input-group-text bg-dark text-white">
+                <i class="bi bi-hash"></i>
+            </label>
+            <input type="text" class="form-control" placeholder="해시태그">
+        </div>
+        <div class="list-group">
+            <a href="#" class="list-group-item text-bg-dark d-flex align-items-center">
+                <i class="bi bi-hash border rounded-circle fs-2 d-flex justify-content-center align-items-center" style="width: 50px; height: 50px"></i>
+                <div class="ms-3">
+                    <div>
+                        <i class="bi bi-hash"></i>
+                        <span>홍대</span>
+                    </div>
+                    <div class="text-white text-opacity-75">
+                        <small>게시물</small>
+                        <small>30</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
 <th:block th:if="${msg!=null || session.msg !=null}">
     <div id="actionModal" class="modal" tabindex="-1">
         <div class="modal-dialog">
