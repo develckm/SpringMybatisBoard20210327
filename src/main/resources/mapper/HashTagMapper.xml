@@ -7,9 +7,8 @@
                      select="com.acorn.springboardteacher.mapper.BoardHashTagMapper.countByTag"
                      column="tag"/>
         <association property="bCnt"
-                     select="com.acorn.springboardteacher.mapper.ReplyHashTagMapper.countByTag"
+                     select="com.acorn.springboardteacher.mapper.BoardHashTagMapper.countByTag"
                      column="tag"/>
-
     </resultMap>
     <insert id="insertOne">
         INSERT INTO hashtags (tag) value (#{tag});

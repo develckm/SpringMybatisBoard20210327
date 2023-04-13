@@ -83,4 +83,10 @@ class BoardMapperTest {
         int updateIncrementViewCountBId = boardMapper.updateIncrementViewCountBId(1);
         assertEquals(updateIncrementViewCountBId,1);
     }
+
+    @Test
+    void findByTag() {
+        List<BoardDto> boards = boardMapper.findByTag("홍대맛집");
+        assertNotNull(boards);
+    }
 }

@@ -8,7 +8,6 @@ import com.acorn.springboardteacher.mapper.HashTagMapper;
 import com.acorn.springboardteacher.mapper.ReplyHashTagMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,12 +18,7 @@ public class HashTagServiceImp implements HashTagService{
     private BoardHashTagMapper boardHashTagMapper;
     private ReplyHashTagMapper replyHashTagMapper;
     @Override
-    public List<HashTagDto> searchName(String name){
-        List<HashTagDto> searchName=hashTagMapper.findByTagContains(name);
-        return searchName;
-    }
-    @Override
-    public int  replyHashTagRegister(ReplyHashTagDto replyHashTag){
+    public int  register(ReplyHashTagDto replyHashTag){
         HashTagDto hashTag=hashTagMapper.findByTag(replyHashTag.getTag());
         int register=0;
         if (hashTag==null){
@@ -37,16 +31,27 @@ public class HashTagServiceImp implements HashTagService{
 
     }
     @Override
-    public int  boardHashTagRegister(BoardHashTagDto boardHashTag){
-        HashTagDto hashTag=hashTagMapper.findByTag(boardHashTag.getTag());
-        int register=0;
-        if (hashTag==null){
-            hashTag=new HashTagDto();
+    public int  register(BoardHashTagDto boardHashTag) {
+        HashTagDto hashTag = hashTagMapper.findByTag(boardHashTag.getTag());
+        int register = 0;
+        if (hashTag == null) {
+            hashTag = new HashTagDto();
             hashTag.setTag(boardHashTag.getTag());
-            register=hashTagMapper.insertOne(hashTag.getTag());
+            register = hashTagMapper.insertOne(hashTag.getTag());
         }
-        register+=boardHashTagMapper.insertOne(boardHashTag);
+        register += boardHashTagMapper.insertOne(boardHashTag);
         return register;
-
     }
+
+    @Override
+    public int remove(BoardHashTagDto boardHashTagDto) {
+        return 0;
+    }
+
+    @Override
+    public List<HashTagDto> search(String tag) {
+        List<HashTagDto> search=hashTagMapper.findByTagContains(tag);
+        return search;
+    }
+
 }

@@ -35,7 +35,7 @@ public class BoardReplyServiceImp implements BoardReplyService{
                 ReplyHashTagDto replyHashTag=new ReplyHashTagDto();
                 replyHashTag.setTag(tag);
                 replyHashTag.setBrId(reply.getBrId());
-                register+=hashTagService.replyHashTagRegister(replyHashTag);
+                register+=hashTagService.register(replyHashTag);
             }
         }
         return register;

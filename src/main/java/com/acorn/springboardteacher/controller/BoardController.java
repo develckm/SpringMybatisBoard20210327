@@ -38,17 +38,22 @@ public class BoardController {
     public String list(
             Model model,
             @SessionAttribute(required = false) UserDto loginUser){
-
         List<BoardDto> boards;
-        if(loginUser==null){
-            boards=boardService.list();
-        }else{
-            boards=boardService.list(loginUser.getUId());
-        }
+        boards=boardService.list(loginUser);
         model.addAttribute("boards",boards);
-
         return "/board/list";
     }
+    @GetMapping("/{tag}/tagList.do")
+    public String tagList(
+            @PathVariable String tag,
+            Model model,
+            @SessionAttribute(required = false) UserDto loginUser){
+        List<BoardDto> boards;
+        boards=boardService.tagList(tag,loginUser);
+        model.addAttribute("boards",boards);
+        return "/board/list";
+    }
+
     //?bId=1 //bId 동적 동적 페에지에 꼭 필요(400) 명시적으로 나타내는 것
     @GetMapping("/{bId}/modify.do")
     public String modifyForm(
