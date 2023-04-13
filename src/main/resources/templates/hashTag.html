@@ -6,7 +6,7 @@
     <input type="text" id="tagInput" list="tagDataList" class="form-control" placeholder="해시태그">
     <button id="tagBtn" type="button" class="btn btn-secondary">등록</button>
   </div>
-  <datalist id="tagDataList" class="w-100">
+  <datalist id="tagDataList" class="">
   </datalist>
   <script>
     const tagDataList=document.getElementById("tagDataList");
@@ -50,10 +50,10 @@
         e.preventDefault();
         appendTagList();
       }
-    })
+    });
     tagInput.addEventListener("change",()=>{
       appendTagList();
-    })
+    });
     function removeTag(tagCont,tag) {
       console.log("삭제",tag)
       tagsSet.delete(tag);
