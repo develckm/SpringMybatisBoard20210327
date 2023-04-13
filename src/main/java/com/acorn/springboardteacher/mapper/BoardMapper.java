@@ -14,6 +14,7 @@ public interface BoardMapper {
     //상세보기시 조회수 올리기
     List<BoardDto> findAll();
     List<BoardDto> findAll(String loginUserId);
+    List<BoardDto> findByTag(String tag);
     BoardDto findByBId(int bId);
     int insertOne(BoardDto board);
     int updateOne(BoardDto board);

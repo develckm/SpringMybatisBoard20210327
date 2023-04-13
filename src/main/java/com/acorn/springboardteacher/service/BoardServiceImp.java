@@ -2,15 +2,14 @@ package com.acorn.springboardteacher.service;
 
 import com.acorn.springboardteacher.dto.BoardDto;
 import com.acorn.springboardteacher.dto.BoardImgDto;
+import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.mapper.BoardImgMapper;
 import com.acorn.springboardteacher.mapper.BoardMapper;
 import com.acorn.springboardteacher.mapper.UserMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,17 +21,20 @@ public class BoardServiceImp implements  BoardService{
     private BoardImgMapper boardImgMapper;
 
     @Override
-    public List<BoardDto> list() {
-        List<BoardDto> list=boardMapper.findAll();
-        return list;
-    }
-    @Override
-    public List<BoardDto> list(String loginUserId) {
+    public List<BoardDto> list(UserDto loginUser) {
         //List<BoardDto> list=boardMapper.findAll(loginUserId); //서브쿼리로 좋아요 불러오기
-        userMapper.setLoginUserId(loginUserId); //로그인한 유저 아이디를 mysql 서버에 변수로 등록
+        if(loginUser!=null)userMapper.setLoginUserId(loginUser.getUId()); //로그인한 유저 아이디를 mysql 서버에 변수로 등록
         List<BoardDto> list=boardMapper.findAll(); //지연로딩으로 좋아요 불러오기
-        userMapper.setLoginUserIdNull(); //사용이 끝나서 삭제
+        if(loginUser!=null)userMapper.setLoginUserIdNull(); //사용이 끝나서 삭제
         return list;
+    }//15분까지 쉬었다가 오세요~
+
+    @Override
+    public List<BoardDto> tagList(String tag, UserDto loginUser) {
+        if(loginUser!=null)userMapper.setLoginUserId(loginUser.getUId());
+        List<BoardDto> tagList=boardMapper.findByTag(tag);
+        if(loginUser!=null)userMapper.setLoginUserIdNull();
+        return tagList;
     }
 
     @Override

@@ -62,26 +62,55 @@
             <label class="input-group-text bg-dark text-white">
                 <i class="bi bi-hash"></i>
             </label>
-            <input type="text" class="form-control" placeholder="해시태그">
+            <input type="text" id="searchTagInput" class="form-control" placeholder="해시태그">
         </div>
-        <div class="list-group">
-            <a href="#" class="list-group-item text-bg-dark d-flex align-items-center">
-                <i class="bi bi-hash border rounded-circle fs-2 d-flex justify-content-center align-items-center" style="width: 50px; height: 50px"></i>
-                <div class="ms-3">
-                    <div>
-                        <i class="bi bi-hash"></i>
-                        <span>홍대</span>
-                    </div>
-                    <div class="text-white text-opacity-75">
-                        <small>게시물</small>
-                        <small>30</small>
-                    </div>
-                </div>
-            </a>
+        <hr>
+        <div id="tagListCont" class="list-group">
+
         </div>
     </div>
 </div>
+<script>
+    function tagListComponent(tagObj) {
+        return `
+            <a href="/board/${tagObj.tag}/tagList.do" class="list-group-item text-bg-dark d-flex align-items-center">
+                <i class="bi bi-hash border rounded-circle fs-2 d-flex justify-content-center align-items-center" style="width: 45px; height: 45px"></i>
+                <div class="ms-3">
+                    <div>
+                        <i class="bi bi-hash"></i>
+                        <span>${tagObj.tag}</span>
+                    </div>
+                    <div class="text-white text-opacity-75">
+                        <small>게시물</small>
+                        <small>${tagObj.bCnt}</small>
+                    </div>
+                </div>
+            </a>
+        `;
+    }
+    const searchTagInput=document.getElementById("searchTagInput");
+    const tagListCont=document.getElementById("tagListCont");
+    searchTagInput.addEventListener("input",async (e)=>{
+        let tag=searchTagInput.value;
+        if(tag.length>0){
+            const tags=await searchTags(tag);
+            if (tags){
+                tagListCont.innerHTML="";
+                for(const tagObj of tags){
+                    tagListCont.insertAdjacentHTML("beforeend",tagListComponent(tagObj));
+                }
+            }
+        }
+    });
+    async function searchTags(tag){
+        let url = `/hashtag/${tag}/search.do`;
+        const resp=await fetch(url);
+        if(resp.status===200){
+            return await resp.json();
+        }
+    }
 
+</script>
 
 <th:block th:if="${msg!=null || session.msg !=null}">
     <div id="actionModal" class="modal" tabindex="-1">

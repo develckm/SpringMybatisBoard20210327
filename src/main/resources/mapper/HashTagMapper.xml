@@ -3,6 +3,9 @@
 <mapper namespace="com.acorn.springboardteacher.mapper.HashTagMapper">
     <resultMap id="HashTagMap" type="HashTagDto">
         <id property="tag" column="tag"/>
+        <association property="bCnt"
+                     select="com.acorn.springboardteacher.mapper.BoardHashTagMapper.countByTag"
+                     column="tag"/>
     </resultMap>
     <insert id="insertOne">
         INSERT INTO hashtags (tag) value (#{tag});
