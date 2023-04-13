@@ -43,7 +43,6 @@ public class BoardController {
         model.addAttribute("boards",boards);
         return "/board/list";
     }
-    //http://localhost:8080/board/%ED%99%8D%EB%8C%80%EC%95%A0%EA%B2%AC%EC%B9%B4%ED%8E%98/tagList.do
     @GetMapping("/{tag}/tagList.do")
     public String tagList(
             @PathVariable String tag,

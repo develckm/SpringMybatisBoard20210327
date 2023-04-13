@@ -71,12 +71,7 @@
                             <h5 class="card-title" th:text="${b.title}"></h5>
                             <p class="card-text" th:text="${b.content}"></p>
                             <p>
-                                <ul class="list-unstyled">
-                                    <li th:each="t:${b.tags}" class="badge bg-light text-muted me-2">
-                                        <i class="bi bi-hash"></i>
-                                        <span th:text="${t.tag}"></span>
-                                    </li>
-                                </ul>
+                                <th:block th:include="/board/tags"></th:block>
                             </p>
                             <hr>
                             <h5 class="card-title d-flex justify-content-between">
