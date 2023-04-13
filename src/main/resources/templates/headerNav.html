@@ -48,21 +48,25 @@
 </nav>
 <div class="offcanvas offcanvas-start" tabindex="-1" id="hashTagOffcanvas" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">해시태그 검색</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
+        <p>
+            <input type="text" class="form-control" placeholder="검색">
+        </p>
         <div>
-            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
-        </div>
-        <div class="dropdown mt-3">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                Dropdown button
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-action">
+                    <a class="d-flex align-items-center" href="#">
+                        <i class="bi bi-hash border rounded-circle fs-2 text-center me-2" style="width: 50px;height: 50px;"></i>
+                        <div>
+                            <span>홍대</span>
+                            <br>
+                            <small>게시물39</small>
+                        </div>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
