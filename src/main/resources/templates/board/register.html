@@ -28,6 +28,9 @@
       <label for="contentInput" class="form-label">글 내용</label>
       <textarea id="contentInput" name="content" rows="4" class="form-control" placeholder=""></textarea>
     </p>
+    <div class="mb-3">
+      <th:block th:include="/board/tagsInput"></th:block>
+    </div>
     <p class="text-end">
       <button type="reset" class="btn btn-warning">초기화</button>
       <button type="submit" class="btn btn-primary">등록</button>
