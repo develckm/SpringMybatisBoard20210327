@@ -14,7 +14,7 @@ public interface BoardService {
     List<BoardImgDto> imgList(int[]biId);
 
     BoardDto detail(int bId);
-    int register(BoardDto board);
-    int modify(BoardDto board, int[] delImgIds);
+    int register(BoardDto board, List<String> tags);
+    int modify(BoardDto board, int[] delImgIds, List<String> tags, List<String> delTags);
     int remove(int bId);
 }

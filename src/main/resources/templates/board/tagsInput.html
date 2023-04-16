@@ -1,0 +1,94 @@
+<div id="tagsCont" class="mb-2">
+</div>
+<div class="input-group">
+    <label class="input-group-text bi bi-hash"></label>
+    <input id="tagsInput" list="tagsDataList" class="form-control" type="text" placeholder="태그">
+</div>
+<datalist id="tagsDataList">
+</datalist>
+<script>
+    const tagsDataList=document.getElementById("tagsDataList");
+    const tagsInput=document.getElementById("tagsInput");
+    const tagsCont=document.getElementById("tagsCont");
+    const tagsSet=new Set(); //같은 것이 존재하지 않는 자료 구조 (검색,정렬 배열보다 빠름)
+    //keyup,keydown,keypress(x)  e=>어떤 키를 눌렀는지 **한글입력은 받을 수 없다
+    //compositionstart,compositionend : 자음모음있는 언어(한글)를 입력할때
+    //한글입력 중에 엔터를 입력하면 keydown 2번 발생하는 이유 : 자음 모음을 하나의 문자로 완성하던중(compositionstart) 엔터를 입력하면 문자입력+엔터가 동시의 keydown을 발생
+
+    let composition = false; //한글입력중
+    tagsInput.addEventListener("compositionstart", (e) => {
+        composition = true;
+    });
+    tagsInput.addEventListener("compositionend", (e) => {
+        composition = false; //한글입력이 끝났을때
+        let tagName=tagsInput.value;
+        let lastVal = tagName[tagName.length - 1]; //" " === 스페이스
+        if (lastVal === " ") {
+            appendTag();
+        }
+    });
+    tagsInput.addEventListener("keydown",(e)=>{
+        if((e.code==="Enter"||e.code==="Space")&&!composition){
+            e.preventDefault();
+            console.log("keydown")
+            appendTag();
+        }
+    });
+
+    tagsInput.addEventListener("change",async (e)=>{
+        appendTag();
+    });
+    tagsInput.addEventListener("input",async (e)=>{
+        let tagName=tagsInput.value;
+        if (tagName.length>0 ){
+            await searchTags(tagName);
+        }
+    });
+    async function searchTags(tagName){
+        let url=`/hashtag/${tagName}/search.do`;
+        const resp=await fetch(url);
+        const tags=await resp.json();
+        tagsDataList.innerHTML="";
+        for(const tag of tags){
+            tagsDataList.insertAdjacentHTML("beforeend",tagOptComponent(tag));
+        }
+    }
+    function tagOptComponent(tagObj){
+        return `<option value="${tagObj.tag}">${tagObj.tag} 게시물${tagObj.bCnt}</option>`;
+    }
+    function appendTag(){
+        let tagName=tagsInput.value.trim();
+        tagsInput.value="";
+        if(tagName.length===0){
+            alert("한글자 이상 입력하세요");
+            return;
+        }
+        if(!tagsSet.has(tagName)){
+            tagsSet.add(tagName);
+            tagsCont.insertAdjacentHTML("beforeend",tagComponent(tagName));
+        }else{
+            alert("이미 등록된 태그입니다.");
+        }
+    }
+
+
+    function tagComponent(tagName){
+        return `
+            <a href="javascript:void(0)" onclick="removeTag(this,'${tagName}')" class="btn btn-light btn-sm rounded-5 text-secondary" type="button">
+                <i class="bi bi-hash"></i>
+                <span>${tagName}</span>
+                <i class="bi bi-x ms-1"></i>
+                <input type="hidden" name="tag" value="${tagName}" >
+            </a>
+        `;
+    }
+
+
+    function removeTag(tagNode,tagName){
+        tagNode.remove();
+        tagsSet.delete(tagName);
+        alert(tagName+" 삭제!");
+    }
+
+
+</script>
