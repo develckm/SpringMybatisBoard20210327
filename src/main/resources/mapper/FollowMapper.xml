@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.FollowMapper">
+    <insert id="insertOne">
+        INSERT INTO follows (from_id, to_id) VALUE (#{fromId},#{toId})
+    </insert>
+    <delete id="deleteOne">
+        DELETE FROM follows WHERE to_id=#{toId} AND from_id=#{fromId}
+    </delete>
+    <select id="countByFromIdIsILoginUserIdAndToId" resultType="java.lang.Boolean">
+        SELECT count(*) f4f FROM follows WHERE  to_id=#{uId} AND from_id=@loginUserId
+    </select>
+</mapper>

@@ -14,5 +14,43 @@
         <p>
             <a th:href="@{'/user/{uId}/modify.do'(uId=${user.uId})}">수정페이지</a>
         </p>
+        <h2>팔로우</h2>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">
+                    팔로워
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
+                    팔로우
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                <h3>팔로워(나를 구독 중인 사람)</h3>
+                <div class="list-group">
+                    <div th:each="f : ${user.followers}" class="d-flex list-group-item justify-content-between align-items-center">
+                        <th:block th:include="/user/followPofile" th:with="profile=${f}"></th:block>
+                        <button class="btn btn-outline-warning">
+                            <span>삭제</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <h3>팔로우 (내가 구독 중인 유저)</h3>
+                <div class="list-group">
+                    <div th:each="f : ${user.followings}" class="d-flex list-group-item justify-content-between align-items-center">
+                        <th:block th:include="/user/pofile" th:with="profile=${f}"></th:block>
+                        <button class="btn btn-outline-danger">
+                            <span>구독 취소</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </html>

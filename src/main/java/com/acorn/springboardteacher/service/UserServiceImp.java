@@ -20,7 +20,10 @@ public class UserServiceImp implements UserService{ //13분까지 쉬었다가 �
 
     @Override
     public UserDto detail(String uId) {
-        return userMapper.findByUId(uId);
+        userMapper.setLoginUserId(uId);
+        UserDto detail=userMapper.findByUId(uId);
+        userMapper.setLoginUserIdNull();
+        return detail;
     }
 
     @Override

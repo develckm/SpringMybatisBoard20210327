@@ -21,5 +21,7 @@ public interface UserMapper {
     int setLoginUserIdNull();
     List<UserDto> findByFollowFromId(String fromId); //users+follows 내가 팔로우 하는 유저
     List<UserDto> findByFollowToId(String fromId); //users+follows 나를 팔로우 하는 유저
-    List<UserDto> findByFollowing_ToIdEqualsFollower_FromIdAndFollowing_FromId(String fromId); //users+following+follower 맞팔
+
+
+    //List<UserDto> findByFollowing_ToIdEqualsFollower_FromIdAndFollowing_FromId(String fromId); //users+following+follower 맞팔
 }

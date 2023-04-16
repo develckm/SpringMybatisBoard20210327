@@ -1,0 +1,17 @@
+<div class="ms-3 d-flex">
+  <img th:src="@{'{path}'(path=${profile.imgPath})}" class="rounded-circle" style="width: 45px; height: 45px"></img>
+  <a class="link-secondary text-decoration-none ms-4" th:href="@{'/follow/{uId}/detail.do'(uId=profile.uId)}">
+    <div>
+      <span th:text=" ${profile.uId}"></span>
+    </div>
+    <div>
+      <small th:text="${profile.name}"></small>
+    </div>
+  </a>
+  <th:block th:if="${session.loginUser!=null && !profile.f4f}">
+    <i class="bi bi-dot"></i>
+    <div>
+      <a href="javascript:void(0)" th:onclick="following([[${profile.uId}]],[[${session.loginUser.uId}]])">팔로우</a>
+    </div>
+  </th:block>
+</div>

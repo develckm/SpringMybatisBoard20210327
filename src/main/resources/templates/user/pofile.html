@@ -1,0 +1,11 @@
+<div class="ms-3 d-flex">
+  <img th:src="@{'{path}'(path=${profile.imgPath})}" class="rounded-circle" style="width: 45px; height: 45px"></img>
+  <a class="link-secondary text-decoration-none ms-4" th:href="@{'/follow/{uId}/detail.do'(uId=profile.uId)}">
+    <div>
+      <span th:text=" ${profile.uId}"></span>
+    </div>
+    <div>
+      <small th:text="${profile.name}"></small>
+    </div>
+  </a>
+</div>
