@@ -68,7 +68,9 @@ public class BoardController {
     public String modifyAction(
             @ModelAttribute BoardDto board,
             @RequestParam(value = "delImgId",required = false) int [] delImgIds,
-            @RequestParam(value="img",required = false) MultipartFile [] imgs
+            @RequestParam(value = "img",required = false) MultipartFile [] imgs,
+            @RequestParam(value = "tag",required = false) List<String> tags,
+            @RequestParam(value = "delTag",required = false) List<String> delTags
             ){
         String redirectPath="redirect:/board/"+board.getBId()+"/modify.do";
         List<BoardImgDto> imgDtos=null;
@@ -76,7 +78,7 @@ public class BoardController {
         try {
             if(delImgIds!=null)imgDtos=boardService.imgList(delImgIds);
             //삭제 전에 이미지 파일 경로를 받아옴
-            modify=boardService.modify(board,delImgIds);
+            modify=boardService.modify(board,delImgIds,tags,delTags);
         }catch (Exception e){
             log.error(e.getMessage());
         }
@@ -105,7 +107,8 @@ public class BoardController {
     public String registerAction(
             @SessionAttribute UserDto loginUser,
             @ModelAttribute BoardDto board,
-            @RequestParam(name = "img") MultipartFile [] imgs) throws IOException {
+            @RequestParam(name = "img",required = false) MultipartFile [] imgs,
+            @RequestParam(name = "tag",required = false) List<String> tags) throws IOException {
 
         String redirectPage="redirect:/board/register.do";
         if(!loginUser.getUId().equals(board.getUId())) return redirectPage;
@@ -129,7 +132,7 @@ public class BoardController {
         board.setImgs(imgDtos);
         int register=0;
         try {
-            register=boardService.register(board);
+            register=boardService.register(board,tags);
         }catch (Exception e){
             log.error(e.getMessage());
         }

@@ -44,6 +44,22 @@
       <label for="contentInput" class="form-label">글 내용</label>
       <textarea id="contentInput" name="content" rows="4" class="form-control" th:text="${b.content}"></textarea>
     </p>
+    <div class="mb-3">
+      <label class="form-label">태그 삭제</label>
+      <div class="form-control">
+        <th:block th:each="t:${b.tags}">
+          <input th:id="${t.tag}" name="delTag" th:value="${t.tag}" type="checkbox" class="btn-check" autocomplete="off">
+          <label th:for="${t.tag}" class="btn btn-outline-secondary btn-sm rounded-5 m-1">
+            <span th:text="${t.tag}"></span>
+            <i class="bi bi-x"></i>
+          </label>
+        </th:block>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">태그 등록</label>
+      <th:block th:include="/board/tagsInput"></th:block>
+    </div>
     <p class="text-end">
       <button type="reset" class="btn btn-warning">초기화</button>
       <a th:href="@{'/board/{bId}/remove.do'(bId=${b.bId})}" class="btn btn-danger">삭제 </a>

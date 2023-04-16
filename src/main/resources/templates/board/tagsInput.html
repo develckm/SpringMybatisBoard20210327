@@ -5,10 +5,6 @@
     <input id="tagsInput" list="tagsDataList" class="form-control" type="text" placeholder="태그">
 </div>
 <datalist id="tagsDataList">
-    <option value="홍대">홍대 15</option>
-    <option value="홍대입구">홍대입구 5</option>
-    <option value="홍대맛집">홍대맛집 25</option>
-    <option value="홍대인생네컷">홍대인생네컷 13</option>
 </datalist>
 <script>
     const tagsDataList=document.getElementById("tagsDataList");
@@ -25,7 +21,8 @@
     });
     tagsInput.addEventListener("compositionend", (e) => {
         composition = false; //한글입력이 끝났을때
-        let lastVal = tagsInput.value[tagsInput.value.length - 1]; //" " === 스페이스
+        let tagName=tagsInput.value;
+        let lastVal = tagName[tagName.length - 1]; //" " === 스페이스
         if (lastVal === " ") {
             appendTag();
         }
@@ -41,15 +38,31 @@
     tagsInput.addEventListener("change",async (e)=>{
         appendTag();
     });
-
-    async function searchTags(tagName){ //10분~
-
+    tagsInput.addEventListener("input",async (e)=>{
+        let tagName=tagsInput.value;
+        if (tagName.length>0 ){
+            await searchTags(tagName);
+        }
+    });
+    async function searchTags(tagName){
+        let url=`/hashtag/${tagName}/search.do`;
+        const resp=await fetch(url);
+        const tags=await resp.json();
+        tagsDataList.innerHTML="";
+        for(const tag of tags){
+            tagsDataList.insertAdjacentHTML("beforeend",tagOptComponent(tag));
+        }
     }
-
-
+    function tagOptComponent(tagObj){
+        return `<option value="${tagObj.tag}">${tagObj.tag} 게시물${tagObj.bCnt}</option>`;
+    }
     function appendTag(){
         let tagName=tagsInput.value.trim();
         tagsInput.value="";
+        if(tagName.length===0){
+            alert("한글자 이상 입력하세요");
+            return;
+        }
         if(!tagsSet.has(tagName)){
             tagsSet.add(tagName);
             tagsCont.insertAdjacentHTML("beforeend",tagComponent(tagName));
