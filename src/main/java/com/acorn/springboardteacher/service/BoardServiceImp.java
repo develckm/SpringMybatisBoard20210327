@@ -22,6 +22,8 @@ public class BoardServiceImp implements  BoardService{
         //List<BoardDto> list=boardMapper.findAll(loginUserId); //서브쿼리로 좋아요 불러오기
         if(loginUser!=null)userMapper.setLoginUserId(loginUser.getUId()); //로그인한 유저 아이디를 mysql 서버에 변수로 등록
         List<BoardDto> list=boardMapper.findAll(pageDto); //지연로딩으로 좋아요 불러오기
+        int totalRows=boardMapper.countAll(pageDto);
+        pageDto.setTotalRows(totalRows);
         if(loginUser!=null)userMapper.setLoginUserIdNull(); //사용이 끝나서 삭제
         return list;
     }

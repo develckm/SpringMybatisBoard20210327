@@ -24,11 +24,44 @@
     </form>
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
-            <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
-            <li class="page-item"><a class="page-link" href=#>Next</a></li>
+            <li class="page-item">
+                <a class="page-link"
+                   th:classappend="${!page.prev ? 'disabled' : ''}"
+                   th:href="@{''(page=1,order=${page.order},direct=${page.direct},searchField=${page.searchField},searchValue=${page.searchValue})}">
+                    First
+                </a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link"
+                   th:classappend="${!page.prev ? 'disabled' : ''}"
+                   th:href="@{''(page=${page.prevPage},order=${page.order},direct=${page.direct},searchField=${page.searchField},searchValue=${page.searchValue})}">
+                    Prev
+                </a>
+            </li>
+
+            <li class="page-item" th:each="p:${#numbers.sequence(1,page.lastPage)}">
+                <a class="page-link"
+                   th:classappend="${(p==page.page)?'active':''}"
+                   th:href="@{''(page=${p},order=${page.order},direct=${page.direct},searchField=${page.searchField},searchValue=${page.searchValue})}"
+                   th:text="${p}"></a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link"
+                   th:classappend="${!page.next ? 'disabled' : ''}"
+                   th:href="@{''(page=${page.nextPage},order=${page.order},direct=${page.direct},searchField=${page.searchField},searchValue=${page.searchValue})}">
+                    Next
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"
+                   th:classappend="${!page.next ? 'disabled' : ''}"
+                   th:href="@{''(page=${page.lastPage},order=${page.order},direct=${page.direct},searchField=${page.searchField},searchValue=${page.searchValue})}">
+                    Last
+                </a>
+            </li>
+
         </ul>
     </nav>
     <section id="boardListCont" class="row row-cols-lg-2 row-cols-1 g-5">

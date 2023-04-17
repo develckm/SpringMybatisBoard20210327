@@ -42,6 +42,7 @@ public class BoardController {
             @ModelAttribute PageDto pageDto){
         List<BoardDto> boards;
         boards=boardService.list(loginUser,pageDto);
+        model.addAttribute("page",pageDto);
         model.addAttribute("boards",boards);
         return "/board/list";
     }

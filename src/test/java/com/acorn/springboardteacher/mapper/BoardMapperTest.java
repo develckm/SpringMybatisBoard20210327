@@ -18,6 +18,14 @@ class BoardMapperTest {
     private BoardMapper boardMapper;
 
     @Test
+    void page(){
+        int totalRows=13;
+        int offset=5;
+        double result=((double) totalRows)/offset;
+        System.out.println("result = " + result);
+        System.out.println("(Math.ceil(totalRows/offset)) = " + (Math.ceil(((double) totalRows/offset))));
+    }
+    @Test
     void findAll() {
         PageDto pageDto=new PageDto();
         List<BoardDto> boardList=boardMapper.findAll(pageDto);

@@ -13,7 +13,7 @@ public interface BoardMapper {
     //리스트,상세,등록,수정,삭제,신고
     //상세보기시 조회수 올리기
     List<BoardDto> findAll(PageDto pageDto);
-    List<BoardDto> findAll(String loginUserId);
+    int countAll(PageDto pageDto);//페이지 네비게이션의 수를 알기 위해
     List<BoardDto> findByTag(String tag);
     BoardDto findByBId(int bId);
     int insertOne(BoardDto board);

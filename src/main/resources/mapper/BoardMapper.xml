@@ -49,10 +49,24 @@
         DELETE FROM boards WHERE b_id=#{bId}
     </delete>
     <!--  SELECT * FROM boards ORDER BY post_time DESC LIMIT 0,10  -->
+<!--    http://localhost:8080/board/list.do?page=2&order=post_time&direct=DESC&searchField=&searchValue=-->
     <select id="findAll" resultMap="BoardMap" parameterType="PageDto">
-        SELECT * FROM boards ORDER BY ${order} ${direct} LIMIT #{startIndex},#{offset}
-
+        SELECT *
+            FROM boards
+            <if test="searchField!=null and searchValue!=null">
+                WHERE ${searchField} LIKE CONCAT('%',#{searchValue},'%')
+            </if>
+            ORDER BY ${order} ${direct}
+            LIMIT #{startIndex},#{offset}
     </select>
+    <select id="countAll" resultType="int" parameterType="PageDto">
+        SELECT COUNT(*)
+        FROM boards
+        <if test="searchField!=null and searchValue!=null">
+            WHERE ${searchField} LIKE CONCAT('%',#{searchValue},'%')
+        </if>
+    </select>
+
     <select id="findByBId" resultMap="BoardMap">
         SELECT *
         FROM boards WHERE b_id=#{bId}
