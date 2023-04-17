@@ -23,3 +23,6 @@ server:
 mybatis:
   type-aliases-package: com.acorn.springboardteacher.dto
   mapper-locations: mapper/*Mapper.xml
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true

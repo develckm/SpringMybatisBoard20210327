@@ -38,6 +38,7 @@ public class BoardController {
     public String list(
             Model model,
             @SessionAttribute(required = false) UserDto loginUser){
+
         List<BoardDto> boards;
         boards=boardService.list(loginUser);
         model.addAttribute("boards",boards);

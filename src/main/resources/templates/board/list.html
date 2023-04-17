@@ -10,6 +10,7 @@
 <p></p>
 <div layout:fragment="content">
     <h1 class="my-4">게시판 리스트</h1>
+    <p th:text="${boards}"></p>
     <section id="boardListCont" class="row row-cols-lg-2 row-cols-1 g-5">
         <div class="col" th:each="b:${boards}">
             <div class="card" >
