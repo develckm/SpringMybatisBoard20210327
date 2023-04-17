@@ -48,12 +48,10 @@
     <delete id="deleteOne">
         DELETE FROM boards WHERE b_id=#{bId}
     </delete>
-    <select id="findAll" resultMap="BoardMap">
-        SELECT *
-             <if test="#{loginUserId!=null}">
-                ,(SELECT status FROM board_likes WHERE b_id=boards.b_id AND u_id=#{loginUserId}) login_user_like_status
-             </if>
-            FROM boards
+    <!--  SELECT * FROM boards ORDER BY post_time DESC LIMIT 0,10  -->
+    <select id="findAll" resultMap="BoardMap" parameterType="PageDto">
+        SELECT * FROM boards ORDER BY ${order} ${direct} LIMIT #{startIndex},#{offset}
+
     </select>
     <select id="findByBId" resultMap="BoardMap">
         SELECT *

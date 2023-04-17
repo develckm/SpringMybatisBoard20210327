@@ -10,6 +10,27 @@
 <p></p>
 <div layout:fragment="content">
     <h1 class="my-4">게시판 리스트</h1>
+    <form action="">
+        <div class="input-group">
+            <label class="input-group-text bi bi-search"></label>
+            <select name="searchField"class="form-control">
+                <option value="u_id">유저</option>
+                <option value="title" selected>제목</option>
+                <option value="content">내용</option>
+            </select>
+            <input type="text" class="form-control" name="searchValue" placeholder="검색어 입력">
+            <button class="btn btn-primary">검색</button>
+        </div>
+    </form>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
+            <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
+            <li class="page-item"><a class="page-link" href=#>Next</a></li>
+        </ul>
+    </nav>
     <section id="boardListCont" class="row row-cols-lg-2 row-cols-1 g-5">
         <div class="col" th:each="b:${boards}">
             <div class="card" >

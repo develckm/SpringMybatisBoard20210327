@@ -2,6 +2,7 @@ package com.acorn.springboardteacher.controller;
 
 import com.acorn.springboardteacher.dto.BoardDto;
 import com.acorn.springboardteacher.dto.BoardImgDto;
+import com.acorn.springboardteacher.dto.PageDto;
 import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.service.BoardService;
 import lombok.AllArgsConstructor;
@@ -37,9 +38,10 @@ public class BoardController {
     @GetMapping("/list.do")
     public String list(
             Model model,
-            @SessionAttribute(required = false) UserDto loginUser){
+            @SessionAttribute(required = false) UserDto loginUser,
+            @ModelAttribute PageDto pageDto){
         List<BoardDto> boards;
-        boards=boardService.list(loginUser);
+        boards=boardService.list(loginUser,pageDto);
         model.addAttribute("boards",boards);
         return "/board/list";
     }

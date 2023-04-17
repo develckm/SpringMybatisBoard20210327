@@ -18,10 +18,10 @@ public class BoardServiceImp implements  BoardService{
     private BoardHashTagMapper boardHashTagMapper;
     private HashTagMapper hashTagMapper;
     @Override
-    public List<BoardDto> list(UserDto loginUser) {
+    public List<BoardDto> list(UserDto loginUser, PageDto pageDto) {
         //List<BoardDto> list=boardMapper.findAll(loginUserId); //서브쿼리로 좋아요 불러오기
         if(loginUser!=null)userMapper.setLoginUserId(loginUser.getUId()); //로그인한 유저 아이디를 mysql 서버에 변수로 등록
-        List<BoardDto> list=boardMapper.findAll(); //지연로딩으로 좋아요 불러오기
+        List<BoardDto> list=boardMapper.findAll(pageDto); //지연로딩으로 좋아요 불러오기
         if(loginUser!=null)userMapper.setLoginUserIdNull(); //사용이 끝나서 삭제
         return list;
     }

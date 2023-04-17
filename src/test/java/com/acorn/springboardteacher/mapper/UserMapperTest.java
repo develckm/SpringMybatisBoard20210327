@@ -18,7 +18,6 @@ class UserMapperTest {
     //@Test : 정의된 함수들은 순서 없이 실행기 때문에 초기화 하거나 정리를 해야한다.
     //등록 => 수정 => 삭제 (기대)
     //삭제(실패) =>등록(중) => 수정(실패)
-
     //***@TestMethodOrder : test의 순서를 지정할 수 있음
 
     @Autowired
@@ -79,6 +78,7 @@ class UserMapperTest {
         System.out.println("UserMapperTest.user = " + UserMapperTest.user);
         assertEquals(updateOne,1);
     }
+
     @Test
     @Order(6)
     void updatePwByUId() {
@@ -97,3 +97,7 @@ class UserMapperTest {
         assertEquals(1,deleteByUIdAndPw);
     }
 }
+
+
+
+
