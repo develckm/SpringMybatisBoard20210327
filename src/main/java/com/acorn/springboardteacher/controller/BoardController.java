@@ -2,8 +2,11 @@ package com.acorn.springboardteacher.controller;
 
 import com.acorn.springboardteacher.dto.BoardDto;
 import com.acorn.springboardteacher.dto.BoardImgDto;
+import com.acorn.springboardteacher.dto.BoardPageDto;
 import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.service.BoardService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,10 +40,15 @@ public class BoardController {
     @GetMapping("/list.do")
     public String list(
             Model model,
-            @SessionAttribute(required = false) UserDto loginUser){
+            @SessionAttribute(required = false) UserDto loginUser,
+            @ModelAttribute BoardPageDto pageDto){
 
         List<BoardDto> boards;
+        PageHelper.startPage(pageDto.getPageNum(),pageDto.getPageSize(),"b_id DESC");
         boards=boardService.list(loginUser);
+
+        PageInfo<BoardDto> pageBoards=new PageInfo<>(boards);
+        model.addAttribute("page",pageBoards);
         model.addAttribute("boards",boards);
         return "/board/list";
     }

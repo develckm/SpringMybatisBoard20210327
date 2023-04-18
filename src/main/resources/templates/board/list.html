@@ -10,7 +10,31 @@
 <p></p>
 <div layout:fragment="content">
     <h1 class="my-4">게시판 리스트</h1>
-    <p th:text="${boards}"></p>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link"
+                   th:classappend="${page.isHasPreviousPage ? '' : 'disabled'}"
+                   th:href="@{''(pageNum=${page.prePage},pageSize=10)}"
+                >Prev</a>
+            </li>
+            <li th:each="p:${page.navigatepageNums}" class="page-item">
+                <a class="page-link"
+                   th:classappend="${p==page.pageNum ? 'active' : ''}"
+                   th:href="@{''(pageNum=${p},pageSize=10)}"
+                   th:text="${p}">
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"
+                   th:classappend="${page.isHasNextPage ? '' : 'disabled'}"
+                   th:href="@{''(pageNum=${page.nextPage},pageSize=10)}"
+                >Next</a>
+            </li>
+        </ul>
+    </nav>
+
+    <p th:text="${page}"></p>
     <section id="boardListCont" class="row row-cols-lg-2 row-cols-1 g-5">
         <div class="col" th:each="b:${boards}">
             <div class="card" >
