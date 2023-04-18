@@ -120,7 +120,7 @@
         let page=1;
         let lastPage=[[${page.pages}]]
         let queryString=[[@{''(pageSize=10,order=${param.order},direct=${param.direct},searchField=${param.searchField},searchValue=${param.searchValue})}]]
-        window.addEventListener('scroll', async function() {
+        window.addEventListener('scroll', async function(e) {
             // 현재 스크롤 위치 계산
             if (page+1<=lastPage){
                 let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -128,7 +128,7 @@
                 let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
                 let scrollPosition = scrollTop + clientHeight;
                 // 스크롤 위치가 2/3 지점을 지났는지 확인
-                if (scrollPosition / scrollHeight >= 3 / 4) {
+                if (scrollPosition / scrollHeight >= 1) {
                     let list=await loadBoardList(++page);
                     boardListCont.insertAdjacentHTML("beforeend",list);
                 }
