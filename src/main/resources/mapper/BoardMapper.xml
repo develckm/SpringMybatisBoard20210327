@@ -50,6 +50,9 @@
     </delete>
     <select id="findAll" resultMap="BoardMap">
         SELECT * FROM boards
+        <if test="searchField!=null and searchValue!=null">
+            WHERE ${searchField} LIKE CONCAT('%',#{searchValue},'%')
+        </if>
     </select>
     <select id="findByBId" resultMap="BoardMap">
         SELECT *

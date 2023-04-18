@@ -44,9 +44,7 @@ public class BoardController {
             @ModelAttribute BoardPageDto pageDto){
 
         List<BoardDto> boards;
-        PageHelper.startPage(pageDto.getPageNum(),pageDto.getPageSize(),"b_id DESC");
-        boards=boardService.list(loginUser);
-
+        boards=boardService.list(loginUser,pageDto);
         PageInfo<BoardDto> pageBoards=new PageInfo<>(boards);
         model.addAttribute("page",pageBoards);
         model.addAttribute("boards",boards);

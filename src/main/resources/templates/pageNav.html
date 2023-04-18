@@ -1,0 +1,33 @@
+<ul class="pagination justify-content-center">
+  <li class="page-item">
+    <a class="page-link"
+       th:classappend="${!page.isFirstPage ? '' : 'disabled'}"
+       th:href="@{''(pageNum=1,pageSize=10,order=${param.order},direct=${param.direct},searchField=${param.searchField},searchValue=${param.searchValue})}"
+    >First</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link"
+       th:classappend="${page.isHasPreviousPage ? '' : 'disabled'}"
+       th:href="@{''(pageNum=${page.prePage},pageSize=10,order=${param.order},direct=${param.direct},searchField=${param.searchField},searchValue=${param.searchValue})}"
+    >Prev</a>
+  </li>
+  <li th:each="p:${page.navigatepageNums}" class="page-item">
+    <a class="page-link"
+       th:classappend="${p==page.pageNum ? 'active' : ''}"
+       th:href="@{''(pageNum=${p},pageSize=10,order=${param.order},direct=${param.direct},searchField=${param.searchField},searchValue=${param.searchValue})}"
+       th:text="${p}">
+    </a>
+  </li>
+  <li class="page-item">
+    <a class="page-link"
+       th:classappend="${page.isHasNextPage ? '' : 'disabled'}"
+       th:href="@{''(pageNum=${page.nextPage},pageSize=10,order=${param.order},direct=${param.direct},searchField=${param.searchField},searchValue=${param.searchValue})}"
+    >Next</a>
+  </li>
+  <li class="page-item">
+    <a class="page-link"
+       th:classappend="${!page.isLastPage ? '' : 'disabled'}"
+       th:href="@{''(pageNum=${page.pages},pageSize=10,order=${param.order},direct=${param.direct},searchField=${param.searchField},searchValue=${param.searchValue})}"
+    >Last</a>
+  </li>
+</ul>
