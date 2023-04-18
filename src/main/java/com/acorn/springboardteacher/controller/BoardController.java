@@ -36,17 +36,24 @@ public class BoardController {
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
+    @GetMapping("/ajaxList.do")
+    public String ajaxList(
+            Model model,
+            @SessionAttribute(required = false) UserDto loginUser,
+            @ModelAttribute BoardPageDto pageDto){
+        List<BoardDto> boards;
+        boards=boardService.list(loginUser,pageDto);
+        model.addAttribute("boards",boards);
+        return "/board/ajaxList";
+    }
 
     @GetMapping("/list.do")
     public String list(
             Model model,
             @SessionAttribute(required = false) UserDto loginUser,
             @ModelAttribute BoardPageDto pageDto){
-
         List<BoardDto> boards;
-        PageHelper.startPage(pageDto.getPageNum(),pageDto.getPageSize(),"b_id DESC");
-        boards=boardService.list(loginUser);
-
+        boards=boardService.list(loginUser,pageDto);
         PageInfo<BoardDto> pageBoards=new PageInfo<>(boards);
         model.addAttribute("page",pageBoards);
         model.addAttribute("boards",boards);

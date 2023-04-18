@@ -11,35 +11,53 @@
 <div layout:fragment="content">
     <h1 class="my-4">게시판 리스트</h1>
     <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link"
-                   th:classappend="${page.isHasPreviousPage ? '' : 'disabled'}"
-                   th:href="@{''(pageNum=${page.prePage},pageSize=10)}"
-                >Prev</a>
-            </li>
-            <li th:each="p:${page.navigatepageNums}" class="page-item">
-                <a class="page-link"
-                   th:classappend="${p==page.pageNum ? 'active' : ''}"
-                   th:href="@{''(pageNum=${p},pageSize=10)}"
-                   th:text="${p}">
-                </a>
-            </li>
-            <li class="page-item">
-                <a class="page-link"
-                   th:classappend="${page.isHasNextPage ? '' : 'disabled'}"
-                   th:href="@{''(pageNum=${page.nextPage},pageSize=10)}"
-                >Next</a>
-            </li>
-        </ul>
+        <form action="" class="mx-auto" style="width: 450px">
+            <div class="input-group">
+                <label class="input-group-text bi bi-list-columns"></label>
+                <select name="order" class="form-control">
+                    <option value="">칼럼</option>
+                    <option th:selected="(${#strings.equals(param.order,'b_id')})" value="b_id">글번호</option>
+                    <option th:selected="(${#strings.equals(param.order,'u_id')})"value="u_id">글쓴이</option>
+                    <option th:selected="(${#strings.equals(param.order,'post_time')})"value="post_time">작성일</option>
+                    <option th:selected="(${#strings.equals(param.order,'update_time')})"value="update_time">수정일</option>
+                    <option th:selected="(${#strings.equals(param.order,'title')})"value="title">제목</option>
+                    <option th:selected="(${#strings.equals(param.order,'view_count')})"value="view_count">조회수</option>
+                </select>
+                <select name="direct" class="form-control">
+                    <option value="">방향</option>
+                    <option th:selected="(${#strings.equals(param.direct,'DESC')})" value="DESC">
+                        내림차순
+                    </option>
+                    <option th:selected="(${#strings.equals(param.direct,'ASC')})" value="ASC">
+                        오름차순
+                    </option>
+                </select>
+                <button class="btn btn-primary">정렬</button>
+            </div>
+            <div class="input-group my-3">
+                <label class="input-group-text bi bi-search"></label>
+                <select name="searchField" class="form-control">
+                    <option value="">칼럼</option>
+                    <option th:selected="(${#strings.equals(param.searchField,'b_id')})" value="b_id">글번호</option>
+                    <option th:selected="(${#strings.equals(param.searchField,'u_id')})"value="u_id">글쓴이</option>
+                    <option th:selected="(${#strings.equals(param.searchField,'post_time')})"value="post_time">작성일</option>
+                    <option th:selected="(${#strings.equals(param.searchField,'update_time')})"value="update_time">수정일</option>
+                    <option th:selected="(${#strings.equals(param.searchField,'title')})"value="title">제목</option>
+                    <option th:selected="(${#strings.equals(param.searchField,'content')})"value="content">내용</option>
+                </select>
+                <input type="text" class="form-control" name="searchValue" placeholder="검색어 입력"
+                        th:value="${param.searchValue}">
+                <button class="btn btn-primary">검색</button>
+            </div>
+        </form>
     </nav>
-
-    <p th:text="${page}"></p>
     <section id="boardListCont" class="row row-cols-lg-2 row-cols-1 g-5">
         <div class="col" th:each="b:${boards}">
             <div class="card" >
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <div>
+                        <span th:text="${b.bId}"></span>
+                        <i class="bi bi-dot"></i>
                         <img
                                 th:if="${b.user.imgPath!=null}"
                                 th:src="@{'{path}'(path=${b.user.imgPath})}"
@@ -95,9 +113,32 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
-
+    <script th:inline="javascript">
+        const boardListCont=document.getElementById("boardListCont");
+        let page=1;
+        let lastPage=[[${page.pages}]]
+        let queryString=[[@{''(pageSize=10,order=${param.order},direct=${param.direct},searchField=${param.searchField},searchValue=${param.searchValue})}]]
+        window.addEventListener('scroll', async function() {
+            // 현재 스크롤 위치 계산
+            if (page+1<=lastPage){
+                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+                let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+                let scrollPosition = scrollTop + clientHeight;
+                // 스크롤 위치가 2/3 지점을 지났는지 확인
+                if (scrollPosition / scrollHeight >= 3 / 4) {
+                    let list=await loadBoardList(++page);
+                    boardListCont.insertAdjacentHTML("beforeend",list);
+                }
+            }
+        });
+        async function loadBoardList(page){
+            let url='/board/ajaxList.do'+(queryString+("&pageNum="+page));
+            const resp=await fetch(url);
+            return resp.text();
+        }
+    </script>
 </div>
 </html>

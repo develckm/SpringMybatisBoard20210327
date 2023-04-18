@@ -48,8 +48,12 @@
     <delete id="deleteOne">
         DELETE FROM boards WHERE b_id=#{bId}
     </delete>
-    <select id="findAll" resultMap="BoardMap">
+    <select id="findAll" resultMap="BoardMap" parameterType="BoardPageDto">
         SELECT * FROM boards
+        <if test="searchField!=null and searchValue!=null">
+            WHERE ${searchField} LIKE CONCAT('%',#{searchValue},'%')
+        </if>
+
     </select>
     <select id="findByBId" resultMap="BoardMap">
         SELECT *

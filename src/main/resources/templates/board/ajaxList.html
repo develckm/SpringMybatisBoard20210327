@@ -1,0 +1,62 @@
+<div class="col" th:each="b:${boards}">
+    <div class="card" >
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <span th:text="${b.bId}"></span>
+                <i class="bi bi-dot"></i>
+                <img
+                        th:if="${b.user.imgPath!=null}"
+                        th:src="@{'{path}'(path=${b.user.imgPath})}"
+                        alt="프로필 이미지"
+                        style="width: 60px; height: 60px; object-fit: cover;" class="img-thumbnail">
+                <strong class="ms-2" th:text="${b.user.uId}"></strong>
+                (<strong th:text="${b.user.name}"></strong>)
+                <small class="text-muted"> • </small>
+                <small th:text="${#dates.format(b.postTime,'yyyy-MM-dd')}"></small>
+            </div>
+            <th:block th:include="/board/dropDownMenu"></th:block>
+        </div>
+        <div class="card-body">
+            <div th:if="${b.imgs!=null}" th:id="'carousel'+${b.bId}" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item" th:each="img,state:${b.imgs}" th:classappend="${(state.first)?'active':''}">
+                        <img th:src="@{'{path}'(path=${img.imgPath})}" class="d-block w-100" alt="게시글 이미지">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" th:data-bs-target="'#carousel'+${b.bId}" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" th:data-bs-target="'#carousel'+${b.bId}" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <div>
+                <h5 class="card-title" th:text="${b.title}"></h5>
+                <p class="card-text" th:text="${b.content}"></p>
+                <p>
+                    <th:block th:include="/board/tags"></th:block>
+                </p>
+            </div>
+        </div>
+        <div class="card-footer d-flex align-items-center">
+            <!-- th:with 지역 변수 등록 -->
+            <div class="likeCont" th:id="'likeCont'+${b.bId}">
+                <th:block th:if="${session.loginUser!=null}" th:with="likes=${b.likes},id=${b.bId}" th:include="/board/loginLikes"></th:block>
+                <th:block th:unless="${session.loginUser!=null}" th:with="likes=${b.likes},id=${b.bId}" th:include="/board/likes"></th:block>
+            </div>
+
+
+            <small class="text-muted"> • </small>
+            <div class="viewCont ms-2" data-bs-toggle="tooltip" data-bs-title="조회수">
+                <i class="bi bi-eye fs-4"></i>
+                <span th:text="${b.viewCount}"></span>
+            </div>
+            <small class="text-muted mx-2"> • </small>
+            <div data-bs-toggle="tooltip" data-bs-title="수정일">
+                <small th:text="${#dates.format(b.updateTime,'yyyy-MM-dd')}"></small>
+            </div>
+        </div>
+    </div>
+</div>
