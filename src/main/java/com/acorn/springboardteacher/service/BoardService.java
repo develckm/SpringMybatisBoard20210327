@@ -10,7 +10,7 @@ import java.util.List;
 public interface BoardService {
     //리스트,상세(조회수올림),수정,등록,삭제
     List<BoardDto> list(UserDto loginUser, BoardPageDto pageDto);
-    List<BoardDto> tagList(String tag, UserDto loginUser);
+    List<BoardDto> tagList(String tag, UserDto loginUser, BoardPageDto pageDto);
 
     List<BoardImgDto> imgList(int[]biId);
 

@@ -63,9 +63,12 @@ public class BoardController {
     public String tagList(
             @PathVariable String tag,
             Model model,
-            @SessionAttribute(required = false) UserDto loginUser){
+            @SessionAttribute(required = false) UserDto loginUser,
+            @ModelAttribute BoardPageDto pageDto){
         List<BoardDto> boards;
-        boards=boardService.tagList(tag,loginUser);
+        boards=boardService.tagList(tag,loginUser,pageDto);
+        PageInfo<BoardDto> pageBoards=new PageInfo<>(boards);
+        model.addAttribute("page",pageBoards);
         model.addAttribute("boards",boards);
         return "/board/list";
     }

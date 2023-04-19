@@ -11,6 +11,21 @@ spring:
       location: ${user.dir}/SpringMybatisBoard20210327/src/main/resources/static/public/img
       max-file-size: 1MB
       max-request-size: 5MB
+#Google 계정 관리 > 보안 > Google에 로그인 > 2단계 인증 설정
+#Google 계정 관리 > 보안 > Google에 로그인 > 2단계 인증 설정 > 앱 비밀번호 설정
+  #앱 선택 > 기타 > SMTP로 설정 후 생성
+  #생성한 비밀번호를 복사
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: develckmtest@gmail.com
+    password: idfuvfmbnbvhixtq
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 img:
   upload:
     path: ${user.dir}/SpringMybatisBoard20210327/src/main/resources/static/public/img
@@ -26,3 +41,4 @@ mybatis:
 pagehelper:
   helper-dialect: mysql
   reasonable: true
+

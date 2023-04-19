@@ -25,6 +25,7 @@ dependencies {
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.0'
 	implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.4.6'
+	implementation 'org.springframework.boot:spring-boot-starter-mail:3.0.4'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -32,6 +33,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.webjars.npm:bootstrap:5.2.3'
 	implementation 'org.webjars.npm:bootstrap-icons:1.10.3'
+
 
 }
 

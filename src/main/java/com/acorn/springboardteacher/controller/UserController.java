@@ -1,7 +1,9 @@
 package com.acorn.springboardteacher.controller;
 
+import com.acorn.springboardteacher.dto.EmailDto;
 import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.lib.AESEncryption;
+import com.acorn.springboardteacher.service.EmailService;
 import com.acorn.springboardteacher.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,6 +25,7 @@ public class UserController {
     // "/user/login.do" 동적페이지 정의
 
     private UserService userService;
+    private EmailService emailService;
     @GetMapping("/dropout.do")
     public String dropoutForm(
             @SessionAttribute UserDto loginUser){
@@ -108,11 +111,22 @@ public class UserController {
         modelAndView.addObject("user",user);
         return  modelAndView;
     }
+    @GetMapping("/checkEmail.do")
+    public void checkEmailForm(@ModelAttribute UserDto user){
+        EmailDto emailDto=new EmailDto();
+        emailDto.setTo("develckm@gmail.com");
+        emailDto.setSubject("자바 이메일 테스트");
+        emailDto.setMessage("<h1>인증을 진행할 예정</h1>");
+        emailService.send(emailDto);
+
+    }
 
 
 
     @GetMapping("/signup.do")
     public void signupForm(){}
+
+
     @PostMapping("/signup.do")
     public String signupAction(
             @ModelAttribute UserDto user,

@@ -29,8 +29,9 @@ public class BoardServiceImp implements  BoardService{
     }
 
     @Override
-    public List<BoardDto> tagList(String tag, UserDto loginUser) {
+    public List<BoardDto> tagList(String tag, UserDto loginUser, BoardPageDto pageDto) {
         if(loginUser!=null)userMapper.setLoginUserId(loginUser.getUId());
+        PageHelper.startPage(pageDto.getPageNum(),pageDto.getPageSize(), pageDto.getOrderBy());
         List<BoardDto> tagList=boardMapper.findByTag(tag);
         if(loginUser!=null)userMapper.setLoginUserIdNull();
         return tagList;
