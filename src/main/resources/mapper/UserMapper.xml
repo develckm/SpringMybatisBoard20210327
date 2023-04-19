@@ -14,6 +14,16 @@
         <result column="address" property="address"/>
         <result column="detail_address" property="detailAddress"/>
         <result column="permission" property="permission"/>
+        <collection
+                property="followings"
+                select="com.acorn.springboardteacher.mapper.FollowMapper.findByFromId"
+                column="u_id"
+                fetchType="lazy"/>
+        <collection
+                property="followers"
+                select="com.acorn.springboardteacher.mapper.FollowMapper.findByToId"
+                column="u_id"
+                fetchType="lazy"/>
     </resultMap>
     <update id="setLoginUserId">
         SET @loginUserId=#{uId}

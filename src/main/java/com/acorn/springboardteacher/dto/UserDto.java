@@ -2,6 +2,8 @@ package com.acorn.springboardteacher.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UserDto {
     private String uId;
@@ -16,5 +18,7 @@ public class UserDto {
     private String address;
     private String detailAddress;
     private String permission;
+    private List<UserDto> followings; //팔로우 리스트 users : follows = 1 : N (from_id=u_id)
+    private List<UserDto> followers; //팔로워 리스트 users : follows = 1 : N (to_id=u_id)
 
 }

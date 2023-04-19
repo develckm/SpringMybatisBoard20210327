@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.FollowMapper">
+    <resultMap id="UserMap" type="UserDto">
+        <id column="u_id" property="uId"/>
+        <result column="name" property="name"/>
+        <result column="pw" property="pw"/>
+        <result column="phone" property="phone"/>
+        <result column="img_path" property="imgPath"/>
+        <result column="email" property="email"/>
+        <result column="post_time" property="postTime"/>
+        <result column="birth" property="birth"/>
+        <result column="gender" property="gender"/>
+        <result column="address" property="address"/>
+        <result column="detail_address" property="detailAddress"/>
+        <result column="permission" property="permission"/>
+    </resultMap>
+
+    <insert id="insertOne" parameterType="FollowDto">
+        INSERT INTO follows (from_id, to_id) VALUE (#{fromId},#{toId})
+    </insert>
+    <delete id="deleteByFromIdAndToId" parameterType="FollowDto">
+        DELETE FROM follows WHERE from_id=#{fromId} AND to_id=#{toId}
+    </delete>
+    <select id="findByFromId" resultMap="UserMap">
+        SELECT u.*
+            FROM follows f LEFT JOIN users u ON f.to_id=u.u_id
+            WHERE from_id=#{uId}
+    </select>
+    <select id="findByToId" resultMap="UserMap">
+        SELECT u.*
+            FROM follows f LEFT JOIN users u ON f.from_id=u.u_id
+            WHERE to_id=#{uId}
+    </select>
+</mapper>

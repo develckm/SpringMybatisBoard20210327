@@ -9,9 +9,55 @@
 </head>
     <div layout:fragment="content">
         <h1 class="my-4">유저 상세 페이지 </h1>
-        <p th:text="${user}"></p>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active"  data-bs-toggle="tab" data-bs-target="#followersNav" type="button" role="tab">
+                    팔로워
+                    <span th:text="${(user.followers!=null)?user.followers.size():0}"></span>
+                </button>
+                <button class="nav-link"  data-bs-toggle="tab" data-bs-target="#followingsNav" type="button" role="tab">
+                    팔로잉
+                    <span th:text="${(user.followings!=null)?user.followings.size():0}"></span>
+                </button>
+                <button class="nav-link"  data-bs-toggle="tab" data-bs-target="#boardsNav" type="button" role="tab">
+                    게시글
+                </button>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="followersNav" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                <h2>팔로워 리스트</h2>
+                <div id="followerCont" class="list-group">
+                    <div th:each="f:${user.followers}"  class="list-group-item text-bg-dark d-flex align-items-center">
+                        <img th:src="@{'{path}'(path=${f.imgPath})}" class="border rounded-circle" style="width: 45px; height: 45px"/>
+                        <div class="ms-3">
+                            <div>
+                                <span th:text="${f.uId}"></span>
+                                <i class="bi bi-dot"></i>
+                                <a th:href="@{'/user/follow/{uId}/insert.do'(uId=${f.uId})}">팔루우</a>
+                            </div>
+                            <div class="text-white text-opacity-75">
+                                <small th:text="${f.name}"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="followingsNav" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                <h2>팔로잉 리스트</h2>
+                <p th:text="${user.followings}"></p>
 
-        <p>
+            </div>
+            <div class="tab-pane fade" id="boardsNav" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+                <h2>게시글 리스트</h2>
+            </div>
+        </div>
+
+
+
+
+
+        <p th:if="${session.loginUser!=null}">
             <a th:href="@{'/user/{uId}/modify.do'(uId=${user.uId})}">수정페이지</a>
         </p>
     </div>

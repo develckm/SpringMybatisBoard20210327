@@ -45,7 +45,8 @@ class UserMapperTest {
     @Test
     @Order(2)
     void findByUId() {
-        UserDto findUser=userMapper.findByUId(user.getUId());
+        UserDto findUser=userMapper.findByUId("user01");
+        System.out.println("findUser = " + findUser);
         assertNotNull(findUser);
     }
     @Test
