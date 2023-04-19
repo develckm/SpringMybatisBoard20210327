@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout}">
+<head>
+    <title>게시판 리스트</title>
+    <script src="/public/js/BoardLike.js" defer></script>
+</head>
+<div layout:fragment="content">
+    <h1 class="mt-4">해시태그 검색</h1>
+    <h2 class="mb-4">
+        <i class="bi bi-hash"></i>
+        <span th:text="${tag}"></span>
+    </h2>
+    <section id="boardListCont" class="row row-cols-lg-2 row-cols-1 g-5">
+        <th:block th:include="/board/includeList"></th:block>
+    </section>
+    <script>
+        let page=1;
+        let lastPage=[[${boards.pages}]];
+        const boardListCont=document.getElementById("boardListCont");
+        window.addEventListener("scroll",async ()=>{
+            let scrollTop=document.documentElement.scrollTop || document.body.scrollTop;
+            let clientHeight=document.documentElement.clientHeight || document.body.clientHeight;
+            let scrollHeight=document.documentElement.scrollHeight || document.body.scrollHeight;
+            scrollHeight-=clientHeight;
+            if(scrollTop===scrollHeight){
+                if(lastPage===page){
+                    alert("마지막 페이지 입니다.");
+                    return;
+                }
+                let list=await loadTagList(page+1);
+                if(list){
+                    ++page;
+                    boardListCont.insertAdjacentHTML("beforeend",list);
+                }else{
+                    alert("불러오기 실패");
+                }
+            }
+        });
+
+        async function loadTagList(pageNum){
+            let url="/board/[[${tag}]]/ajaxTagList.do?pageNum="+pageNum;
+            const resp=await fetch(url);
+            if(resp.status===200){
+                return await resp.text();
+            }
+        }
+    </script>
+    <br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br>
+</div>
+</html>

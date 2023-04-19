@@ -26,6 +26,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/user/signup.do")
                 .addPathPatterns("/board/**")
                 .excludePathPatterns("/board/list.do")
+                .excludePathPatterns("/board/*/tagList.do")
+                .excludePathPatterns("/board/*/ajaxTagList.do")
                 .excludePathPatterns("/board/*/detail.do");
         registry.addInterceptor(msgRemoveInterceptor).order(3)
                 .addPathPatterns("/**");

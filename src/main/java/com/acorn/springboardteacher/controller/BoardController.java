@@ -54,11 +54,27 @@ public class BoardController {
     public String tagList(
             @PathVariable String tag,
             Model model,
-            @SessionAttribute(required = false) UserDto loginUser){
+            @SessionAttribute(required = false) UserDto loginUser,
+            BoardPageDto pageDto){
         List<BoardDto> boards;
-        boards=boardService.tagList(tag,loginUser);
+        pageDto.setPageSize(4);
+        boards=boardService.tagList(tag,loginUser,pageDto);
         model.addAttribute("boards",boards);
-        return "/board/list";
+        model.addAttribute("tag",tag);
+        return "/board/tagList";
+    }
+    @GetMapping("/{tag}/ajaxTagList.do")
+    public String ajaxTagList(
+            @PathVariable String tag,
+            Model model,
+            @SessionAttribute(required = false) UserDto loginUser,
+            BoardPageDto pageDto){
+        List<BoardDto> boards;
+        pageDto.setPageSize(4);
+        boards=boardService.tagList(tag,loginUser,pageDto);
+        model.addAttribute("boards",boards);
+        model.addAttribute("tag",tag);
+        return "/board/includeList";
     }
 
     //?bId=1 //bId 동적 동적 페에지에 꼭 필요(400) 명시적으로 나타내는 것
