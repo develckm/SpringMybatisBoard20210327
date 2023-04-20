@@ -57,7 +57,7 @@ public class UserController {
             @PathVariable String uId,
             @SessionAttribute UserDto loginUser,
             Model model){//렌더할 뷰에 바로 객체 전달
-        UserDto user=userService.detail(uId);
+        UserDto user=userService.detail(uId,null);
         model.addAttribute("user",user);
         return "/user/modify";
     }
@@ -102,8 +102,8 @@ public class UserController {
             modelAndView.setViewName("redirect:/user/login.do");
             return modelAndView;
         }
-
-        UserDto user=userService.detail(uId);
+        String loginUserId=(loginUser!=null)?loginUser.getUId():null;
+        UserDto user=userService.detail(uId,loginUserId);
         modelAndView.setViewName("/user/detail");
         modelAndView.addObject("user",user);
         return  modelAndView;

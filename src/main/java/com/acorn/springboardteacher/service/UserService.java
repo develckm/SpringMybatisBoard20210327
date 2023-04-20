@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public interface UserService {
     //로그인,유저상세,수정회원가입,삭제
     UserDto login(UserDto user);
-    UserDto detail(String uId);
+    UserDto detail(String uId,String loginUserId);
     int modify(UserDto user);
     int signup(UserDto user);
     int dropout(UserDto user);

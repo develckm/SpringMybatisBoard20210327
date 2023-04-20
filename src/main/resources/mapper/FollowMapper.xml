@@ -14,6 +14,7 @@
         <result column="address" property="address"/>
         <result column="detail_address" property="detailAddress"/>
         <result column="permission" property="permission"/>
+        <result column="following" property="following" />
     </resultMap>
 
     <insert id="insertOne" parameterType="FollowDto">
@@ -23,12 +24,13 @@
         DELETE FROM follows WHERE from_id=#{fromId} AND to_id=#{toId}
     </delete>
     <select id="findByFromId" resultMap="UserMap">
-        SELECT u.*
+        SELECT u.*,(true) following
             FROM follows f LEFT JOIN users u ON f.to_id=u.u_id
             WHERE from_id=#{uId}
     </select>
     <select id="findByToId" resultMap="UserMap">
         SELECT u.*
+             ,(SELECT COUNT(*) FROM follows WHERE from_id=@loginUserId AND to_id=f.from_id) following
             FROM follows f LEFT JOIN users u ON f.from_id=u.u_id
             WHERE to_id=#{uId}
     </select>

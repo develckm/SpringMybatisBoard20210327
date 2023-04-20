@@ -28,18 +28,22 @@
             <div class="tab-pane fade show active" id="followersNav" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                 <h2>팔로워 리스트</h2>
                 <div id="followerCont" class="list-group">
-                    <div th:each="f:${user.followers}"  class="list-group-item text-bg-dark d-flex align-items-center">
-                        <img th:src="@{'{path}'(path=${f.imgPath})}" class="border rounded-circle" style="width: 45px; height: 45px"/>
-                        <div class="ms-3">
-                            <div>
-                                <span th:text="${f.uId}"></span>
-                                <i class="bi bi-dot"></i>
-                                <a th:href="@{'/user/follow/{uId}/insert.do'(uId=${f.uId})}">팔루우</a>
-                            </div>
-                            <div class="text-white text-opacity-75">
-                                <small th:text="${f.name}"></small>
+                    <div th:each="f:${user.followers}"
+                         class="list-group-item text-bg-dark d-flex justify-content-between align-items-center">
+                        <div class="d-flex">
+                            <img th:src="@{'{path}'(path=${f.imgPath})}" class="border rounded-circle" style="width: 45px; height: 45px"/>
+                            <div class="ms-3">
+                                <div>
+                                    <span th:text="${f.uId}"></span>
+                                    <i class="bi bi-dot" th:text="${f.following}"></i>
+                                    <a th:href="@{'/user/follow/{uId}/insert.do'(uId=${f.uId})}">팔루우</a>
+                                </div>
+                                <div class="text-white text-opacity-75">
+                                    <small th:text="${f.name}"></small>
+                                </div>
                             </div>
                         </div>
+                        <button type="button" class="btn btn-danger">삭제</button>
                     </div>
                 </div>
             </div>

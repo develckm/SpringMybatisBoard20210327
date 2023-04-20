@@ -23,7 +23,7 @@
                 property="followers"
                 select="com.acorn.springboardteacher.mapper.FollowMapper.findByToId"
                 column="u_id"
-                fetchType="lazy"/>
+                fetchType="eager"/>
     </resultMap>
     <update id="setLoginUserId">
         SET @loginUserId=#{uId}

@@ -94,6 +94,7 @@
         let tag=searchTagInput.value;
         if(tag.length>0){
             const tags=await searchTags(tag);
+            console.log(tags);
             if (tags){
                 tagListCont.innerHTML="";
                 for(const tagObj of tags){
