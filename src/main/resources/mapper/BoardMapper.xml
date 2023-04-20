@@ -19,7 +19,7 @@
         <association property="user"
                     select="com.acorn.springboardteacher.mapper.UserMapper.findByUId"
                     column="u_id"
-                    fetchType="lazy"/>
+                    fetchType="eager"/>
         <collection property="replies"
                     select="com.acorn.springboardteacher.mapper.BoardReplyMapper.findByBIdAndParentBrIdIsNull"
                     column="b_id"

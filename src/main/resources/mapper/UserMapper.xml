@@ -14,6 +14,11 @@
         <result column="address" property="address"/>
         <result column="detail_address" property="detailAddress"/>
         <result column="permission" property="permission"/>
+        <association
+                property="following"
+                select="com.acorn.springboardteacher.mapper.FollowMapper.findByToIdAndFromIdIsLoginUserId"
+                column="u_id"
+                fetchType="eager"/>
         <collection
                 property="followings"
                 select="com.acorn.springboardteacher.mapper.FollowMapper.findByFromId"

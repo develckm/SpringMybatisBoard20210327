@@ -2,21 +2,14 @@
     <div class="card" >
         <div class="card-header d-flex justify-content-between align-items-center">
             <div>
-                <span th:text="${b.bId}"></span>
-                <i class="bi bi-dot"></i>
-                <img
-                        th:if="${b.user.imgPath!=null}"
-                        th:src="@{'{path}'(path=${b.user.imgPath})}"
-                        alt="프로필 이미지"
-                        style="width: 60px; height: 60px; object-fit: cover;" class="img-thumbnail">
-                <strong class="ms-2" th:text="${b.user.uId}"></strong>
-                (<strong th:text="${b.user.name}"></strong>)
-                <small class="text-muted"> • </small>
-                <small th:text="${#dates.format(b.postTime,'yyyy-MM-dd')}"></small>
+                <th:block th:include="/user/profile" th:with="f=${b.user}"></th:block>
             </div>
             <th:block th:include="/board/dropDownMenu"></th:block>
         </div>
         <div class="card-body">
+            <span th:text="${b.bId}"></span>
+            <i class="bi bi-dot"></i>
+            <small th:text="${#dates.format(b.postTime,'yyyy-MM-dd')}"></small>
             <div th:if="${b.imgs!=null}" th:id="'carousel'+${b.bId}" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item" th:each="img,state:${b.imgs}" th:classappend="${(state.first)?'active':''}">

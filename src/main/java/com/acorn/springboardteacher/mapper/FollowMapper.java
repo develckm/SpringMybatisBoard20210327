@@ -18,4 +18,6 @@ public interface FollowMapper {
     int deleteByFromIdAndToId(FollowDto followDto);
     int insertOne(FollowDto followDto);
 
+    boolean findByToIdAndFromIdIsLoginUserId(String uId);
+
 }
