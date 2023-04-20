@@ -28,6 +28,8 @@ CREATE TABLE users
     permission     ENUM ('ADMIN','USER','SILVER','GOLD','PRIVATE') NOT NULL DEFAULT 'USER' COMMENT '권한'
 );
 
+ALTER TABLE users add column status ENUM('SIGNUP','EMAIL_CHECKING','INACTIVE','LOCK','LEAVE') DEFAULT 'SIGNUP';
+ALTER TABLE users add column email_check_code VARCHAR(8);
 CREATE TABLE boards
 (
     b_id        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '게시글 아이디',

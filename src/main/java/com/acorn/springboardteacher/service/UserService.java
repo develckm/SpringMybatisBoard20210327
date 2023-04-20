@@ -14,6 +14,8 @@ public interface UserService {
     UserDto login(UserDto user);
     UserDto detail(String uId);
     int modify(UserDto user);
+    int modifyStatusEmailCheck(UserDto user);
+    int modifyStatus(UserDto user);
     int signup(UserDto user);
     int dropout(UserDto user);
 

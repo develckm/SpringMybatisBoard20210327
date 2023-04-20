@@ -14,6 +14,8 @@
         <result column="address" property="address"/>
         <result column="detail_address" property="detailAddress"/>
         <result column="permission" property="permission"/>
+        <result column="status" property="status"/>
+        <result column="email_check_code" property="emailCheckCode"/>
     </resultMap>
     <update id="setLoginUserId">
         SET @loginUserId=#{uId}
@@ -22,8 +24,8 @@
         SET @loginUserId=NULL;
     </update>
     <insert id="insertOne" parameterType="UserDto">
-        INSERT INTO users (u_id, pw, name, phone, img_path, email, birth, gender, address, detail_address)
-        VALUE (#{uId},#{pw},#{name},#{phone},#{imgPath},#{email},#{birth},#{gender},#{address},#{detailAddress})
+        INSERT INTO users (u_id, pw, name, phone, img_path, email, birth, gender, address, detail_address,status,email_check_code)
+        VALUE (#{uId},#{pw},#{name},#{phone},#{imgPath},#{email},#{birth},#{gender},#{address},#{detailAddress},#{status},#{emailCheckCode})
     </insert>
     <update id="updateOne" parameterType="UserDto">
         UPDATE users SET
@@ -40,6 +42,12 @@
     </update>
     <update id="updatePwByUId" parameterType="UserDto">
         UPDATE users SET pw=#{pw} WHERE u_id=#{uId};
+    </update>
+    <update id="updateStatusByUId" parameterType="UserDto">
+        UPDATE users SET status=#{status} WHERE u_id=#{uId};
+    </update>
+    <update id="updateStatusByUIdAndEmailCheckCode" parameterType="UserDto">
+        UPDATE users SET status=#{status} WHERE u_id=#{uId} AND email_check_code=#{emailCheckCode};
     </update>
     <delete id="deleteByUIdAndPw" parameterType="UserDto">
         DELETE FROM users WHERE u_id=#{uId} AND pw=#{pw}
