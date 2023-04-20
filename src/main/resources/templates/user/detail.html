@@ -31,7 +31,7 @@
                     <div th:each="f:${user.followers}"
                          class="list-group-item d-flex justify-content-between align-items-center">
                         <th:block th:include="/user/profile"></th:block>
-                        <button type="button" class="btn btn-outline-danger">삭제</button>
+                        <button th:onclick="toggleFollower([[${f.uId}]],this)" type="button" class="btn btn-outline-danger">삭제</button>
                     </div>
                 </div>
             </div>

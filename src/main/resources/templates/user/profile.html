@@ -3,10 +3,10 @@
   <div class="ms-3">
     <div>
       <span th:text="${f.uId}"></span>
-      <th:block th:if="${!f.following}">
+      <span th:if="${!f.following}" class="followCont">
         <i class="bi bi-dot"></i>
-        <a th:href="@{'/user/follow/{uId}/insert.do'(uId=${f.uId})}">팔루우</a>
-      </th:block>
+        <button class="btn btn-link p-0" th:onclick="following([[${f.uId}]],this)">팔루우</button>
+      </span>
     </div>
     <div class="">
       <small th:text="${f.name}"></small>
