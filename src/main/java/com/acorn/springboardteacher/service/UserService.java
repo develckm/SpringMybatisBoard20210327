@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 //DIP(의존성 주입 원칙) : 주입받는 객체의 타입은 꼭 인터페이스로 정의하라(모듈을 유연하게 확장하기 위해)
 @Service //@Component 자식 어노테이션으로 service 관리 한는다는(관심사분리) 명시적의미와 @Transactional 을 정의 가능
 public interface UserService {
-    //로그인,유저상세,수정회원가입,삭제
+    //로그인,유저상세,수정회원가입,삭제,이메일 체크시 가입확인
     UserDto login(UserDto user);
     UserDto detail(String uId,String loginUserId);
     int modify(UserDto user);
+    int modifyEmailCheck(UserDto user);
     int signup(UserDto user);
     int dropout(UserDto user);
 

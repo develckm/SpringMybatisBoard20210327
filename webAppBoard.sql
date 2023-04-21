@@ -25,7 +25,9 @@ CREATE TABLE users
     gender         ENUM ('FEMALE','MALE','NONE') COMMENT '성별',
     address        VARCHAR(255) COMMENT '주소',
     detail_address VARCHAR(255) COMMENT '상세주소',
-    permission     ENUM ('ADMIN','USER','SILVER','GOLD','PRIVATE') NOT NULL DEFAULT 'USER' COMMENT '권한'
+    permission     ENUM ('ADMIN','USER','SILVER','GOLD','PRIVATE') NOT NULL DEFAULT 'USER' COMMENT '권한',
+    status     ENUM ('SIGNUP','EMAIL_CHECK','BLOCK','LEAVE','REPORT') NOT NULL DEFAULT 'SIGNUP' COMMENT '계정 상태',
+    email_check_code VARCHAR(8) COMMENT '이메일 확인 코드'
 );
 
 CREATE TABLE boards

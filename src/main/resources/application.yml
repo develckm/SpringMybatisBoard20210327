@@ -11,6 +11,17 @@ spring:
       location: ${user.dir}/SpringMybatisBoard20210327/src/main/resources/static/public/img
       max-file-size: 1MB
       max-request-size: 5MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: develckmtest@gmail.com
+    password: idfuvfmbnbvhixtq
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 img:
   upload:
     path: ${user.dir}/SpringMybatisBoard20210327/src/main/resources/static/public/img

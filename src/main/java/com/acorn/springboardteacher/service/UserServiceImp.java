@@ -33,6 +33,12 @@ public class UserServiceImp implements UserService{ //13분까지 쉬었다가 �
     }
 
     @Override
+    public int modifyEmailCheck(UserDto user) {
+        int modifyEmailCheck=userMapper.updateStatusByUidAndEmailCheckCode(user);
+        return modifyEmailCheck;
+    }
+
+    @Override
     public int signup(UserDto user) {
         return userMapper.insertOne(user);
     }
