@@ -11,17 +11,23 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class FollowController {
     private FollowService followService;
-    @PostMapping("/{uId}/handler.do")
+    @PostMapping("/{uId}/{follower}/handler.do")
     public int registerHandler(
             @PathVariable String uId,
+            @PathVariable boolean follower,
             @SessionAttribute UserDto loginUser){ //400
         int register=0;
         //글쓴이가 자기 자신을 팔로잉 할 수 없다.
         if(loginUser.getUId().equals(uId))return register;
 
         FollowDto followDto=new FollowDto();
-        followDto.setToId(uId);
-        followDto.setFromId(loginUser.getUId());
+        if(follower){ //팔로워 등록
+            followDto.setToId(loginUser.getUId());
+            followDto.setFromId(uId);
+        }else{//팔로우 등록
+            followDto.setToId(uId);
+            followDto.setFromId(loginUser.getUId());
+        }
         register=followService.register(followDto); //500
         return register;
     }
