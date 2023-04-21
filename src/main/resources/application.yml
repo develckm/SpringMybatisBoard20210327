@@ -3,7 +3,7 @@ spring:
     #url: jdbc:mysql://localhost:3306/WebAppBoard
     url: jdbc:log4jdbc:mysql://localhost:3306/WebAppBoard
     username: boardServerDev
-    password: mysql123
+    password: ${db.password}
     #driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
   servlet:
@@ -15,7 +15,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: develckmtest@gmail.com
-    password: idfuvfmbnbvhixtq
+    password: ${email.password}
     properties:
       mail:
         smtp:
