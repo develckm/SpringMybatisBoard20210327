@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.ChatMsgMapper">
+    <resultMap id="ChatMsgMap" type="com.acorn.springboardteacher.dto.ChatMsgDto">
+        <id property="cmId" column="cm_id"/>
+        <result property="crId" column="cr_id"/>
+        <result property="uId" column="u_id"/>
+        <result property="status" column="status"/>
+        <result property="content" column="content"/>
+        <result property="nickname" column="nickname"/>
+        <result property="postTime" column="post_time"/>
+    </resultMap>
+    <insert id="insertOne">
+        INSERT INTO chat_messages (cr_id, u_id, nickname, content, status)
+            VALUE (#{crId},#{uId},#{nickname},#{content},#{status})
+    </insert>
+    <select id="findByCrId" resultMap="ChatMsgMap">
+        SELECT * FROM chat_messages WHERE cr_id=#{crId}
+    </select>
+    <select id="findByCrIdAndGraterThanPostTime" resultMap="ChatMsgMap">
+        SELECT * FROM chat_messages WHERE cr_id=#{crId} AND post_time>#{postTime}
+    </select>
+<!--    <select id="findByCrIdAndGraterThanPostTime" resultMap="ChatMsgMap">-->
+<!--        SELECT * FROM chat_messages WHERE cr_id=#{crId} AND post_time>=#{postTime} AND cm_id != #{cmId}-->
+<!--    </select>-->
+</mapper>

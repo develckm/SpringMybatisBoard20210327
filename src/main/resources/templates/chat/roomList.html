@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<div layout:fragment="content">
+    <h1 class="my-4">채팅방 리스트</h1>
+    <ul class="list-group">
+        <li th:each="r:${rooms}" class="list-group-item">
+            <a class="link-secondary"
+                th:href="@{'/chat/room/{crId}/detail.do'(crId=${r.crId})}">
+                <p>
+                    <strong th:text="${r.name}"></strong>
+                    <i class="bi bi-dot"></i>
+                    <span th:text="${r.uId}"></span>
+                </p>
+                <div th:text="${r.description}"></div>
+            </a>
+        </li>
+    </ul>
+</div>

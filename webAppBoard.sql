@@ -405,3 +405,58 @@ VALUES ('user01', 'user02'),
        ('user10', 'user05'),
        ('user10', 'user08'),
        ('user10', 'user09');
+CREATE TABLE chat_rooms
+(
+    cr_id        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '채팅방 아이디',
+    u_id         VARCHAR(255) NOT NULL COMMENT '채팅방 생성자 아이디',
+    name         VARCHAR(255) NOT NULL COMMENT '채팅방 이름',
+    description  TEXT COMMENT '채팅방 설명',
+    post_time    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '채팅방 생성 시간',
+    update_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '채팅방 최근 업데이트 시간'
+);
+
+CREATE TABLE chat_messages
+(
+    cm_id     INT UNSIGNED AUTO_INCREMENT PRIMARY KEY COMMENT '메시지 아이디',
+    cr_id     INT UNSIGNED                  NOT NULL COMMENT '채팅방 아이디',
+    u_id      VARCHAR(255)                  NOT NULL COMMENT '송신자 아이디',
+    nickname  VARCHAR(255)                  NOT NULL COMMENT '송신자 닉네임',
+    content   TEXT                          NOT NULL COMMENT '메시지 내용',
+    status    ENUM ('ENTER','LEAVE','CHAT') NOT NULL COMMENT '메세지 상태 상태',
+    post_time TIMESTAMP                     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '메시지 전송 시간',
+    FOREIGN KEY (cr_id) REFERENCES chat_rooms (cr_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (u_id) REFERENCES users (u_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- chat_rooms
+INSERT INTO chat_rooms(u_id, name, post_time)
+VALUES
+    ('user01', 'Room1', '2022-01-01 12:00:00'),
+    ('user02', 'Room2', '2022-01-02 13:00:00'),
+    ('user03', 'Room3', '2022-01-03 14:00:00'),
+    ('user04', 'Room4', '2022-01-04 15:00:00'),
+    ('user05', 'Room5', '2022-01-05 16:00:00');
+
+-- chat_messages
+INSERT INTO chat_messages(cr_id, u_id, nickname, content, status)
+VALUES
+    (1, 'user01', '유저1', '안녕하세요!', 'ENTER'),
+    (1, 'user02', '유저2', '안녕하세요~', 'ENTER'),
+    (1, 'user01', '유저1', '오늘 날씨가 참 좋네요.', 'CHAT'),
+    (1, 'user02', '유저2', '네, 정말 좋은 날씨입니다.', 'CHAT'),
+    (1, 'user01', '유저1', '그렇군요.', 'CHAT'),
+    (1, 'user01', '유저1', '잠깐만요. 제가 문서 작업 중인데 잠시 쉬고 싶어서 나갔다가 다시 들어왔습니다.', 'LEAVE'),
+    (1, 'user01', '유저1', '다시 돌아왔습니다.', 'CHAT'),
+    (1, 'user02', '유저2', '어떤 문서 작업을 하고 있었나요?', 'CHAT'),
+    (1, 'user01', '유저1', '저희 회사의 신제품 출시 계획서를 작성하고 있었습니다.', 'CHAT'),
+    (1, 'user02', '유저2', '그런가요? 대단하십니다!', 'CHAT'),
+    (1, 'user1', '유저1', '안녕하세요!', 'ENTER'),
+    (1, 'user2', '유저2', '안녕하세요~', 'ENTER'),
+    (1, 'user1', '유저1', '오늘 날씨가 참 좋네요.', 'CHAT'),
+    (1, 'user2', '유저2', '네, 정말 좋은 날씨입니다.', 'CHAT'),
+    (1, 'user1', '유저1', '그렇군요.', 'CHAT'),
+    (1, 'user1', '유저1', '잠깐만요. 제가 문서 작업 중인데 잠시 쉬고 싶어서 나갔다가 다시 들어왔습니다.', 'LEAVE'),
+    (1, 'user1', '유저1', '다시 돌아왔습니다.', 'ENTER'),
+    (1, 'user2', '유저2', '어떤 문서 작업을 하고 있었나요?', 'CHAT'),
+    (1, 'user1', '유저1', '저희 회사의 신제품 출시 계획서를 작성하고 있었습니다.', 'CHAT'),
+    (1, 'user2', '유저2', '그런가요? 대단하십니다!', 'CHAT');
