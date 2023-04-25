@@ -21,22 +21,27 @@
             <i class="fas fa-times"></i>
           </div>
           <div class="card-body" id="chattingCont">
-            <div class="d-none">
-
-            </div>
           </div>
           <form name="sendMsgForm" class="input-group">
-            <textarea class="form-control w-50" name="msg" rows="2"></textarea>
-            <button class="btn btn-info">전송</button>
+            <input type="hidden" name="crId" th:value="${roomId}">
+            <input type="hidden" name="nickname" value="경민">
+            <input type="hidden" name="status" value="CHAT">
+            <input type="hidden" name="uId" th:value="${session.loginUser.uId}">
+            <textarea class="form-control w-50" name="content" rows="2"></textarea>
+            <button class="btn btn-info disabled" name="submitBtn">전송</button>
           </form>
         </div>
         <form name="connForm" class="input-group my-4 mx-auto w-75">
+          <input type="hidden" name="crId" th:value="${roomId}">
+          <input type="hidden" name="status" value="ENTER">
+          <input type="hidden" name="uId" th:value="${session.loginUser.uId}">
+          <input type="hidden" name="content" value="입장하십니다.">
           <strong class="input-group-text">채팅방 입장</strong>
           <div class="form-floating">
-            <input class="form-control h-100" name="user" value="경민" placeholder="유저">
+            <input class="form-control h-100" name="nickname" value="경민" placeholder="유저">
             <label th:text="${session.loginUser.uId}+' 닉네임'"></label>
           </div>
-          <button class="btn btn-primary">
+          <button class="btn btn-primary" name="submitBtn">
             접속
           </button>
         </form>
@@ -45,17 +50,120 @@
   </div>
 <script th:inline="javascript">
   const LOGIN_U_ID=[[${session.loginUser.uId}]];
-  const URL="ws://localhost:8080/chat"
+  const ROOM_ID=[[${roomId}]];
+  const LIST_URL=`/chat/msg/${ROOM_ID}/list.do`;
+  const SEND_URL=`/chat/msg/register.do`;
   const connForm=document.forms["connForm"];
   const sendMsgForm=document.forms["sendMsgForm"];
   const chattingCont=document.getElementById("chattingCont");
-  const receivedMsgContEx = document.getElementById("receivedMsgContEx");
-  const sentMsgContEx = document.getElementById("sentMsgContEx");
+  let lastPostTime;
+  let lastCmId;
+  document.addEventListener("DOMContentLoaded",async (e)=>{
+    await autoLoadChat();
+  });
+  sendMsgForm.onsubmit=async (e)=>{
+    e.preventDefault();
+    let register=await registerMsg(sendMsgForm);
+    if(register>0){
+      await loadChatMsgs(lastPostTime);
+    }
+  }
+  connForm.onsubmit=async (e)=>{
+    e.preventDefault();
+    connForm.submitBtn.classList.add("disabled");
+    sendMsgForm.submitBtn.classList.remove("disabled");
+    sendMsgForm.nickname.value=connForm.nickname.value;
+    let register=await registerMsg(connForm);
+    if(register>0){
+      await loadChatMsgs(lastPostTime);
+    }
+  }
+
+  async function autoLoadChat(){
+    let status=await loadChatMsgs(lastPostTime);
+    await new Promise((resolve)=>{setTimeout(()=>{resolve()},5000)});
+    await autoLoadChat();
+  }
 
 
 
+  async function registerMsg(fromNode){
+    const data=new FormData(fromNode);
+    const response=await fetch(SEND_URL,{method:"POST",body:data});
+    if(response.status===200){
+      return  register=await response.text();
+    }
+  }
 
-  function reciveMsgComponent(msgObj){
+  async function loadChatMsgs(postTime){
+    let listUrl=LIST_URL;
+    if(postTime){
+      listUrl+=`?postTime=${postTime}`;
+    }
+    console.log(listUrl);
+    const response=await fetch(listUrl);
+    if(response.status===200){
+      const msgs=await response.json();
+      msgs.forEach((msg,i)=>{
+        if(i===msgs.length-1){
+          lastPostTime=msg.postTime;
+          lastCmId=msg.cmId;
+        }
+        if(msg.status==="CHAT"){
+          if(msg.uId===LOGIN_U_ID){
+            chattingCont.insertAdjacentHTML("beforeend",sendMsgComponent(msg));
+          }else{
+            chattingCont.insertAdjacentHTML("beforeend",receiveMsgComponent(msg));
+          }
+        }else if(msg.status==="ENTER"){
+          chattingCont.insertAdjacentHTML("beforeend",enterMsgComponent(msg));
+        }else if(msg.status==="LEAVE"){
+          chattingCont.insertAdjacentHTML("beforeend",leaveMsgComponent(msg));
+        }
+      });
+      return true;
+    }
+  }
+  function enterMsgComponent(msgObj){
+    return `
+        <div class="text-center">
+            <div>
+              <strong>
+                ${msgObj.uId}
+              </strong>
+              <span>
+                (${msgObj.nickname})
+              </span>
+              님 입장하셨습니다.
+            </div>
+            <div>
+              <small>
+                ${msgObj.postTime}
+              </small>
+            </div>
+        </div>`;
+  }
+  function leaveMsgComponent(msgObj){
+    return `
+        <div class="text-center">
+            <div>
+              <strong>
+                ${msgObj.uId}
+              </strong>
+              <span>
+                (${msgObj.nickname})
+              </span>
+              님 퇴장하셨습니다.
+            </div>
+            <div>
+              <small>
+                ${msgObj.postTime}
+              </small>
+            </div>
+        </div>`;
+  }
+
+  function receiveMsgComponent(msgObj){
     return`
         <section>
           <div class="d-flex justify-content-end mb-4">
@@ -67,22 +175,28 @@
             <div class="p-3 me-3 border rounded-2 bg-secondary bg-opacity-10">
                 ${msgObj.content}
             </div>
-            <div>
-              <strong class="rounded-circle border d-flex justify-content-center align-items-center" style="width: 45px; height: 45px;">
+            <div class="d-flex flex-column justify-content-center align-items-center" style="width: 55px; height: 55px;">
+              <strong>
                 ${msgObj.uId}
               </strong>
+              <span>
+                ${msgObj.nickname}
+              </span>
             </div>
           </div>
         </section>`;
   }
-  function sendMsgCont(msgObj){
+  function sendMsgComponent(msgObj){
     return`
       <section>
         <div class="d-flex justify-content-start mb-4">
-          <div>
-            <strong class="rounded-circle border d-flex justify-content-center align-items-center" style="width: 45px; height: 45px;">
+          <div class="d-flex flex-column justify-content-center align-items-center" style="width: 55px; height: 55px;">
+            <strong>
               ${msgObj.uId}
             </strong>
+            <span>
+              ${msgObj.nickname}
+            </span>
           </div>
           <div class="p-3 ms-3 border rounded-2 bg-primary bg-opacity-10">
             ${msgObj.content}

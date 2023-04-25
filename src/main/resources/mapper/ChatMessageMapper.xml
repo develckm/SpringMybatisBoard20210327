@@ -7,14 +7,20 @@
         <result property="crId" column="cr_id"/>
         <result property="content" column="content"/>
         <result property="postTime" column="post_time"/>
+        <result property="nickname" column="nickname"/>
+        <result property="status" column="status"/>
     </resultMap>
     <insert id="insertOne">
-        INSERT INTO chat_messages (cr_id, u_id, content) value (#{crId},#{uId},#{content})
+        INSERT INTO chat_messages (cr_id, u_id, nickname, content, status) value (#{crId},#{uId},#{nickname},#{content},#{status})
     </insert>
     <select id="findByCrIdOrderByPostTime" resultMap="ChatMessageMap">
         SELECT * FROM chat_messages WHERE cr_id=#{crId} ORDER BY post_time
     </select>
     <select id="findByCrIdAndPostGraterThenOrderByPostTime" resultMap="ChatMessageMap">
-        SELECT * FROM chat_messages WHERE cr_id=#{crId} AND post_time>#{postTime} ORDER BY post_time
+        SELECT *
+            FROM chat_messages
+            WHERE cr_id=#{crId}
+                AND post_time>#{postTime}
+            ORDER BY post_time
     </select>
 </mapper>
