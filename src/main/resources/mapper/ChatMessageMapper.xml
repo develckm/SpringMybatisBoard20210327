@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.ChatMessageMapper">
+    <resultMap id="ChatMessageMap" type="com.acorn.springboardteacher.dto.ChatMessageDto">
+        <id property="cmId" column="cm_id"/>
+        <result property="uId" column="u_id"/>
+        <result property="crId" column="cr_id"/>
+        <result property="content" column="content"/>
+        <result property="postTime" column="post_time"/>
+    </resultMap>
+    <insert id="insertOne">
+        INSERT INTO chat_messages (cr_id, u_id, content) value (#{crId},#{uId},#{content})
+    </insert>
+    <select id="findByCrIdOrderByPostTime" resultMap="ChatMessageMap">
+        SELECT * FROM chat_messages WHERE cr_id=#{crId} ORDER BY post_time
+    </select>
+    <select id="findByCrIdAndPostGraterThenOrderByPostTime" resultMap="ChatMessageMap">
+        SELECT * FROM chat_messages WHERE cr_id=#{crId} AND post_time>#{postTime} ORDER BY post_time
+    </select>
+</mapper>

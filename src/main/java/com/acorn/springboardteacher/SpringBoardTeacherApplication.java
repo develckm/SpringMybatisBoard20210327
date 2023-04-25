@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 @SpringBootApplication
-@PropertySources(@PropertySource("/env.properties"))
+@PropertySources(@PropertySource("classpath:/env.properties"))
 public class SpringBoardTeacherApplication {
 
 	public static void main(String[] args) {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.acorn.springboardteacher.mapper.ChatRoomMapper">
+    <resultMap id="ChatRoomMap" type="com.acorn.springboardteacher.dto.ChatRoomDto">
+        <id property="crId" column="cr_id"/>
+        <result property="description" column="description"/>
+        <result property="name" column="name"/>
+        <result property="uId" column="u_Id"/>
+        <result property="postTime" column="post_time"/>
+        <result property="updatedTime" column="updated_time"/>
+    </resultMap>
+    <insert id="insertOne">
+        INSERT INTO chat_rooms (u_id, name, description) VALUE (#{uId},#{name},#{description});
+    </insert>
+    <select id="findAll" resultMap="ChatRoomMap">
+        SELECT * FROM chat_rooms
+    </select>
+</mapper>

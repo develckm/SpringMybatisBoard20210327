@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout}">
+<head>
+  <title>채팅방 리스트</title>
+</head>
+<div layout:fragment="content">
+  <h1 class="my-4">채팅방 리스트</h1>
+  <div class="container py-5">
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8 col-lg-6 col-xl-4">
+
+        <div class="card" id="chat1" style="border-radius: 15px;">
+          <div class="card-header d-flex justify-content-between align-items-center p-3 bg-info text-white border-bottom-0" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+            <i class="fas fa-angle-left"></i>
+            <div class="fw-bold">WebSocket 채팅방
+            </div>
+            <i class="fas fa-times"></i>
+          </div>
+          <div class="card-body" id="chattingCont">
+            <div class="d-none">
+
+            </div>
+          </div>
+          <form name="sendMsgForm" class="input-group">
+            <textarea class="form-control w-50" name="msg" rows="2"></textarea>
+            <button class="btn btn-info">전송</button>
+          </form>
+        </div>
+        <form name="connForm" class="input-group my-4 mx-auto w-75">
+          <strong class="input-group-text">채팅방 입장</strong>
+          <div class="form-floating">
+            <input class="form-control h-100" name="user" value="경민" placeholder="유저">
+            <label th:text="${session.loginUser.uId}+' 닉네임'"></label>
+          </div>
+          <button class="btn btn-primary">
+            접속
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+<script th:inline="javascript">
+  const LOGIN_U_ID=[[${session.loginUser.uId}]];
+  const URL="ws://localhost:8080/chat"
+  const connForm=document.forms["connForm"];
+  const sendMsgForm=document.forms["sendMsgForm"];
+  const chattingCont=document.getElementById("chattingCont");
+  const receivedMsgContEx = document.getElementById("receivedMsgContEx");
+  const sentMsgContEx = document.getElementById("sentMsgContEx");
+
+
+
+
+  function reciveMsgComponent(msgObj){
+    return`
+        <section>
+          <div class="d-flex justify-content-end mb-4">
+            <div class="text-muted me-2 d-flex align-items-end">
+              <small>
+                ${msgObj.postTime}
+              </small>
+            </div>
+            <div class="p-3 me-3 border rounded-2 bg-secondary bg-opacity-10">
+                ${msgObj.content}
+            </div>
+            <div>
+              <strong class="rounded-circle border d-flex justify-content-center align-items-center" style="width: 45px; height: 45px;">
+                ${msgObj.uId}
+              </strong>
+            </div>
+          </div>
+        </section>`;
+  }
+  function sendMsgCont(msgObj){
+    return`
+      <section>
+        <div class="d-flex justify-content-start mb-4">
+          <div>
+            <strong class="rounded-circle border d-flex justify-content-center align-items-center" style="width: 45px; height: 45px;">
+              ${msgObj.uId}
+            </strong>
+          </div>
+          <div class="p-3 ms-3 border rounded-2 bg-primary bg-opacity-10">
+            ${msgObj.content}
+          </div>
+          <div class="text-muted ms-2 d-flex align-items-end">
+            <small>${msgObj.postTime}</small>
+          </div>
+        </div>
+      </section>`;
+  }
+</script>
+</div>
