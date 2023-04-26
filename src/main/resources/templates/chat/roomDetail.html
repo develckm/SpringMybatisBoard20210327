@@ -12,28 +12,105 @@
         <div class="card-header">
             <h2 class="text-center mb-0">채팅 내역</h2>
         </div>
-        <div class="card-body" id="msgCont">
+        <div class="card-body overflow-scroll" id="msgCont" style="height: 60vh">
         </div>
         <div class="card-footer">
-            <form action="" class="input-group">
-                <textarea class="form-control"></textarea>
-                <button class="btn btn-outline-primary disabled">제출</button>
+            <form action="" name="sendMsgForm">
+                <input type="hidden" name="uId" th:value="${session.loginUser.uId}">
+                <input type="hidden" name="crId" th:value="${crId}">
+                <input type="hidden" name="status" value="CHAT">
+                <input type="hidden" name="nickname" value="">
+                <div class="input-group">
+                    <textarea name="content" disabled class="form-control"></textarea>
+                    <button name="submitBtn" disabled class="btn btn-primary">제출</button>
+                </div>
             </form>
         </div>
     </div>
+    <form class="my-4" name="enterMsgForm">
+        <input type="hidden" name="uId" th:value="${session.loginUser.uId}">
+        <input type="hidden" name="crId" th:value="${crId}">
+        <input type="hidden" name="status" value="ENTER">
+        <input type="hidden" name="content" th:value="입장">
+        <div class="input-group mx-auto" style="width: 400px">
+            <div class="form-floating">
+                <input class="form-control" name="nickname" type="text" placeholder="닉네임">
+                <label>닉네임</label>
+            </div>
+            <button name="submitBtn" class="btn btn-info text-white">입장</button>
+        </div>
+    </form>
+
     <script th:inline="javascript">
         const LOGIN_USER_ID=[[${session.loginUser.uId}]];
         const msgCont=document.getElementById("msgCont");
-        let listUrl=`/chat/msg/[[${crId}]]/list.do`;
+        const enterMsgForm=document.forms["enterMsgForm"];
+        const sendMsgForm=document.forms["sendMsgForm"];
+        let listUrl=`/chat/msg/[[${crId}]]/list.do`;//if (lastPostTime)  ?postTime=lastPostTime
+        let lastPostTime; //메세지를 로드하다가 마지막 메세지의 등록 시간(로딩된 마지막 글)
+
         document.addEventListener("DOMContentLoaded",async (e)=>{
-            await loadMsgs();
+            // await loadMsgs();
+            // setInterval(async ()=>{
+            //     await loadMsgs();
+            // },3000); //polling
+            await autoLoadMsgs();
         })
+        sendMsgForm.onsubmit=async(e)=>{
+            e.preventDefault();
+            let register=await registerMsg(sendMsgForm);
+            if(register>0){
+                sendMsgForm.content.value="";
+                await loadMsgs();
+            }
+        }
+        //제귀함수로 로드된 시점에 폴링하기
+        async function autoLoadMsgs(){
+            let result=await loadMsgs();
+            if(result){
+                await new Promise((resolve)=>{setTimeout(()=>{resolve()},3000)});
+                autoLoadMsgs();
+            }
+        }
+
+
+
+        enterMsgForm.onsubmit=async(e)=>{
+            e.preventDefault();
+            let register=await registerMsg(enterMsgForm);
+            if(register>0){
+                await loadMsgs();
+                enterMsgForm.nickname.setAttribute("disabled",'');
+                enterMsgForm.submitBtn.setAttribute("disabled",'');
+                sendMsgForm.nickname.value=enterMsgForm.nickname.value;
+                sendMsgForm.content.removeAttribute("disabled");
+                sendMsgForm.submitBtn.removeAttribute("disabled");
+
+            }else {
+                alert("등록 실패");
+            }
+        }
+
+        async function registerMsg(formNode){
+            let url="/chat/msg/register.do";
+            const data=new FormData(formNode);
+            const resp=await fetch(url,{method:"POST",body:data});
+            if(resp.status===200){
+                let register=await resp.text();//"0" 실패 ,"1" 성공
+                return register;
+            }
+        }
 
         async function loadMsgs(){
-            const response=await fetch(listUrl);
+            let url=listUrl;
+            if(lastPostTime)url+="?postTime="+lastPostTime;
+            const response=await fetch(url);
             if(response.status===200){
                  const msgs=await response.json();
                  msgs.forEach((msg,i)=>{
+                     if((msgs.length-1)===i){
+                         lastPostTime=msg.postTime;
+                     }
                      if(msg.status==='CHAT'){
                          if(LOGIN_USER_ID===msg.uId){//로그인한 유저가 보낸메세지
                             msgCont.insertAdjacentHTML("beforeend",sendMsgComponent(msg));
@@ -46,6 +123,7 @@
                          msgCont.insertAdjacentHTML("beforeend",leaveMsgComponent(msg));
                      }
                  });
+                 return true;//로드가 완료된 시점
             }
         }
 

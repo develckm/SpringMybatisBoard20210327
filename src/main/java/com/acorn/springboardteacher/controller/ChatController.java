@@ -2,15 +2,13 @@ package com.acorn.springboardteacher.controller;
 
 import com.acorn.springboardteacher.dto.ChatMsgDto;
 import com.acorn.springboardteacher.dto.ChatRoomDto;
+import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.service.ChatMsgService;
 import com.acorn.springboardteacher.service.ChatRoomService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,11 +40,23 @@ public class ChatController {
     }
     @GetMapping("/msg/{crId}/list.do")
     public @ResponseBody List<ChatMsgDto> list(
-            @PathVariable int crId){
+            @PathVariable int crId,
+            @RequestParam(required = false) String postTime){
         List<ChatMsgDto> list=null;
-        list=chatMsgService.list(crId);
+        if(postTime==null){
+            list=chatMsgService.list(crId);
+        }else{
+            list=chatMsgService.list(crId,postTime);
+        }
         return list;
     }
-
+    @PostMapping("/msg/register.do")
+    public @ResponseBody int register(
+            @ModelAttribute ChatMsgDto chatMsgDto,
+            @SessionAttribute UserDto loginUser){
+        int register=0;
+        register=chatMsgService.register(chatMsgDto);
+        return register;
+    }
 
 }
