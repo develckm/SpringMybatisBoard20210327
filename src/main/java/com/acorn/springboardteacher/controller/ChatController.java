@@ -1,5 +1,6 @@
 package com.acorn.springboardteacher.controller;
 
+import com.acorn.springboardteacher.dto.ChatMsgDto;
 import com.acorn.springboardteacher.dto.ChatRoomDto;
 import com.acorn.springboardteacher.service.ChatMsgService;
 import com.acorn.springboardteacher.service.ChatRoomService;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -38,4 +40,13 @@ public class ChatController {
         model.addAttribute("crId",crId);
         return "/chat/roomDetail";
     }
+    @GetMapping("/msg/{crId}/list.do")
+    public @ResponseBody List<ChatMsgDto> list(
+            @PathVariable int crId){
+        List<ChatMsgDto> list=null;
+        list=chatMsgService.list(crId);
+        return list;
+    }
+
+
 }

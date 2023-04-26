@@ -12,33 +12,7 @@
         <div class="card-header">
             <h2 class="text-center mb-0">채팅 내역</h2>
         </div>
-        <div class="card-body">
-            <div>~~님 입장</div>
-            <div>~~님 퇴장</div>
-            <div class="d-flex my-2">
-                <div class="align-self-start d-flex flex-column">
-                    <strong>user01</strong>
-                    <small>둘리</small>
-                </div>
-                <div class="bg-primary bg-opacity-10 rounded-2 p-3 mx-2">
-                    호이~ 빙하타고 내려와~ 우후~ 친구를 만났지만~ 일억년전 옛날이~ 너무나나 그리워~
-                </div>
-                <div class="align-self-end">
-                    <small>2023-04-25 17:35:04</small>
-                </div>
-            </div>
-            <div class="d-flex my-2 justify-content-end">
-                <div class="align-self-end">
-                    <small>2023-04-25 17:35:04</small>
-                </div>
-                <div class="bg-warning bg-opacity-25 rounded-2 p-3 mx-2">
-                    또치가 맞나요???
-                </div>
-                <div class="align-self-start d-flex flex-column">
-                    <strong>user02</strong>
-                    <small>또치</small>
-                </div>
-            </div>
+        <div class="card-body" id="msgCont">
         </div>
         <div class="card-footer">
             <form action="" class="input-group">
@@ -47,4 +21,90 @@
             </form>
         </div>
     </div>
+    <script th:inline="javascript">
+        const LOGIN_USER_ID=[[${session.loginUser.uId}]];
+        const msgCont=document.getElementById("msgCont");
+        let listUrl=`/chat/msg/[[${crId}]]/list.do`;
+        document.addEventListener("DOMContentLoaded",async (e)=>{
+            await loadMsgs();
+        })
+
+        async function loadMsgs(){
+            const response=await fetch(listUrl);
+            if(response.status===200){
+                 const msgs=await response.json();
+                 msgs.forEach((msg,i)=>{
+                     if(msg.status==='CHAT'){
+                         if(LOGIN_USER_ID===msg.uId){//로그인한 유저가 보낸메세지
+                            msgCont.insertAdjacentHTML("beforeend",sendMsgComponent(msg));
+                         }else{//받은메세지
+                            msgCont.insertAdjacentHTML("beforeend",receiveMsgComponent(msg));
+                         }
+                     }else if(msg.status==="ENTER"){
+                        msgCont.insertAdjacentHTML("beforeend",enterMsgComponent(msg));
+                     }else if(msg.status==="LEAVE"){
+                         msgCont.insertAdjacentHTML("beforeend",leaveMsgComponent(msg));
+                     }
+                 });
+            }
+        }
+
+
+
+
+        function enterMsgComponent(msgObj){
+            return `
+            <div class="text-center">
+                <strong>${msgObj.nickname}</strong>
+                <small>(${msgObj.uId})</small>
+                님 입장
+                <br>
+                <small class="text-muted">${msgObj.postTime}</small>
+            </div>
+            `;
+        }
+        function leaveMsgComponent(msgObj){
+            return `
+            <div class="text-center">
+                <strong>${msgObj.nickname}</strong>
+                <small>(${msgObj.uId})</small>
+                님 퇴장
+                <br>
+                <small class="text-muted">${msgObj.postTime}</small>
+            </div>
+            `;
+        }
+        function receiveMsgComponent(msgObj){
+            return `
+            <div class="d-flex my-2">
+                <div class="align-self-start d-flex flex-column">
+                    <strong> ${msgObj.nickname}</strong>
+                    <small> ${msgObj.uId}</small>
+                </div>
+                <div class="bg-primary bg-opacity-10 rounded-2 p-3 mx-2">
+                    ${msgObj.content}
+                </div>
+                <div class="align-self-end">
+                    <small class="text-muted">${msgObj.postTime}</small>
+                </div>
+            </div>
+            `;
+        }
+        function sendMsgComponent(msgObj){
+            return `
+            <div class="d-flex my-2 justify-content-end">
+                <div class="align-self-end">
+                    <small class="text-muted">${msgObj.postTime}</small>
+                </div>
+                <div class="bg-warning bg-opacity-25 rounded-2 p-3 mx-2">
+                    ${msgObj.content}
+                </div>
+                <div class="align-self-start d-flex flex-column">
+                    <strong>${msgObj.nickname}</strong>
+                    <small>${msgObj.uId}</small>
+                </div>
+            </div>
+            `;
+        }
+    </script>
 </div>
