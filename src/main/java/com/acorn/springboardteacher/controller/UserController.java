@@ -1,6 +1,7 @@
 package com.acorn.springboardteacher.controller;
 
 import com.acorn.springboardteacher.dto.EmailDto;
+import com.acorn.springboardteacher.dto.NaverUserDto;
 import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.lib.AESEncryption;
 import com.acorn.springboardteacher.service.EmailService;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Map;
 
 @AllArgsConstructor //모든 필드를 pojo 형식의 생성자로 자동 생성
 @Controller //< @Component 요청과 응답을 처리 가능
@@ -60,9 +62,57 @@ public class UserController {
         return redirectPage;
     }
     @GetMapping("/naver/login.do")
-    public @ResponseBody String naverCallback(String code,String state) throws IOException {
-        String token = naverLoginService.getToken(code);
-        return token;
+    public String naverCallback(
+            String code,
+            String state,
+            RedirectAttributes redirectAttributes,
+            HttpSession session) {
+        NaverUserDto userInfo=null;
+        try {
+            String token = naverLoginService.getToken(code);
+            userInfo = naverLoginService.getUserInfo(token);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if(userInfo!=null){//네이버 로그인 성공
+            UserDto loginUser = userService.detail(userInfo.getEmail(), null);
+            if(loginUser==null){
+                UserDto user=new UserDto();
+                user.setUId(userInfo.getEmail());
+                user.setPw(userInfo.getId());
+                user.setName(userInfo.getName());
+                user.setPhone(userInfo.getMobile());
+                user.setEmail(userInfo.getEmail());
+                if(userInfo.getGender()== NaverUserDto.Gender.F){
+                    user.setGender(UserDto.Gender.FEMALE);
+                }else{
+                    user.setGender(UserDto.Gender.MALE);
+                }
+                user.setStatus(UserDto.StatusType.NAVER);
+                user.setBirth(userInfo.getBirthyear()+"-"+userInfo.getBirthday());
+                user.setImgPath(userInfo.getProfileImage());
+                int register=userService.signup(user);
+                if(register>0){
+                    loginUser = userService.detail(userInfo.getId(), null);
+                    session.setAttribute("loginUser",loginUser);
+                    redirectAttributes.addFlashAttribute("msg","네이버 회원 가입 및 로그인 성공");
+                    return "redirect:/";
+
+                }else{
+                    redirectAttributes.addFlashAttribute("msg","네이버 회원 가입 및 로그인 실패");
+                    return "redirect:/user/login.do";
+
+                }
+            }else{
+                session.setAttribute("loginUser",loginUser);
+                redirectAttributes.addFlashAttribute("msg","네이버 로그인 성공");
+                return "redirect:/";
+            }
+
+        }else{
+            redirectAttributes.addFlashAttribute("msg","네이버 로그인 실패");
+            return "redirect:/user/login.do";
+        }
 
     }
     @GetMapping("/{uId}/modify.do")

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //MethodOrderer.OrderAnnotation : @Order(0~) 순서를 정하겠다 (함수이름 등으로도 순서를 정할 수 있음)
-class UserMapperTest {
+class  UserMapperTest {
 
     @BeforeAll //모든 테스트 실행전에 실행(초기화)
     static void init(){}
@@ -37,7 +37,7 @@ class UserMapperTest {
         user.setName("테스트 유저 입니다.");
         user.setAddress("서울시 압구정");
         user.setDetailAddress("압구정역");
-        user.setGender("MALE");
+        user.setGender(UserDto.Gender.MALE);
         user.setImgPath("/public/imgs/user/TestTest478977.jpeg");
         int insertOne = userMapper.insertOne(user);
         assertEquals(insertOne,1);
@@ -73,7 +73,7 @@ class UserMapperTest {
         user.setName("테스트 유저 수정 입니다.");
         user.setAddress("서울시 강남구");
         user.setDetailAddress("강남역");
-        user.setGender("NONE");
+        user.setGender(UserDto.Gender.NONE);
         user.setImgPath("/public/imgs/user/TestTest478977.png");
         int updateOne = userMapper.updateOne(user);
         UserMapperTest.user=userMapper.findByUId(user.getUId());

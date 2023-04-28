@@ -1,5 +1,7 @@
 package com.acorn.springboardteacher.dto;
 
+import com.fasterxml.jackson.annotation.JsonKey;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Data;
 
 import java.util.List;
@@ -7,7 +9,10 @@ import java.util.List;
 @Data
 public class UserDto {
     public enum StatusType{
-        SIGNUP,EMAIL_CHECK,BLOCK,LEAVE,REPORT
+        SIGNUP,EMAIL_CHECK,BLOCK,LEAVE,REPORT,NAVER,KAKAO,GOOGLE
+    }
+    public enum Gender{
+        FEMALE,MALE,NONE
     }
     private String uId;
     private String pw;
@@ -17,7 +22,7 @@ public class UserDto {
     private String email;
     private java.util.Date postTime;
     private String birth;
-    private String gender;
+    private Gender gender;
     private String address;
     private String detailAddress;
     private String permission;

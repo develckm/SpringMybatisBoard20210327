@@ -1,5 +1,7 @@
 package com.acorn.springboardteacher.service;
 
+import com.acorn.springboardteacher.dto.NaverUserDto;
+import com.acorn.springboardteacher.dto.UserDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +42,7 @@ public class NaverLoginService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id="+clientId);
+            sb.append("&client_secret="+clientSecret);
             sb.append("&redirect_uri="+redirectUrl);
             sb.append("&code=" + code);
 
@@ -79,9 +82,10 @@ public class NaverLoginService {
     }
 
 
-    public Map<String, Object> getUserInfo(String access_token) throws IOException {
+    public NaverUserDto getUserInfo(String access_token) throws IOException {
         String host = profileUrl;
-        Map<String, Object> result = new HashMap<>();
+        //Map<String, Object> result = new HashMap<>();
+        NaverUserDto naverLoginUser=null;
         try {
             URL url = new URL(host);
 
@@ -122,23 +126,24 @@ public class NaverLoginService {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode obj = objectMapper.readTree(res);
             JsonNode account =  obj.get("response");
-            String email = account.get("email").toString();
-            String nickname = account.get("nickname").toString();
-            String profile_image = account.get("profile_image").toString();
-            //String age = account.get("age").toString();
-            String id = account.get("id").toString();
-            String name = account.get("name").toString();
-            String birthday = account.get("birthday").toString();
-            String birthyear = account.get("birthyear").toString();
-            String mobile = account.get("mobile").toString();
-
-            result.put("id", id);
-            result.put("email", email);
-            result.put("profile_image", profile_image);
-            result.put("name", name);
-            result.put("birthday", birthday);
-            result.put("birthyear", birthyear);
-            result.put("mobile", mobile);
+            naverLoginUser = objectMapper.readValue( account.toString().getBytes(), NaverUserDto.class);
+//            String email = account.get("email").toString();
+//            //String nickname = account.get("nickname").toString();
+//            String profile_image = account.get("profile_image").toString();
+//            //String age = account.get("age").toString();
+//            String id = account.get("id").toString();
+//            String name = account.get("name").toString();
+//            String birthday = account.get("birthday").toString();
+//            String birthyear = account.get("birthyear").toString();
+//            String mobile = account.get("mobile").toString();
+//
+//            result.put("id", id);
+//            result.put("email", email);
+//            result.put("profile_image", profile_image);
+//            result.put("name", name);
+//            result.put("birthday", birthday);
+//            result.put("birthyear", birthyear);
+//            result.put("mobile", mobile);
 
             br.close();
 
@@ -147,40 +152,7 @@ public class NaverLoginService {
             e.printStackTrace();
         }
 
-        return result;
-    }
-
-    public String getAgreementInfo(String access_token)
-    {
-        String result = "";
-        String host = "https://kapi.kakao.com/v2/user/scopes";
-        try{
-            URL url = new URL(host);
-            HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setRequestProperty("Authorization", "Bearer "+access_token);
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            String line = "";
-            while((line=br.readLine())!=null)
-            {
-                result+=line;
-            }
-
-            int responseCode = urlConnection.getResponseCode();
-            System.out.println("responseCode = " + responseCode);
-
-            // result is json format
-            br.close();
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
+        return naverLoginUser;
     }
 
 }

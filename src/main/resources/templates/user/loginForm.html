@@ -27,6 +27,25 @@
                 <a class="btn btn-info" href="/user/signup.do">회원가입</a>
                 <button class="btn btn-primary">로그인</button>
             </p>
+
+            <div class="text-end">
+                <button id="naverLoginBtn" class="btn p-0" type="button">
+                    <img src="/public/img/naver/btnG_완성형.png" style="height: 40px">
+                </button>
+            </div>
         </form>
+        <script>
+            const naverLoginBtn=document.getElementById("naverLoginBtn");
+            naverLoginBtn.addEventListener("click",(e)=>{
+                let url = 'https://nid.naver.com/oauth2.0/authorize?' +
+                    'response_type=code' +                  // 인증과정에 대한 내부 구분값 code 로 전공 (고정값)
+                    '&client_id=o4uWPp2yqvkDVov8casR' +     // 발급받은 client_id 를 입력
+                    '&state=NAVER_LOGIN_TEST' +             // CORS 를 방지하기 위한 특정 토큰값(임의값 사용)
+                    '&redirect_uri=http://localhost:8080/user/naver/login.do';   // 어플케이션에서 등록했던 CallBack URL를 입력
+
+                // 사용자가 사용하기 편하게끔 팝업창으로 띄어준다.
+                window.location.href=url;
+            });
+        </script>
     </div>
 </html>
