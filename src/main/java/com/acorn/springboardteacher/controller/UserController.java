@@ -4,6 +4,7 @@ import com.acorn.springboardteacher.dto.EmailDto;
 import com.acorn.springboardteacher.dto.UserDto;
 import com.acorn.springboardteacher.lib.AESEncryption;
 import com.acorn.springboardteacher.service.EmailService;
+import com.acorn.springboardteacher.service.NaverLoginService;
 import com.acorn.springboardteacher.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -28,6 +30,7 @@ public class UserController {
 
     private UserService userService;
     private EmailService emailService;
+    private NaverLoginService naverLoginService;
     @GetMapping("/dropout.do")
     public String dropoutForm(
             @SessionAttribute UserDto loginUser){
@@ -56,7 +59,12 @@ public class UserController {
         redirectAttributes.addFlashAttribute("msg",msg);
         return redirectPage;
     }
+    @GetMapping("/naver/login.do")
+    public @ResponseBody String naverCallback(String code,String state) throws IOException {
+        String token = naverLoginService.getToken(code);
+        return token;
 
+    }
     @GetMapping("/{uId}/modify.do")
     public String modifyForm(
             @PathVariable String uId,
